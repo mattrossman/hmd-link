@@ -1,13 +1,13 @@
 {
   "name": "browser",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
     "dev": "netlify dev",
     "parcel:start": "parcel index.html"
   },
   "dependencies": {
+    "firebase": "^7.16.1",
     "htm": "^3.0.4",
     "preact": "^10.4.6"
   },
