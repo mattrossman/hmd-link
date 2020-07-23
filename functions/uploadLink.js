@@ -35,16 +35,15 @@ exports.handler = async event => {
 	*/
 	const body = JSON.parse(event.body);
 	const { db, auth } = getFirebaseServices()
+	const url = body.url;
 	const ip = getPublicIp(event.headers)
 	try {
 		await auth.signInWithCustomToken(body.token);
-		const pin = randomPin(4)
 		const payload = {
-			url: body.url,
-			ip: ip,
+			url,
 			timestamp: Date.now()
 		}
-		await db.collection("urls").doc(pin).set(payload)
+		await db.collection("rooms").doc(ip).set(payload)
 		return {
 			statusCode: 200,
 			headers: {
