@@ -7,8 +7,9 @@
     "parcel:start": "parcel ./src/index.html",
     "parcel:build": "parcel build ./src/index.html --dist-dir dist/"
   },
-  "dependencies": { 
+  "dependencies": {
     "firebase": "^7.16.1",
+    "firebase-admin": "^9.0.0",
     "htm": "^3.0.4",
     "preact": "^10.4.6"
   },
