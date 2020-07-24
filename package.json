@@ -9,8 +9,8 @@
     "dev": "netlify dev",
     "build": "netlify build",
     "parcel:start": "parcel ./src/index.html",
-    "parcel:build": "parcel build ./src/index.html --dist-dir dist/",
-    "clean": "killall node && rm -rf .parcel-cache dist"
+    "parcel:build": "parcel build ./src/index.html",
+    "clean": "killall node && rm -rf .cache dist"
   },
   "dependencies": {
     "firebase": "^7.16.1",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "netlify-cli": "^2.58.0",
     "netlify-lambda": "^2.0.1",
-    "parcel": "^2.0.0-beta.1"
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-bundle-visualiser": "^1.2.0"
   }
 }
