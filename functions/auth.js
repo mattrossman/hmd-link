@@ -12,9 +12,15 @@ const getAdminAuth = () => {
 	return admin.auth()
 }
 
+const getPublicIp = headers => {
+	const ip = headers['x-nf-client-connection-ip']
+			|| headers['client-ip'];
+	return ip === '::1' ? '127.0.0.1' : ip;
+}
+
 exports.handler = async event => {
 	const auth = getAdminAuth()
-	const uid = generateUid()
+	const uid = getPublicIp(event.headers)
 	const token = await auth.createCustomToken(uid)
 	return {
 		statusCode: 200,

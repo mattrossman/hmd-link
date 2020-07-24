@@ -37,6 +37,5 @@ body {
 }
 
 .content {
-    display: grid;
-    place-items: center;
+	padding: 2em
 }
