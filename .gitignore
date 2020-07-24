@@ -115,8 +115,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Netlify cli files
-.netlify/
-
 # Firebase config
 .firebase.config.js
+
+# Local Netlify folder
+.netlify

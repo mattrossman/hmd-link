@@ -2,8 +2,12 @@
   "name": "browser",
   "version": "1.0.0",
   "license": "MIT",
+  "browserslist": [
+    "since 2017-06"
+  ],
   "scripts": {
     "dev": "netlify dev",
+    "build": "netlify build",
     "parcel:start": "parcel ./src/index.html",
     "parcel:build": "parcel build ./src/index.html --dist-dir dist/"
   },
