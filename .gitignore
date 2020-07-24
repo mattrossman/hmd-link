@@ -118,5 +118,8 @@ dist
 # Firebase config
 .firebase.config.js
 
+# Misc files and notes
+.ignore
+
 # Local Netlify folder
 .netlify

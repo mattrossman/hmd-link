@@ -1,8 +1,11 @@
-import { render } from 'preact';
+// import { render } from 'preact';
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { html } from 'htm/preact';
 import axios from 'redaxios';
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
+import { h, render, Fragment } from 'preact'
+
+import Button from '@material-ui/core/Button';
 
 import { Header } from './components/header'
 import { Footer } from './components/footer'
@@ -98,10 +101,25 @@ const App = () => {
 				<button id="btnSavedLink" onClick=${followLink}>Go!</button>
 			</div>
 			`}
+			
+			<Button variant="contained" color="primary">
+				Hello World
+			</Button>
 		</div>
-		<${Footer}/>
+		<!-- <${Footer}/> -->
 	</div>
 	`
 }
 
-render(html`<${App} />`, document.body);
+function NewApp() {
+	return (
+		<Fragment>
+			<Button variant="contained" color="primary">
+				Hello World
+			</Button>
+			<Footer />
+		</Fragment>
+	);
+}
+
+render(<NewApp />, document.body);
