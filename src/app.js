@@ -10,7 +10,6 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 
-const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 const firebaseConfig = {
 	apiKey: process.env.FIREBASE_API_KEY,
@@ -18,19 +17,16 @@ const firebaseConfig = {
 	projectId: process.env.FIREBASE_PROJECT_ID,
 };
 
-const getFirebaseServices = () => {
-	if (firebase.apps.length == 0) {
-		firebase.initializeApp(firebaseConfig);
-	}
-	return {
-		db: firebase.firestore(),
-		auth: firebase.auth()
-	}
-}
+if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+
+const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 const useUid = (initialState) => {
 	const [uid, setUid] = useState(initialState)
-	const { auth } = getFirebaseServices()
 	useEffect(async () => {
 		if (uid === null) {
 			const response = await axios.get('/.netlify/functions/auth')
@@ -38,15 +34,28 @@ const useUid = (initialState) => {
 			await auth.signInWithCustomToken(token);
 			setUid(auth.currentUser.uid)
 		}
-	})
+	}, [uid])
 	return uid
+}
+
+const useDoc = (uid) => {
+	const [doc, setDoc] = useState(null);
+	useEffect(() => {
+		if (uid !== null) {
+			db.collection("rooms").doc(uid).onSnapshot(snapshot => {
+				setDoc(snapshot.data())
+			})
+		}
+	}, [uid])
+	return doc
 }
 
 const App = () => {
 	const uid = useUid(null)
 	const authorized = uid !== null;
 	const input = useRef(null);
-	const { db } = getFirebaseServices();
+	const doc = useDoc(uid);
+	const url = doc && doc.url;
 	const submitLink = async () => {
 		if (authorized) {	
 			const payload = {
@@ -57,6 +66,9 @@ const App = () => {
 			await db.collection("rooms").doc(uid).set(payload)
 		}
 	}
+	const followLink = () => {
+		window.open(url, '_blank');
+	}
 	return html`
 	<div class="container">
 		<${Header}/>
@@ -65,6 +77,12 @@ const App = () => {
 			<label for="url-input">Enter a URL:</label>
 			<input id="url-input" ref=${input} type="text" />
 			<button onClick=${submitLink}>Submit</button>
+			${url && html`
+			<div>
+				<label for="btnSavedLink">Saved link: ${url}</label>
+				<button id="btnSavedLink" onClick=${followLink}>Go!</button>
+			</div>
+			`}
 		</div>
 		<${Footer}/>
 	</div>
