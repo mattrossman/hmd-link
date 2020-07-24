@@ -2,78 +2,74 @@ import { render } from 'preact';
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { html } from 'htm/preact';
 import axios from 'redaxios';
-import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
+import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 
 import { Header } from './components/header'
 import { Footer } from './components/footer'
 
-// Code splitting because Firebase is really big
-const lazyImports = {
-	firebase: import('firebase/app'),
-	firestore: import('firebase/firestore'),
-	auth: import('firebase/auth')
-}
+import * as firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/auth";
+
+
+
+const firebaseConfig = {
+	apiKey: process.env.FIREBASE_API_KEY,
+	authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+	projectId: process.env.FIREBASE_PROJECT_ID,
+};
+
+if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+const auth = firebase.auth();
+
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
-const useUid = (auth) => {
-	const [uid, setUid] = useState(null)
+const useUid = (initialState) => {
+	const [uid, setUid] = useState(initialState)
 	useEffect(async () => {
-		if (auth !== null && uid === null) {
+		if (uid === null) {
 			const response = await axios.get('/.netlify/functions/auth')
 			const { token } = response.data;
 			await auth.signInWithCustomToken(token);
 			setUid(auth.currentUser.uid)
 		}
-	}, [auth, uid])
+	}, [uid])
 	return uid
 }
 
-const useDoc = (db, uid) => {
+const useDoc = (uid) => {
 	const [doc, setDoc] = useState(null);
 	useEffect(() => {
-		if (db !== null && uid !== null) {
+		if (uid !== null) {
 			db.collection("rooms").doc(uid).onSnapshot(snapshot => {
 				setDoc(snapshot.data())
 			})
 		}
-	}, [db, uid])
+	}, [uid])
 	return doc
 }
 
-const createUniqueName = (seed) => {
+const uniqueNameConfig = {
+	dictionaries: [adjectives, colors, animals],
+	separator: '-'
+}
+
+const getUniqueName = (seed) => {
 	return uniqueNamesGenerator({
-		dictionaries: [adjectives, animals],
+		dictionaries: [adjectives, colors, animals],
 		separator: '-',
-		length: 2,
 		seed
 	})
 }
 
-const useFirebase = () => {
-	const [db, setDb] = useState(null);
-	const [auth, setAuth] = useState(null)
-	useEffect(async () => {
-		const firebase = await lazyImports['firebase']
-		await Promise.all([lazyImports['firestore'], lazyImports['auth']])
-		const firebaseConfig = {
-			apiKey: process.env.FIREBASE_API_KEY,
-			authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-			projectId: process.env.FIREBASE_PROJECT_ID,
-		};
-		if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
-		setDb(firebase.firestore());
-		setAuth(firebase.auth())
-	}, [])
-	return { db, auth }
-}
-
 const App = () => {
-	const { db, auth } = useFirebase();
-	const uid = useUid(auth)
+	const uid = useUid(null)
 	const authorized = uid !== null;
 	const input = useRef(null);
-	const doc = useDoc(db, uid);
+	const doc = useDoc(uid);
 	const url = doc && doc.url;
 	const submitLink = async () => {
 		if (authorized) {	
@@ -81,6 +77,7 @@ const App = () => {
 				url: input.current.value,
 				timestamp: Date.now()
 			}
+			console.log("Sending payload: " + JSON.stringify(payload))
 			await db.collection("rooms").doc(uid).set(payload)
 		}
 	}
@@ -91,7 +88,7 @@ const App = () => {
 	<div class="container">
 		<${Header}/>
 		<div class="content">
-			<p>${uid === null ? 'Connecting...' : 'Room name: ' + createUniqueName(uid)}</p>
+			<p>${uid === null ? 'Connecting...' : 'Room name: ' + getUniqueName(uid)}</p>
 			<label for="url-input">Enter a URL:</label>
 			<input id="url-input" ref=${input} type="text" />
 			<button onClick=${submitLink}>Submit</button>
