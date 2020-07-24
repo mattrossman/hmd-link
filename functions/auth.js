@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
-const generateUid = require('./helper/uid')
+const stringHash = require('string-hash')
+
 
 const getAdminAuth = () => {
 	if (admin.apps.length == 0) {
@@ -20,14 +21,11 @@ const getPublicIp = headers => {
 
 exports.handler = async event => {
 	const auth = getAdminAuth()
-	const uid = getPublicIp(event.headers)
+	const uid = stringHash(getPublicIp(event.headers)).toString()
 	const token = await auth.createCustomToken(uid)
 	return {
 		statusCode: 200,
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({
-			uid,
-			token
-		})
+		body: JSON.stringify({ uid, token })
 	}
 }
