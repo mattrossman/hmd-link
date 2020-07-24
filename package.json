@@ -9,14 +9,17 @@
     "dev": "netlify dev",
     "build": "netlify build",
     "parcel:start": "parcel ./src/index.html",
-    "parcel:build": "parcel build ./src/index.html --dist-dir dist/"
+    "parcel:build": "parcel build ./src/index.html --dist-dir dist/",
+    "clean": "killall node && rm -rf .parcel-cache dist"
   },
   "dependencies": {
     "firebase": "^7.16.1",
     "firebase-admin": "^9.0.0",
     "htm": "^3.0.4",
     "preact": "^10.4.6",
-    "redaxios": "^0.3.0"
+    "redaxios": "^0.3.0",
+    "string-hash": "^1.1.3",
+    "unique-names-generator": "^4.3.0"
   },
   "devDependencies": {
     "netlify-cli": "^2.58.0",

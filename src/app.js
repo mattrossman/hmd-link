@@ -2,6 +2,7 @@ import { render } from 'preact';
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { html } from 'htm/preact';
 import axios from 'redaxios';
+import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 
 import { Header } from './components/header'
 import { Footer } from './components/footer'
@@ -9,6 +10,7 @@ import { Footer } from './components/footer'
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+
 
 
 const firebaseConfig = {
@@ -50,6 +52,19 @@ const useDoc = (uid) => {
 	return doc
 }
 
+const uniqueNameConfig = {
+	dictionaries: [adjectives, colors, animals],
+	separator: '-'
+}
+
+const getUniqueName = (seed) => {
+	return uniqueNamesGenerator({
+		dictionaries: [adjectives, colors, animals],
+		separator: '-',
+		seed
+	})
+}
+
 const App = () => {
 	const uid = useUid(null)
 	const authorized = uid !== null;
@@ -73,7 +88,7 @@ const App = () => {
 	<div class="container">
 		<${Header}/>
 		<div class="content">
-			<p>Current room: ${uid}</p>
+			<p>${uid === null ? 'Connecting...' : 'Room name: ' + getUniqueName(uid)}</p>
 			<label for="url-input">Enter a URL:</label>
 			<input id="url-input" ref=${input} type="text" />
 			<button onClick=${submitLink}>Submit</button>
