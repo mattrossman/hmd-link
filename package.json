@@ -14,13 +14,12 @@
     "build": "netlify build",
     "parcel:start": "parcel ./src/index.html",
     "parcel:build": "parcel build ./src/index.html",
+    "parcel:analyze": "PARCEL_BUNDLE_ANALYZER=1 BUNDLE_BUDDY=1 yarn parcel:build",
     "clean": "killall node && rm -rf .parcel-cache dist"
   },
   "babel": {
     "presets": [
       "preact"
-    ],
-    "plugins": [
     ]
   },
   "dependencies": {
@@ -38,7 +37,6 @@
   "devDependencies": {
     "babel-preset-preact": "^2.0.0",
     "netlify-cli": "^2.58.0",
-    "netlify-lambda": "^2.0.1",
-    "parcel-plugin-bundle-visualiser": "^1.2.0"
+    "netlify-lambda": "^2.0.1"
   }
 }

@@ -121,5 +121,8 @@ dist
 # Misc files and notes
 .ignore
 
+# Bundle size analysis
+parcel-bundle-reports
+
 # Local Netlify folder
 .netlify
