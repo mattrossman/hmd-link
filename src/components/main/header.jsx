@@ -18,7 +18,7 @@ export default () => {
 				hmd.link
 			</Typography>
 			<Typography variant="subtitle1" component="h2">
-				Send WebXR links to your headset, instantly.
+				Send WebXR links to your headset, hassle-free.
 			</Typography>
 		</Box>
 	);
