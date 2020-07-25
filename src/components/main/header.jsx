@@ -1,4 +1,4 @@
-import { h } from "preact";
+import { h } from 'preact'
 import { makeStyles, Box, Typography } from '@material-ui/core';
 
 

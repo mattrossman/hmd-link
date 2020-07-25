@@ -1,9 +1,9 @@
-// import { render } from 'preact';
+import { h, render } from 'preact'
 import { useState, useEffect, useRef } from 'preact/hooks'
+
 import { html } from 'htm/preact';
 import axios from 'redaxios';
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
-import { h, render, Fragment } from 'preact'
 
 import { createMuiTheme, ThemeProvider, CssBaseline, responsiveFontSizes } from "@material-ui/core";
 
@@ -14,7 +14,6 @@ import { MainContent } from './components/main/content'
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-
 
 
 const firebaseConfig = {
