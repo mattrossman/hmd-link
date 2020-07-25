@@ -6,9 +6,11 @@ import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-
 import { h, render, Fragment } from 'preact'
 
 import Button from '@material-ui/core/Button';
+import { createMuiTheme, ThemeProvider, CssBaseline } from "@material-ui/core";
 
 import { Header } from './components/header'
 import { Footer } from './components/footer'
+import { MainContent } from './components/main/content'
 
 import * as firebase from "firebase/app";
 import "firebase/firestore";
@@ -111,14 +113,18 @@ const App = () => {
 	`
 }
 
+const darkTheme = createMuiTheme({
+	palette: {
+		type: 'dark',
+	},
+});
+
 function NewApp() {
 	return (
-		<Fragment>
-			<Button variant="contained" color="primary">
-				Hello World
-			</Button>
-			<Footer />
-		</Fragment>
+		<ThemeProvider theme={darkTheme}>
+			<CssBaseline />
+			<MainContent />
+		</ThemeProvider>
 	);
 }
 
