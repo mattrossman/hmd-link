@@ -1,4 +1,4 @@
-import { h, Fragment } from "preact";
+import { h } from "preact";
 import { makeStyles, Box, Typography } from '@material-ui/core';
 
 
@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-export default () => {
+export const Header = () => {
 	const classes = useStyles();
 	return (
 		<Box className={classes.root}>

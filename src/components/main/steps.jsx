@@ -23,8 +23,9 @@ const useStyles = makeStyles(theme => ({
 	}
 }))
 
-export default () => {
+export const StepOne = () => {
 	const classes = useStyles();
+	const placeholder = "e.g. www.example.com"
 	return (
 		<Paper className={classes.root}>
 			<Grid container>
@@ -36,7 +37,7 @@ export default () => {
 				<Grid container xs={12} md={9} justify="center" className={classes.formContainer} >
 					<Typography variant="h4" gutterBottom>Step 1: Paste a link</Typography>
 					<form noValidate className={classes.form} >
-						<TextField required fullWidth placeholder="e.g. www.example.com" variant="outlined" margin="normal" />
+						<TextField required fullWidth placeholder={placeholder} variant="outlined" margin="normal" />
 						<Button type="submit" className={classes.submit} variant="contained" size="large"
 							color="primary"
 							onClick={() => window.alert('click')}>Submit</Button>

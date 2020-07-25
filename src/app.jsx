@@ -5,8 +5,7 @@ import axios from 'redaxios';
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 import { h, render, Fragment } from 'preact'
 
-import Button from '@material-ui/core/Button';
-import { createMuiTheme, ThemeProvider, CssBaseline } from "@material-ui/core";
+import { createMuiTheme, ThemeProvider, CssBaseline, responsiveFontSizes } from "@material-ui/core";
 
 import { Header } from './components/header'
 import { Footer } from './components/footer'
@@ -116,12 +115,13 @@ const App = () => {
 const darkTheme = createMuiTheme({
 	palette: {
 		type: 'dark',
-	},
+	}
 });
 
 function NewApp() {
+	const theme = responsiveFontSizes(darkTheme)
 	return (
-		<ThemeProvider theme={darkTheme}>
+		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<MainContent />
 		</ThemeProvider>
