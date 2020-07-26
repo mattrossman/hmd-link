@@ -20,6 +20,7 @@ const Card = styled('div')`
 	box-shadow: 0 0 5px black;
 `
 
+// Restricts number of vertical lines
 const Description = styled('p')`
     overflow: hidden;
     text-overflow: ellipsis;
@@ -29,13 +30,32 @@ const Description = styled('p')`
     -webkit-box-orient: vertical;
 `
 
-const IconContainer = styled('div')`
+const RightContainer = styled('div')`
+	height: 100%;
     display: grid;
-    place-items: center;
-	padding: 20px;
+    grid-template-rows: auto 1fr auto;
+	padding: 0;
+`
+// RightContainer.defaultProps = {className: "col-sm-12 col-md-8"}
+
+
+const BottomRow = styled('div')`
+	display: grid;
+	grid-template-columns: 1fr auto;
 `
 
-export const Preview = ({preview}) => {
+
+const UrlText = styled('p')`
+	margin-top: auto;
+`
+UrlText.defaultProps = {className: 'truncate-width'}
+
+const UrlContainer = styled('div')`
+	min-width: 0;
+	display: flex;
+`
+
+export const Preview = ({ preview }) => {
 	// const [preview, setPreview] = useState(null);
 	// useEffect(async () => {
 	// 	if (url !== null) {
@@ -54,18 +74,33 @@ export const Preview = ({preview}) => {
 			<div class="col-sm-12 col-md-4" style="padding: 0; height: auto;">
 				<Thumbnail src={thumbnail} alt="site-preview"></Thumbnail>
 			</div>
-			<div class="col-sm-12 col-md-8">
-				<h2 class="truncate-width">{preview.title}</h2>
-				<Description>{lorem}</Description>
-				<div class="row fluid">
-					<div class="col-sm-10">
-						<p class="vertical-center truncate-width">{preview.url}</p>
-					</div>
-					<div class="col-sm-2" style="padding: 0; position:relative">
-						<Icon className="bottom-right-icon" path={mdiArrowRightCircleOutline} size={2} />
-					</div>
-				</div>
+			<div class="col-sm-12 col-md-8" style="padding: 10px">
+				<RightContainer>
+					<h2 class="truncate-width">{preview.title}</h2>
+					<Description>{preview.description}</Description>
+					<BottomRow>
+						<UrlContainer>
+							<UrlText>{preview.url}</UrlText>
+						</UrlContainer>
+						<Icon path={mdiArrowRightCircleOutline} size={2} />
+					</BottomRow>
+				</RightContainer>
 			</div>
 		</Card>
 	)
 }
+
+						// <ClippedGridItem>
+						// 	<div style="overflow: hidden">
+						// 		<BottomText className="truncate-width">{lorem}</BottomText>
+						// 	</div>
+						// </ClippedGridItem>
+
+				// <div class="row fluid">
+				// 	<div class="col-sm-10">
+				// 		<p class="vertical-center truncate-width">{preview.url}</p>
+				// 	</div>
+				// 	<div class="col-sm-2" style="padding: 0; position:relative">
+				// 		<Icon className="bottom-right-icon" path={mdiArrowRightCircleOutline} size={2} />
+				// 	</div>
+				// </div>
