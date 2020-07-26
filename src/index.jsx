@@ -1,82 +1,24 @@
 import { h, render } from 'preact'
-import { useState, useEffect, useRef } from 'preact/hooks'
-
-import axios from 'redaxios';
-import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
-
 import { createMuiTheme, ThemeProvider, CssBaseline, responsiveFontSizes } from "@material-ui/core";
 
 import { MainContent } from './components/main/content.jsx'
-
-import * as firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
-
-
-
-
-const useFirebase = () => {
-	const [services, setServices] = useState({db: null, auth: null})
-	const firebaseConfig = {
-		apiKey: process.env.FIREBASE_API_KEY,
-		authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-		projectId: process.env.FIREBASE_PROJECT_ID,
-	}
-	useEffect(async () => {
-		if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
-		const db = firebase.firestore()
-		const auth = firebase.auth()
-		if (auth.currentUser === null) {
-			const response = await axios.get('/.netlify/functions/auth')
-			const { token } = response.data;
-			await auth.signInWithCustomToken(token);
-		}
-		setServices({ db, auth })
-	}, [])
-	return services
-}
-
+import { useUser, useDoc } from './hooks'
 
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
-const useUid = (auth) => {
-	const [uid, setUid] = useState(null)
-	useEffect(async () => {
-		if (uid === null) {
-			const response = await axios.get('/.netlify/functions/auth')
-			const { token } = response.data;
-			await auth.signInWithCustomToken(token);
-			setUid(auth.currentUser.uid)
-		}
-	}, [auth])
-	return uid
-}
 
-const useDoc = (db, uid) => {
-	const [doc, setDoc] = useState(null);
-	useEffect(() => {
-		if (uid !== null) {
-			db.collection("rooms").doc(uid).onSnapshot(snapshot => {
-				setDoc(snapshot.data())
-			})
-		}
-	}, [uid])
-	return doc
-}
-
-const uniqueNameConfig = {
-	dictionaries: [adjectives, colors, animals],
-	separator: '-'
-}
-
-const getUniqueName = (seed) => {
-	return uniqueNamesGenerator({
-		dictionaries: [adjectives, colors, animals],
-		separator: '-',
-		seed
-	})
-}
+// const useDoc = (db, uid) => {
+// 	const [doc, setDoc] = useState(null);
+// 	useEffect(() => {
+// 		if (uid !== null) {
+// 			db.collection("rooms").doc(uid).onSnapshot(snapshot => {
+// 				setDoc(snapshot.data())
+// 			})
+// 		}
+// 	}, [uid])
+// 	return doc
+// }
 
 // const App = () => {
 // 	const uid = useUid(null)
@@ -129,14 +71,17 @@ const darkTheme = createMuiTheme({
 
 function NewApp() {
 	const theme = responsiveFontSizes(darkTheme)
-	const { db, auth } = useFirebase();
-	if (auth !== null) {
-		console.log(auth.currentUser)
+	const user = useUser()
+	const doc = useDoc(user)
+	if (user !== null) {
+		console.log('Connected to room: ', user.displayName)
 	}
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<MainContent />
+	<h2>Connected to: {user && user.displayName}</h2>
+	<h2>Current URL: {doc}</h2>
 		</ThemeProvider>
 	);
 }

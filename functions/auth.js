@@ -28,7 +28,8 @@ const getUniqueName = (seed) => {
 	})
 }
 
-const getDisplayName = async (auth, uid) => {
+const setupDisplayName = async (auth, uid) => {
+	/* Make sure that the user exists and has a display name */
 	let displayName = null
 	try {
 		const user = await auth.getUser(uid)
@@ -47,11 +48,11 @@ const getDisplayName = async (auth, uid) => {
 exports.handler = async event => {
 	const auth = getAdminAuth()
 	const uid = stringHash(getPublicIp(event.headers)).toString()
-	const displayName = await getDisplayName(auth, uid)
+	await setupDisplayName(auth, uid)
 	const token = await auth.createCustomToken(uid)
 	return {
 		statusCode: 200,
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ uid, displayName, token })
+		body: JSON.stringify({ token })
 	}
 }
