@@ -1,15 +1,12 @@
 import { h, render } from 'preact'
 import { useState, useEffect, useRef } from 'preact/hooks'
 
-import { html } from 'htm/preact';
 import axios from 'redaxios';
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 
 import { createMuiTheme, ThemeProvider, CssBaseline, responsiveFontSizes } from "@material-ui/core";
 
-import { Header } from './components/header'
-import { Footer } from './components/footer'
-import { MainContent } from './components/main/content'
+import { MainContent } from './components/main/content.jsx'
 
 import * as firebase from "firebase/app";
 import "firebase/firestore";
@@ -21,6 +18,7 @@ const firebaseConfig = {
 	authDomain: process.env.FIREBASE_AUTH_DOMAIN,
 	projectId: process.env.FIREBASE_PROJECT_ID,
 };
+
 
 if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
 
@@ -68,48 +66,48 @@ const getUniqueName = (seed) => {
 	})
 }
 
-const App = () => {
-	const uid = useUid(null)
-	const authorized = uid !== null;
-	const input = useRef(null);
-	const doc = useDoc(uid);
-	const url = doc && doc.url;
-	const submitLink = async () => {
-		if (authorized) {	
-			const payload = {
-				url: input.current.value,
-				timestamp: Date.now()
-			}
-			console.log("Sending payload: " + JSON.stringify(payload))
-			await db.collection("rooms").doc(uid).set(payload)
-		}
-	}
-	const followLink = () => {
-		window.open(url, '_blank');
-	}
-	return html`
-	<div class="container">
-		<${Header}/>
-		<div class="content">
-			<p>${uid === null ? 'Connecting...' : 'Room name: ' + getUniqueName(uid)}</p>
-			<label for="url-input">Enter a URL:</label>
-			<input id="url-input" ref=${input} type="text" />
-			<button onClick=${submitLink}>Submit</button>
-			${url && html`
-			<div>
-				<label for="btnSavedLink">Saved link: ${url}</label>
-				<button id="btnSavedLink" onClick=${followLink}>Go!</button>
-			</div>
-			`}
+// const App = () => {
+// 	const uid = useUid(null)
+// 	const authorized = uid !== null;
+// 	const input = useRef(null);
+// 	const doc = useDoc(uid);
+// 	const url = doc && doc.url;
+// 	const submitLink = async () => {
+// 		if (authorized) {	
+// 			const payload = {
+// 				url: input.current.value,
+// 				timestamp: Date.now()
+// 			}
+// 			console.log("Sending payload: " + JSON.stringify(payload))
+// 			await db.collection("rooms").doc(uid).set(payload)
+// 		}
+// 	}
+// 	const followLink = () => {
+// 		window.open(url, '_blank');
+// 	}
+// 	return html`
+// 	<div class="container">
+// 		<${Header}/>
+// 		<div class="content">
+// 			<p>${uid === null ? 'Connecting...' : 'Room name: ' + getUniqueName(uid)}</p>
+// 			<label for="url-input">Enter a URL:</label>
+// 			<input id="url-input" ref=${input} type="text" />
+// 			<button onClick=${submitLink}>Submit</button>
+// 			${url && html`
+// 			<div>
+// 				<label for="btnSavedLink">Saved link: ${url}</label>
+// 				<button id="btnSavedLink" onClick=${followLink}>Go!</button>
+// 			</div>
+// 			`}
 			
-			<Button variant="contained" color="primary">
-				Hello World
-			</Button>
-		</div>
-		<!-- <${Footer}/> -->
-	</div>
-	`
-}
+// 			<Button variant="contained" color="primary">
+// 				Hello World
+// 			</Button>
+// 		</div>
+// 		<!-- <${Footer}/> -->
+// 	</div>
+// 	`
+// }
 
 const darkTheme = createMuiTheme({
 	palette: {
