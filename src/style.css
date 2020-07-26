@@ -1,41 +1,5 @@
-body {
-	margin: 0;
-	font-family: monospace;
-}
-.container {
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 15px;
-    padding-right: 15px;
-	height: 100vh;
-    display: grid;
-	grid-template-rows: auto 1fr auto;
-	box-shadow:0 0 10px #aaa;
-}
-
-@media (min-width: 622px) {
-    .container {
-        width: 600px;
-     }
-}
-
-.header {
-	text-align: center;
-	padding-top: 3em;
-	/* background-color: lightblue; */
-}
-
-.header > h2 {
-	font-style: italic;
-	font-weight: lighter;
-	font-size: 14px;
-}
-
-.footer {
-	text-align: center;
-	/* background-color: lightgreen; */
-}
-
-.content {
-	padding: 2em
+form {
+	background: none;
+	border: none;
+	padding: 0;
 }

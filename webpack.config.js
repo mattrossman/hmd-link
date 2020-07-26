@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
 	entry: './src/index.jsx',
@@ -14,16 +15,17 @@ module.exports = {
 		port: 9000
 	},
 	plugins: [
-		new HtmlWebpackPlugin({
-            template: './src/index.html',
-		})
+		new HtmlWebpackPlugin({ template: './src/index.html', }),
+		new MiniCssExtractPlugin()
 	],
 	module: {
 		rules: [
-			{ test: /\.jsx$/, exclude: /node_modules/, loader: "babel-loader" }
+			{ test: /\.jsx$/, exclude: /node_modules/, loader: "babel-loader" },
+      		{ test: /\.css$/i, use: [MiniCssExtractPlugin.loader, 'css-loader'] }
 		]
 	},
 	resolve: {
+		modules: [ 'node_modules', 'src' ],
 		extensions: ['.js', '.jsx'],
 		alias: {
 			"react": "preact/compat",
