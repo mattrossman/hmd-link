@@ -1,6 +1,8 @@
 import { h } from 'preact'
-import styled from 'styled-components'
+import { useState, useEffect } from 'preact/hooks'
+import axios from 'redaxios'
 
+import styled from 'styled-components'
 import Icon from '@mdi/react'
 import { mdiArrowRightCircleOutline } from '@mdi/js'
 
@@ -55,14 +57,14 @@ const UrlContainer = styled('div')`
 	display: flex;
 `
 
-export const Preview = ({ preview }) => {
-	// const [preview, setPreview] = useState(null);
-	// useEffect(async () => {
-	// 	if (url !== null) {
-	// 		const response = await axios.post('/.netlify/functions/preview', {url})
-	// 		setPreview(response.data);
-	// 	}
-	// }, [url])
+export const Preview = ({ url }) => {
+	const [preview, setPreview] = useState(null);
+	useEffect(async () => {
+		if (url !== null) {
+			const response = await axios.post('/.netlify/functions/preview', {url})
+			setPreview(response.data);
+		}
+	}, [url])
 	let thumbnail;
 	if (preview !== null) {
 		if (preview.images.length > 0) thumbnail = preview.images[0];
@@ -89,18 +91,3 @@ export const Preview = ({ preview }) => {
 		</Card>
 	)
 }
-
-						// <ClippedGridItem>
-						// 	<div style="overflow: hidden">
-						// 		<BottomText className="truncate-width">{lorem}</BottomText>
-						// 	</div>
-						// </ClippedGridItem>
-
-				// <div class="row fluid">
-				// 	<div class="col-sm-10">
-				// 		<p class="vertical-center truncate-width">{preview.url}</p>
-				// 	</div>
-				// 	<div class="col-sm-2" style="padding: 0; position:relative">
-				// 		<Icon className="bottom-right-icon" path={mdiArrowRightCircleOutline} size={2} />
-				// 	</div>
-				// </div>
