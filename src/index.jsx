@@ -26,13 +26,17 @@ const useFirebase = () => {
 		if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
 		const db = firebase.firestore()
 		const auth = firebase.auth()
-		const response = await axios.get('/.netlify/functions/auth')
-		const { token } = response.data;
-		await auth.signInWithCustomToken(token);
+		if (auth.currentUser === null) {
+			const response = await axios.get('/.netlify/functions/auth')
+			const { token } = response.data;
+			await auth.signInWithCustomToken(token);
+		}
 		setServices({ db, auth })
 	}, [])
 	return services
 }
+
+
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
@@ -127,7 +131,7 @@ function NewApp() {
 	const theme = responsiveFontSizes(darkTheme)
 	const { db, auth } = useFirebase();
 	if (auth !== null) {
-		console.log(auth.currentUser.uid)
+		console.log(auth.currentUser)
 	}
 	return (
 		<ThemeProvider theme={theme}>

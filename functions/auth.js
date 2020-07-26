@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
 const stringHash = require('string-hash')
+const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
 
 
 const getAdminAuth = () => {
@@ -13,19 +14,44 @@ const getAdminAuth = () => {
 	return admin.auth()
 }
 
-const getPublicIp = headers => {
+const getPublicIp = (headers) => {
 	const ip = headers['x-nf-client-connection-ip']
 			|| headers['client-ip'];
 	return ip === '::1' ? '127.0.0.1' : ip;
 }
 
+const getUniqueName = (seed) => {
+	return uniqueNamesGenerator({
+		dictionaries: [adjectives, colors, animals],
+		separator: '-',
+		seed
+	})
+}
+
+const getDisplayName = async (auth, uid) => {
+	let displayName = null
+	try {
+		const user = await auth.getUser(uid)
+		displayName = user.displayName
+		if (displayName === undefined) throw new Error('User exists but displayName is blank')
+	}
+	catch (_) {
+		// If the user doesn't exist (error from getUser) or the displayName is blank, generate one
+		displayName = getUniqueName(uid)
+		auth.updateUser(uid, { displayName })
+	}
+	return displayName
+}
+
+
 exports.handler = async event => {
 	const auth = getAdminAuth()
 	const uid = stringHash(getPublicIp(event.headers)).toString()
+	const displayName = await getDisplayName(auth, uid)
 	const token = await auth.createCustomToken(uid)
 	return {
 		statusCode: 200,
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ uid, token })
+		body: JSON.stringify({ uid, displayName, token })
 	}
 }
