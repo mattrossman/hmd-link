@@ -13,23 +13,31 @@ import "firebase/firestore";
 import "firebase/auth";
 
 
-const firebaseConfig = {
-	apiKey: process.env.FIREBASE_API_KEY,
-	authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-	projectId: process.env.FIREBASE_PROJECT_ID,
-};
 
 
-if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
-
-const db = firebase.firestore();
-const auth = firebase.auth();
-
+const useFirebase = () => {
+	const [services, setServices] = useState({db: null, auth: null})
+	const firebaseConfig = {
+		apiKey: process.env.FIREBASE_API_KEY,
+		authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+		projectId: process.env.FIREBASE_PROJECT_ID,
+	}
+	useEffect(async () => {
+		if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
+		const db = firebase.firestore()
+		const auth = firebase.auth()
+		const response = await axios.get('/.netlify/functions/auth')
+		const { token } = response.data;
+		await auth.signInWithCustomToken(token);
+		setServices({ db, auth })
+	}, [])
+	return services
+}
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
-const useUid = (initialState) => {
-	const [uid, setUid] = useState(initialState)
+const useUid = (auth) => {
+	const [uid, setUid] = useState(null)
 	useEffect(async () => {
 		if (uid === null) {
 			const response = await axios.get('/.netlify/functions/auth')
@@ -37,11 +45,11 @@ const useUid = (initialState) => {
 			await auth.signInWithCustomToken(token);
 			setUid(auth.currentUser.uid)
 		}
-	}, [uid])
+	}, [auth])
 	return uid
 }
 
-const useDoc = (uid) => {
+const useDoc = (db, uid) => {
 	const [doc, setDoc] = useState(null);
 	useEffect(() => {
 		if (uid !== null) {
@@ -117,6 +125,10 @@ const darkTheme = createMuiTheme({
 
 function NewApp() {
 	const theme = responsiveFontSizes(darkTheme)
+	const { db, auth } = useFirebase();
+	if (auth !== null) {
+		console.log(auth.currentUser.uid)
+	}
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
