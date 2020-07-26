@@ -2,13 +2,14 @@ import { h, render } from 'preact'
 
 import styled from 'styled-components'
 // import { MainContent } from './components/main/content.jsx'
-import { useUser, useDoc } from './hooks'
+import { useUser, useDoc } from 'hooks'
 import { useEffect } from 'preact/hooks';
 
 import { GridContainer, GridColumn, GridRow } from 'mini.css-preact'
 import 'mini.css/dist/mini-dark.min.css'
 import 'style.css'
 import { Header } from 'components/header'
+import { Content } from 'components/Content'
 import { Form } from 'components/form'
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
@@ -47,10 +48,11 @@ const Container = ({children}) => {
 }
 
 const App = () => {
+	const user = useUser();
 	return(
 		<Container>
 			<Header />
-			<Form />
+			<Content />
 		</Container>
 	)
 }

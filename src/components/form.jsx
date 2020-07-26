@@ -3,13 +3,15 @@ import styled from 'styled-components'
 import { InputGroup, GridRow, GridColumn } from 'mini.css-preact'
 
 
+	// TODO: stop autofill
 const WideInput = styled('input')`
 	width: 100%;
 `
 const MarginForm = styled('form')`margin-top: 4em;`
 
 const SubmitButton = () => {
-	const handler = (event) => {
+	const handler = (e) => {
+    	e.preventDefault();
 		alert("hello")
 	}
 	return (
@@ -20,7 +22,7 @@ const SubmitButton = () => {
 
 export const Form = () => {
 	return (
-		<MarginForm>
+		<form autocomplete="off">
 			<GridRow>
 				<WideInput type="text" id="url" placeholder="e.g. www.example.com" />
 			</GridRow>
@@ -29,7 +31,7 @@ export const Form = () => {
 				<SubmitButton />
 				</div>
 			</div>
-		</MarginForm>
+		</form>
 	)
 }
 
