@@ -34,6 +34,8 @@
     ]
   },
   "dependencies": {
+    "@mdi/js": "^5.4.45",
+    "@mdi/react": "^1.4.0",
     "firebase": "^7.16.1",
     "firebase-admin": "^9.0.0",
     "link-preview-generator": "^0.0.4",
@@ -42,6 +44,7 @@
     "mini.css": "^3.0.1",
     "mini.css-preact": "^1.0.3",
     "preact": "^10.4.6",
+    "prop-types": "^15.7.2",
     "redaxios": "^0.3.0",
     "string-hash": "^1.1.3",
     "styled-components": "^5.1.1",

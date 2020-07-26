@@ -8,6 +8,30 @@ form {
 	padding: 0;
 }
 
+.vertical-center {
+	margin: 0;
+	position: relative;
+	top: 50%;
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+.super-center {
+    display: grid;
+    place-items: center;
+}
+
+.bottom-right-icon {
+	position: absolute;
+    bottom:0;
+    right:0;
+	margin: 10px;
+}
+
+.float-bottom {
+	margin-top: auto;
+}
+
 .truncate-width {
 	white-space: nowrap;
 	overflow: hidden;
