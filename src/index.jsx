@@ -7,7 +7,7 @@ import { useEffect } from 'preact/hooks';
 
 import { GridContainer, GridColumn, GridRow } from 'mini.css-preact'
 import 'mini.css/dist/mini-dark.min.css'
-import './style.css'
+import 'style.css'
 import { Header } from 'components/header'
 import { Form } from 'components/form'
 
@@ -37,8 +37,8 @@ const MarginContainer = styled(GridContainer)`
 const Container = ({children}) => {
 	return (
 		<MarginContainer>
-			<GridRow small='12' medium='6'>
-				<GridContainer medium={{offset: 3}}>
+			<GridRow small='12' medium='8' large='6'>
+				<GridContainer medium={{offset: 2}} large={{offset: 3}}>
 					{ children }
 				</GridContainer>
 			</GridRow>
