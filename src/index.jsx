@@ -5,6 +5,11 @@ import styled from 'styled-components'
 import { useUser, useDoc } from './hooks'
 import { useEffect } from 'preact/hooks';
 
+import { GridContainer, GridColumn, GridRow } from 'mini.css-preact'
+import 'mini.css/dist/mini-dark.min.css'
+import './style.css'
+import { Header } from 'components/header'
+import { Form } from 'components/form'
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
@@ -24,19 +29,28 @@ const sleep = ms => new Promise(r => setTimeout(r, ms))
 // 		window.open(url, '_blank');
 // 	}
 
-const Container = styled.div`
+
+const MarginContainer = styled(GridContainer)`
 	margin-top: 2em;
 `
 
+const Container = ({children}) => {
+	return (
+		<MarginContainer>
+			<GridRow small='12' medium='6'>
+				<GridContainer medium={{offset: 3}}>
+					{ children }
+				</GridContainer>
+			</GridRow>
+		</MarginContainer>
+	)
+}
+
 const App = () => {
 	return(
-		<Container className="container">
-			<div className="row cols-sm-12 cols-md-8">
-				<div className="col-md-offset-2">
-					<h1>hmd.link</h1>
-					<p>Send WebXR links to your headset, fast.</p>
-				</div>
-			</div>
+		<Container>
+			<Header />
+			<Form />
 		</Container>
 	)
 }
