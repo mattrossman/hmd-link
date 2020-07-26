@@ -24,6 +24,7 @@ module.exports = {
 		]
 	},
 	resolve: {
+		modules: [ 'node_modules', 'src' ],
 		extensions: ['.js', '.jsx'],
 		alias: {
 			"react": "preact/compat",

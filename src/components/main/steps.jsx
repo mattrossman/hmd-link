@@ -1,10 +1,13 @@
 import { h } from 'preact'
 import { makeStyles, Paper, Grid, Typography, TextField, Button, Hidden } from '@material-ui/core'
-import { FormControl } from '@material-ui/core';
-import { LinkIcon } from './icons';
+import { Card, CardHeader } from '@material-ui/core'
+import { LinkIcon, CardboardIcon } from './icons';
 
 
 const useStyles = makeStyles(theme => ({
+	root: {
+		marginBottom: theme.spacing(4)
+	},
 	formContainer: {
 		padding: theme.spacing(4),
 	},
@@ -42,6 +45,29 @@ export const StepOne = () => {
 							color="primary"
 							onClick={() => window.alert('click')}>Submit</Button>
 					</form>
+				</Grid>
+			</Grid>
+		</Paper>
+	)
+}
+
+
+export const StepTwo = () => {
+	const classes = useStyles();
+	const placeholder = "e.g. www.example.com"
+	return (
+		<Paper className={classes.root}>
+			<Grid container>
+				<Hidden only='xs'>
+					<Grid container md={3} alignItems="center" justify="center">
+						<CardboardIcon className={classes.icon} />
+					</Grid>
+				</Hidden>
+				<Grid container xs={12} md={9} justify="center" >
+					<Typography variant="h4" gutterBottom>Step 2: Visit on your headset</Typography>
+					<Card>
+						<CardHeader title="Click me"/>
+					</Card>
 				</Grid>
 			</Grid>
 		</Paper>

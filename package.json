@@ -23,23 +23,24 @@
       "preact"
     ],
     "plugins": [
-      "babel-plugin-transform-inline-environment-variables"
+      "babel-plugin-transform-inline-environment-variables",
+      "babel-plugin-styled-components"
     ]
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
     "firebase": "^7.16.1",
     "firebase-admin": "^9.0.0",
     "preact": "^10.4.6",
     "redaxios": "^0.3.0",
     "string-hash": "^1.1.3",
+    "styled-components": "^5.1.1",
     "unique-names-generator": "^4.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
     "babel-loader": "^8.1.0",
+    "babel-plugin-styled-components": "^1.10.7",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "babel-preset-preact": "^2.0.0",
     "html-webpack-plugin": "^4.3.0",
