@@ -1,5 +1,15 @@
+html, body {
+	background: rgb(30, 30, 30);
+}
+
 form {
 	background: none;
 	border: none;
 	padding: 0;
+}
+
+.truncate-width {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }

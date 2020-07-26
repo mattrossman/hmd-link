@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'preact/hooks'
 import axios from 'redaxios';
-
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
@@ -41,4 +40,14 @@ export const useDoc = (user) => {
 		}
 	}, [user])
 	return doc
+}
+
+export const usePreview = (url) => {
+	const [preview, setPreview] = useState(null)
+	useEffect(async () => {
+		if (url !== null) {
+			// setPreview(await linkPreviewGenerator(url))
+		}
+	}, [url])
+	return preview
 }

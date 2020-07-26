@@ -36,6 +36,9 @@
   "dependencies": {
     "firebase": "^7.16.1",
     "firebase-admin": "^9.0.0",
+    "link-preview-generator": "^0.0.4",
+    "link-preview-js": "^2.0.4",
+    "linkpreview-for-node": "^1.1.1",
     "mini.css": "^3.0.1",
     "mini.css-preact": "^1.0.3",
     "preact": "^10.4.6",
