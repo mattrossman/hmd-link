@@ -3,6 +3,7 @@ import { createMuiTheme, ThemeProvider, CssBaseline, responsiveFontSizes } from 
 
 import { MainContent } from './components/main/content.jsx'
 import { useUser, useDoc } from './hooks'
+import { useEffect } from 'preact/hooks';
 
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
@@ -73,9 +74,11 @@ function NewApp() {
 	const theme = responsiveFontSizes(darkTheme)
 	const user = useUser()
 	const doc = useDoc(user)
-	if (user !== null) {
-		console.log('Connected to room: ', user.displayName)
-	}
+	useEffect(() => {
+		if (user !== null) {
+			console.log('Connected to room: ', user.displayName)
+		}
+	}, [user])
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />

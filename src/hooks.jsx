@@ -6,41 +6,32 @@ import "firebase/firestore";
 import "firebase/auth";
 
 
-const useFirebase = () => {
-	const [services, setServices] = useState({db: null, auth: null})
-	const firebaseConfig = {
-		apiKey: process.env.FIREBASE_API_KEY,
-		authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-		projectId: process.env.FIREBASE_PROJECT_ID,
-	}
-	useEffect(() => {
-		if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
-		const db = firebase.firestore()
-		const auth = firebase.auth()
-		setServices({ db, auth })
-	}, [])
-	return services
+const firebaseConfig = {
+	apiKey: process.env.FIREBASE_API_KEY,
+	authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+	projectId: process.env.FIREBASE_PROJECT_ID,
 }
+
+if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore()
+const auth = firebase.auth()
 
 
 export const useUser = () => {
-	const { auth } = useFirebase();
 	const [user, setUser] = useState(null)
 	useEffect(async () => {
-		if (auth !== null) {
-			if (auth.currentUser === null) {
-				const response = await axios.get('/.netlify/functions/auth')
-				const { token } = response.data;
-				await auth.signInWithCustomToken(token);
-			}
-			setUser(auth.currentUser)
+		if (auth.currentUser === null) {
+			const response = await axios.get('/.netlify/functions/auth')
+			const { token } = response.data;
+			await auth.signInWithCustomToken(token);
 		}
-	}, [auth])
+		setUser(auth.currentUser)
+	}, [])
+	console.log('using user')
 	return user;
 }
 
 export const useDoc = (user) => {
-	const { db } = useFirebase() 
 	const [doc, setDoc] = useState(null)
 	useEffect(() => {
 		if (user !== null) {
