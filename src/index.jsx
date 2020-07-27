@@ -31,7 +31,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms))
 // 	}
 
 
-const MarginContainer = styled(GridContainer)`
+const MarginContainer = styled.div`
 	margin-top: 2em;
 	margin-bottom: 6em;
 `
@@ -39,11 +39,11 @@ const MarginContainer = styled(GridContainer)`
 const Container = ({children}) => {
 	return (
 		<MarginContainer>
-			<GridRow small='12' medium='8' large='6'>
-				<GridContainer medium={{offset: 2}} large={{offset: 3}}>
+			<div class="row" >
+				<div class="col-sm-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
 					{ children }
-				</GridContainer>
-			</GridRow>
+				</div>
+			</div>
 		</MarginContainer>
 	)
 }

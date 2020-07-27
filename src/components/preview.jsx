@@ -52,7 +52,6 @@ const RightContainer = styled('div')`
     grid-template-rows: auto 1fr auto;
 	padding: 0;
 `
-// RightContainer.defaultProps = {className: "col-sm-12 col-md-8"}
 
 
 const BottomRow = styled('div')`
@@ -74,7 +73,7 @@ const UrlContainer = styled('div')`
 export const Preview = ({ previewData, onImgLoad, hidden }) => {
 	const { title, description, url, thumbnail } = previewData;
 	return (
-		<DivLink href={url}>
+		<DivLink href={url} target="_blank">
 			<Card className="row card-container shadowed">
 				<div class="col-sm-12 col-md-4" style="padding: 0; height: auto;">
 					<Thumbnail onLoad={onImgLoad} src={thumbnail} alt="site-preview"></Thumbnail>

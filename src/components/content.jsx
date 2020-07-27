@@ -7,16 +7,7 @@ import axios from 'redaxios'
 import { useUser, useDoc, usePreview } from 'hooks'
 import { Form } from 'components/form'
 import { Preview } from 'components/preview'
-
-
-const Dot = styled('span')`
-	height: .5em;
-	width: .5em;
-	background-color: ${props => props.color || 'white'};
-	border-radius: 50%;
-	margin-right: 10px;
-	display: inline-block;
-`
+import { StatusChip } from 'components/status'
 
 const SpinnerContainer = styled('div')`
 	display: grid;
@@ -76,46 +67,14 @@ const LinkStore = ({user}) => {
 	}
 }
 
-const FixedFooter = styled('div')`
-   position:fixed;
-   display: grid;
-   place-items: center;
-   left:0px;
-   bottom:0px;
-   width:100%;
-`
-
-const BottomChip = styled('div')`
-	width: max-content;
-	display: grid;
-	place-items: center;
-	height: 3em;
-	border-radius: 1.5em;
-	background: rgb(50, 50, 50);
-	padding: 0 20px;
-	margin: 20px;
-`
 
 export const Content = () => {
 	const user = useUser();
 	// const user = null;
-	let status;
-	let content;
-	if (user === null) {
-		status = <p><Dot color='orange'/>Connecting...</p>
-	}
-	else {
-		status = <p><Dot color='#0f0'/><b>{user.displayName}</b></p>
-		content = <LinkStore user={user}/>
-	}
 	return (
 		<>
-			{content}
-			<FixedFooter>
-				<BottomChip className="shadowed">
-					{status}
-				</BottomChip>
-			</FixedFooter>
+			{user && <LinkStore user={user}/>}
+			<StatusChip user={user} />
 		</>
 	)
 }

@@ -12,6 +12,11 @@ form {
 	box-shadow: 0 0 5px rgb(20, 20, 20);
 }
 
+.tooltip:after {
+	width: 300px;
+	white-space: normal;
+}
+
 .truncate-width {
 	white-space: nowrap;
 	overflow: hidden;
