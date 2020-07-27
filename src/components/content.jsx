@@ -1,8 +1,8 @@
 import { h, Fragment } from 'preact'
 import styled, { keyframes, css } from 'styled-components'
-import { useState, useEffect } from 'preact/hooks'
+import { useState, useEffect, useCallback } from 'preact/hooks'
 import axios from 'redaxios'
-import { mdiArrowLeftBold } from '@mdi/js'
+import { mdiArrowLeftBold, mdiBomb } from '@mdi/js'
 import Icon from '@mdi/react'
 
 import { useUser, useDoc, usePreview } from 'hooks'
@@ -50,7 +50,7 @@ const ActionBarContainer = styled.div`
 	margin-bottom: 1rem;
 `
 
-const ActionBarLeft = styled.button`
+const ActionBarEditButton = styled.button`
 	background: none;
 	display: inline-grid;
 	grid-auto-flow: column;
@@ -61,22 +61,27 @@ const ActionBarLeft = styled.button`
 // const ActionBarLeftText = styled.``
 
 
-const LinkStore = ({user, previewData}) => {
-	// const [doc, uploadUrl] = useDoc(user)
+const LinkStore = ({user}) => {
+	const [doc, uploadUrl] = useDoc(user)
+	const [editing, setEditing] = useState(false)
 	const [imgLoaded, setImgLoaded] = useState(false)
-	// const [previewData, previewStatus, updatePreviewUrl] = usePreview()
-	const previewStatus = 'done';
+	const [previewData, previewStatus, updatePreviewUrl] = usePreview()
+	// const previewStatus = 'done';
 	// const doc = {url};
 
-	// useEffect(() => {
-	// 	// When firestore detects a new record, request a preview update
-	// 	if (doc) { updatePreviewUrl(doc.url) }
-	// }, [doc]);
+	useEffect(() => {
+		// When firestore detects a new record, request a preview update
+		if (doc) { updatePreviewUrl(doc.url) }
+	}, [doc]);
+	const urlHandler = useCallback((url) => {
+		uploadUrl(url);
+		setEditing(false)
+	}, [uploadUrl])
 
-	if (false && (doc === null || doc === undefined) && previewStatus !== null) {
+	if (editing) {
 		// We don't have a record, and we already tried waiting for a preview
 		// TODO: this logic is weird?? Shouldn't I instead be waiting for a signal from useDoc?
-		return <Form urlHandler={uploadUrl}/>
+		return <Form urlHandler={urlHandler} />
 	}
 	else {
 		if (previewData && previewStatus === 'done') {
@@ -84,9 +89,9 @@ const LinkStore = ({user, previewData}) => {
 				<FadeIn visible={imgLoaded}>
 					<ActionBarContainer class="row">
 						<div class="col-sm-6">
-							<ActionBarLeft>
+							<ActionBarEditButton onClick={() => setEditing(true)}>
 								<Icon path={mdiArrowLeftBold} size={2} /><p>Edit link</p>
-							</ActionBarLeft>
+							</ActionBarEditButton>
 						</div>
 					</ActionBarContainer>
 					<Preview previewData={previewData} onImgLoad={()=>{setImgLoaded(true)}} />

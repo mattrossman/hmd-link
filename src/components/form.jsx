@@ -1,14 +1,13 @@
 import { h } from 'preact'
 import { useRef, useCallback } from 'preact/hooks'
 import styled from 'styled-components'
-import { InputGroup, GridRow, GridColumn } from 'mini.css-preact'
 
 
 	// TODO: stop autofill
 const WideInput = styled('input')`
 	width: 100%;
 `
-const MarginForm = styled('form')`margin-top: 4em;`
+const MarginForm = styled('form')`margin-top: 8em;`
 
 
 export const Form = ({urlHandler}) => {
@@ -21,17 +20,17 @@ export const Form = ({urlHandler}) => {
 		}
 	}
 	return (
-		<form autocomplete="off">
-			<GridRow>
+		<MarginForm autocomplete="off">
+			<div class="row">
 				<WideInput ref={input} type="text" id="url" placeholder="e.g. www.example.com" />
-			</GridRow>
+			</div>
 			<div className="row">
 				<div className="col-sm-12 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
 				<button className="primary col-sm"
 					type="submit" onclick={handler}>Submit</button>
 				</div>
 			</div>
-		</form>
+		</MarginForm>
 	)
 }
 
