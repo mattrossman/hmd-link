@@ -20,8 +20,21 @@ const Thumbnail = styled('img')`
 `
 
 const Card = styled('div')`
+	color: white;
 	background: rgb(50, 50, 50);
-	box-shadow: 0 0 5px black;
+	box-shadow: 0 0 5px rgb(20, 20, 20);
+	background-color: none;
+  	transition: transform .2s, box-shadow .2s; 
+	&:hover {
+		transform: scale(1.05);
+		box-shadow: 0 0 10px black;
+	}
+`
+
+const DivLink = styled('a')`
+	&:hover {
+		text-decoration: none;
+	}
 `
 
 // Restricts number of vertical lines
@@ -62,22 +75,24 @@ const UrlContainer = styled('div')`
 export const Preview = ({ previewData }) => {
 	const { title, description, url, thumbnail } = previewData;
 	return (
-		<Card className="row">
-			<div class="col-sm-12 col-md-4" style="padding: 0; height: auto;">
-				<Thumbnail onLoad={()=>console.log("Image finished loading")} src={thumbnail} alt="site-preview"></Thumbnail>
-			</div>
-			<div class="col-sm-12 col-md-8" style="padding: 10px">
-				<RightContainer>
-					<h2 class="truncate-width">{title}</h2>
-					<Description>{description}</Description>
-					<BottomRow>
-						<UrlContainer>
-							<UrlText>{url}</UrlText>
-						</UrlContainer>
-						<Icon path={mdiArrowRightCircleOutline} size={2} />
-					</BottomRow>
-				</RightContainer>
-			</div>
-		</Card>
+		<DivLink href={url}>
+			<Card className="row card-container">
+				<div class="col-sm-12 col-md-4" style="padding: 0; height: auto;">
+					<Thumbnail onLoad={()=>console.log("Image finished loading")} src={thumbnail} alt="site-preview"></Thumbnail>
+				</div>
+				<div class="col-sm-12 col-md-8" style="padding: 10px">
+					<RightContainer>
+						<h2 class="truncate-width">{title}</h2>
+						<Description>{description}</Description>
+						<BottomRow>
+							<UrlContainer>
+								<UrlText>{url}</UrlText>
+							</UrlContainer>
+							<Icon path={mdiArrowRightCircleOutline} size={2} />
+						</BottomRow>
+					</RightContainer>
+				</div>
+			</Card>
+		</DivLink>
 	)
 }

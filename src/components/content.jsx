@@ -18,9 +18,16 @@ const Dot = styled('span')`
 	display: inline-block;
 `
 
+const SpinnerContainer = styled('div')`
+	display: grid;
+	place-items: center;
+`
+
 const Spinner = () => {
 	return (
-		<div class="spinner"></div>
+		<SpinnerContainer>
+			<div class="spinner"></div>
+		</SpinnerContainer>
 	)
 }
 
@@ -69,18 +76,17 @@ const BottomChip = styled('div')`
 	height: 3em;
 	border-radius: 1.5em;
 	background: rgb(50, 50, 50);
-	box-shadow: 0 0 5px black;
 	padding: 0 20px;
 	margin: 20px;
 `
 
 export const Content = () => {
 	const user = useUser();
+	// const user = null;
 	let status;
 	let content;
 	if (user === null) {
 		status = <p><Dot color='orange'/>Connecting...</p>
-		content = <Spinner />
 	}
 	else {
 		status = <p><Dot color='#0f0'/><b>{user.displayName}</b></p>
@@ -90,7 +96,7 @@ export const Content = () => {
 		<>
 			{content}
 			<FixedFooter>
-				<BottomChip>
+				<BottomChip className="shadowed">
 					{status}
 				</BottomChip>
 			</FixedFooter>
