@@ -1,4 +1,5 @@
 import { h } from 'preact'
+import { useRef, useCallback } from 'preact/hooks'
 import styled from 'styled-components'
 import { InputGroup, GridRow, GridColumn } from 'mini.css-preact'
 
@@ -9,26 +10,25 @@ const WideInput = styled('input')`
 `
 const MarginForm = styled('form')`margin-top: 4em;`
 
-const SubmitButton = () => {
+
+export const Form = ({urlHandler}) => {
+	const input = useRef(null);
 	const handler = (e) => {
     	e.preventDefault();
-		alert("hello")
+		if (input.current) {
+			console.log('dispatching urlHander: ', input.current.value)
+			urlHandler(input.current.value)
+		}
 	}
-	return (
-		<button className="primary col-sm-12"
-			type="submit" onClick={handler}>Submit</button>
-	)
-}
-
-export const Form = () => {
 	return (
 		<form autocomplete="off">
 			<GridRow>
-				<WideInput type="text" id="url" placeholder="e.g. www.example.com" />
+				<WideInput ref={input} type="text" id="url" placeholder="e.g. www.example.com" />
 			</GridRow>
 			<div className="row">
 				<div className="col-sm-12 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
-				<SubmitButton />
+				<button className="primary col-sm"
+					type="submit" onclick={handler}>Submit</button>
 				</div>
 			</div>
 		</form>

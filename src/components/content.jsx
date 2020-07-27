@@ -4,7 +4,7 @@ import { useState, useEffect } from 'preact/hooks'
 import axios from 'redaxios'
 
 
-import { useUser, useDoc } from 'hooks'
+import { useUser, useDoc, usePreview } from 'hooks'
 import { Form } from 'components/form'
 import { Preview } from 'components/preview'
 
@@ -18,21 +18,39 @@ const Dot = styled('span')`
 	display: inline-block;
 `
 
-
+const Spinner = () => {
+	return (
+		<div class="spinner"></div>
+	)
+}
 
 const LinkStore = ({user}) => {
-	const doc = useDoc(null)
-	// const doc = useDoc(user)
-	console.log(doc);
+	const [doc, uploadUrl] = useDoc(user)
+	const [previewData, previewStatus, setPreviewUrl] = usePreview()
 
-	if (doc === null) {
+	useEffect(() => {
+		if (doc && !previewData) {
+			console.log("We got a document but no preview, attempting to set preview url")
+			setPreviewUrl(doc.url)
+		}
+	}, [doc, previewData]);
+
+	if ((doc === null || doc === undefined) && previewStatus !== null) {
+		console.log('Preview status is ', previewStatus);
 		// return <p>No saved link</p>
-		return <Form />
+		return <Form urlHandler={uploadUrl}/>
 	}
 	else {
-		return (
-			<Preview url={doc.url} />
-		)
+		if (previewData !== null) {
+			return (
+				<Preview previewData={previewData} />
+			)
+		}
+		else {
+			return (
+				<Spinner />
+			)
+		}
 	}
 }
 
@@ -63,7 +81,7 @@ export const Content = () => {
 	let content;
 	if (user === null) {
 		status = <p><Dot color='orange'/>Connecting...</p>
-		content = null;
+		content = <Spinner />
 	}
 	else {
 		status = <p><Dot color='#0f0'/><b>{user.displayName}</b></p>

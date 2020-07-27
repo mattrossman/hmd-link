@@ -15,7 +15,7 @@
     "webpack:dev": "webpack-dev-server",
     "webpack:build": "webpack",
     "analyze": "ANALYZE=true webpack",
-    "clean": "killall node && rm -rf .parcel-cache dist"
+    "clean": "rm -rf dist && killall node"
   },
   "babel": {
     "presets": [

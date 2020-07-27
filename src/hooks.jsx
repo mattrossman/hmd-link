@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'preact/hooks'
+import { useState, useEffect, useCallback } from 'preact/hooks'
 import axios from 'redaxios';
 import * as firebase from "firebase/app";
 import "firebase/firestore";
@@ -26,12 +26,22 @@ export const useUser = () => {
 		}
 		setUser(auth.currentUser)
 	}, [])
-	console.log('using user')
 	return user;
 }
 
 export const useDoc = (user) => {
 	const [doc, setDoc] = useState(null)
+	const uploadUrl = useCallback(async (url) => {
+		console.log('running uploadUrl: ', url)
+		if (user !== null) {
+			const payload = {
+				url,
+				timestamp: Date.now()
+			}
+			console.log('Sending payload: ', payload,' to uid ', user.uid)
+			await db.collection("rooms").doc(user.uid).set(payload)
+		}
+	}, [user])
 	useEffect(() => {
 		if (user !== null) {
 			db.collection("rooms").doc(user.uid).onSnapshot(snapshot => {
@@ -39,15 +49,37 @@ export const useDoc = (user) => {
 			})
 		}
 	}, [user])
-	return doc
+	return [doc, uploadUrl]
 }
 
-export const usePreview = (url) => {
+export const usePreview = () => {
+	const [url, setUrl] = useState(null);
 	const [preview, setPreview] = useState(null)
+
+	/* The status is needed in case the preview endpoint fails, allowing us to fallback
+	to a simpler rendering of the preview. */
+	const [status, setStatus] = useState(null)
 	useEffect(async () => {
 		if (url !== null) {
-			// setPreview(await linkPreviewGenerator(url))
+			try {
+				const response = await axios.post('/.netlify/functions/preview', {url})
+				const preview = response.data;
+
+				let thumbnail;
+				if (preview.images && preview.images.length > 0) thumbnail = preview.images[0];
+				else if (preview.favicons && preview.favicons.length > 1) thumbnail = preview.favicons[1];
+				else thumbnail = 'https://picsum.photos/id/1025/200';
+				const title = preview.title || '(No title)'
+				const description = preview.description || '(No description)'
+				
+				setPreview({title, description, url, thumbnail});
+				setStatus('success')
+			}
+			catch (e) {
+				console.log('Caught error: ', e)
+				setStatus('error')
+			}
 		}
 	}, [url])
-	return preview
+	return [preview, status, setUrl]
 }
