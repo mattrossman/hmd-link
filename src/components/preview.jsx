@@ -76,7 +76,7 @@ const Centered = styled.div`
 	align-items: center;
 `
 
-export const Preview = ({ data, status, onImgLoad }) => {
+export const Preview = ({ data, onImgLoad }) => {
 	let { title, description, url, thumbnail } = data;
 	return (
 		<DivLink href={url} target="_blank">

@@ -35,7 +35,7 @@ const fadeIn = keyframes`
 
 const FadeIn = styled.div`
 	display: ${props => props.visible ? 'block' : 'none'};
-	animation: ${props => props.visible ? fadeIn : null} 0.2s linear;
+	animation: ${props => props.visible ? fadeIn : null} .2s linear;
 `
 
 const BackControls = () => {
@@ -65,13 +65,15 @@ const LinkStore = ({user}) => {
 	const [doc, uploadUrl] = useDoc(user)
 	const [editing, setEditing] = useState(false)
 	const [imgLoaded, setImgLoaded] = useState(false)
-	const [previewData, previewStatus, updatePreviewUrl] = usePreview()
-	// const previewStatus = 'done';
+	const [previewData, updatePreviewUrl] = usePreview()
 	// const doc = {url};
 
 	useEffect(() => {
 		// When firestore detects a new record, request a preview update
-		if (doc) { updatePreviewUrl(doc.url) }
+		if (doc) {
+			setImgLoaded(false);
+			updatePreviewUrl(doc.url);
+		}
 	}, [doc]);
 	const urlHandler = useCallback((url) => {
 		uploadUrl(url);
@@ -84,7 +86,7 @@ const LinkStore = ({user}) => {
 		return <Form urlHandler={urlHandler} />
 	}
 	else {
-		if (previewData && previewStatus) {
+		if (previewData) {
 			return (
 				<FadeIn visible={imgLoaded}>
 					<ActionBarContainer class="row">
@@ -94,7 +96,7 @@ const LinkStore = ({user}) => {
 							</ActionBarEditButton>
 						</div>
 					</ActionBarContainer>
-					<Preview data={previewData} status={previewStatus} onImgLoad={()=>{setImgLoaded(true)}} />
+					<Preview data={previewData}  onImgLoad={()=>{console.log("loaded"); setImgLoaded(true)}} />
 				</FadeIn>
 			)
 		}

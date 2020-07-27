@@ -54,15 +54,14 @@ export const useDoc = (user) => {
 
 export const usePreview = () => {
 	const [url, setUrl] = useState(null);
-	const [preview, setPreview] = useState(null)
-
-	/* The status is needed in case the preview endpoint fails, allowing us to fallback
-	to a simpler rendering of the preview. */
-	const [status, setStatus] = useState(null)
-	const updateUrl = useCallback((url) => {
-		setStatus(null)
+	const [data, setData] = useState(null)
+	
+	const updateUrl = (url) => {
+		setData(null);
 		setUrl(url)
-	})
+		console.log("changed URL")
+	}
+
 	useEffect(async () => {
 		const fallbackThumbnail = 'https://picsum.photos/id/1025/200';
 		if (url !== null) {
@@ -77,14 +76,12 @@ export const usePreview = () => {
 				const title = preview.title || '(No title)'
 				const description = preview.description || '(No description)'
 				
-				setPreview({title, description, url, thumbnail});
-				setStatus('done')
+				setData({title, description, url, thumbnail});
 			}
 			catch (e) {
-				setPreview({url, title: '(No preview)', description:'', thumbnail: fallbackThumbnail})
-				setStatus('error')
+				setData({url, title: '(No preview)', description:'', thumbnail: fallbackThumbnail})
 			}
 		}
 	}, [url])
-	return [preview, status, updateUrl]
+	return [data, updateUrl]
 }
