@@ -26,14 +26,13 @@ const Spinner = () => {
 
 const LinkStore = ({user}) => {
 	const [doc, uploadUrl] = useDoc(user)
-	const [previewData, previewStatus, setPreviewUrl] = usePreview()
+	const [previewData, previewStatus, updatePreviewUrl] = usePreview()
 
 	useEffect(() => {
-		if (doc && !previewData) {
-			console.log("We got a document but no preview, attempting to set preview url")
-			setPreviewUrl(doc.url)
+		if (doc) {
+			updatePreviewUrl(doc.url)
 		}
-	}, [doc, previewData]);
+	}, [doc]);
 
 	if ((doc === null || doc === undefined) && previewStatus !== null) {
 		console.log('Preview status is ', previewStatus);
@@ -41,7 +40,7 @@ const LinkStore = ({user}) => {
 		return <Form urlHandler={uploadUrl}/>
 	}
 	else {
-		if (previewData !== null) {
+		if (previewData !== null && previewStatus === 'done') {
 			return (
 				<Preview previewData={previewData} />
 			)

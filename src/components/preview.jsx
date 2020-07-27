@@ -64,7 +64,7 @@ export const Preview = ({ previewData }) => {
 	return (
 		<Card className="row">
 			<div class="col-sm-12 col-md-4" style="padding: 0; height: auto;">
-				<Thumbnail src={thumbnail} alt="site-preview"></Thumbnail>
+				<Thumbnail onLoad={()=>console.log("Image finished loading")} src={thumbnail} alt="site-preview"></Thumbnail>
 			</div>
 			<div class="col-sm-12 col-md-8" style="padding: 10px">
 				<RightContainer>

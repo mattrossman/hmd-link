@@ -59,6 +59,10 @@ export const usePreview = () => {
 	/* The status is needed in case the preview endpoint fails, allowing us to fallback
 	to a simpler rendering of the preview. */
 	const [status, setStatus] = useState(null)
+	const updateUrl = useCallback((url) => {
+		setStatus(null)
+		setUrl(url)
+	})
 	useEffect(async () => {
 		if (url !== null) {
 			try {
@@ -73,7 +77,7 @@ export const usePreview = () => {
 				const description = preview.description || '(No description)'
 				
 				setPreview({title, description, url, thumbnail});
-				setStatus('success')
+				setStatus('done')
 			}
 			catch (e) {
 				console.log('Caught error: ', e)
@@ -81,5 +85,5 @@ export const usePreview = () => {
 			}
 		}
 	}, [url])
-	return [preview, status, setUrl]
+	return [preview, status, updateUrl]
 }
