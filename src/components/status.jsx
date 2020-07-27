@@ -42,7 +42,7 @@ export const StatusChip = ({ user }) => {
 		}
 	}, [user])
 	const tooltipText=`
-		This is your room name, determined by your public IP.\n
+		This is your room name, determined by your public IP.
 		As long as your headset and companion device show the same room name,
 		you should be able to share links between them.
 	`

@@ -4,7 +4,7 @@ import axios from 'redaxios'
 
 import styled from 'styled-components'
 import Icon from '@mdi/react'
-import { mdiArrowRightCircleOutline } from '@mdi/js'
+import { mdiOpenInNew } from '@mdi/js'
 
 import { usePreview } from 'hooks'
 
@@ -62,12 +62,18 @@ const BottomRow = styled('div')`
 
 const UrlText = styled('p')`
 	margin-top: auto;
+	margin-bottom: 0;
 `
 UrlText.defaultProps = {className: 'truncate-width'}
 
 const UrlContainer = styled('div')`
 	min-width: 0;
 	display: flex;
+`
+
+const Centered = styled.div`
+	display: grid;
+	align-items: center;
 `
 
 export const Preview = ({ previewData, onImgLoad, hidden }) => {
@@ -86,7 +92,9 @@ export const Preview = ({ previewData, onImgLoad, hidden }) => {
 							<UrlContainer>
 								<UrlText>{url}</UrlText>
 							</UrlContainer>
-							<Icon path={mdiArrowRightCircleOutline} size={2} />
+							<Centered>
+								<Icon path={mdiOpenInNew} size={1} />
+							</Centered>
 						</BottomRow>
 					</RightContainer>
 				</div>

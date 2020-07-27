@@ -32,13 +32,12 @@ const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 
 const MarginContainer = styled.div`
-	margin-top: 2em;
 	margin-bottom: 6em;
 `
 
 const Container = ({children}) => {
 	return (
-		<MarginContainer>
+		<MarginContainer className="container">
 			<div class="row" >
 				<div class="col-sm-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
 					{ children }

@@ -2,7 +2,8 @@ import { h, Fragment } from 'preact'
 import styled, { keyframes, css } from 'styled-components'
 import { useState, useEffect } from 'preact/hooks'
 import axios from 'redaxios'
-
+import { mdiArrowLeftBold } from '@mdi/js'
+import Icon from '@mdi/react'
 
 import { useUser, useDoc, usePreview } from 'hooks'
 import { Form } from 'components/form'
@@ -37,25 +38,58 @@ const FadeIn = styled.div`
 	animation: ${props => props.visible ? fadeIn : null} 0.2s linear;
 `
 
+const BackControls = () => {
+	return (
+		<div class="row">
+			<p>Visit this link on your</p>
+		</div>
+	)
+}
 
-const LinkStore = ({user}) => {
-	const [doc, uploadUrl] = useDoc(user)
+const ActionBarContainer = styled.div`
+	margin-bottom: 1rem;
+`
+
+const ActionBarLeft = styled.button`
+	background: none;
+	display: inline-grid;
+	grid-auto-flow: column;
+	align-items: center;
+	margin: 0;
+`
+
+// const ActionBarLeftText = styled.``
+
+
+const LinkStore = ({user, previewData}) => {
+	// const [doc, uploadUrl] = useDoc(user)
 	const [imgLoaded, setImgLoaded] = useState(false)
-	const [previewData, previewStatus, updatePreviewUrl] = usePreview()
+	// const [previewData, previewStatus, updatePreviewUrl] = usePreview()
+	const previewStatus = 'done';
+	// const doc = {url};
 
-	useEffect(() => {
-		// When firestore detects a new record, request a preview update
-		if (doc) { updatePreviewUrl(doc.url) }
-	}, [doc]);
+	// useEffect(() => {
+	// 	// When firestore detects a new record, request a preview update
+	// 	if (doc) { updatePreviewUrl(doc.url) }
+	// }, [doc]);
 
-	if ((doc === null || doc === undefined) && previewStatus !== null) {
+	if (false && (doc === null || doc === undefined) && previewStatus !== null) {
+		// We don't have a record, and we already tried waiting for a preview
+		// TODO: this logic is weird?? Shouldn't I instead be waiting for a signal from useDoc?
 		return <Form urlHandler={uploadUrl}/>
 	}
 	else {
 		if (previewData && previewStatus === 'done') {
 			return (
 				<FadeIn visible={imgLoaded}>
-					<Preview style="color: red;" previewData={previewData} onImgLoad={()=>{setImgLoaded(true)}} />
+					<ActionBarContainer class="row">
+						<div class="col-sm-6">
+							<ActionBarLeft>
+								<Icon path={mdiArrowLeftBold} size={2} /><p>Edit link</p>
+							</ActionBarLeft>
+						</div>
+					</ActionBarContainer>
+					<Preview previewData={previewData} onImgLoad={()=>{setImgLoaded(true)}} />
 				</FadeIn>
 			)
 		}
@@ -67,23 +101,30 @@ const LinkStore = ({user}) => {
 	}
 }
 
-
+// TODO: remove this, just put stuff directly in the main App
 export const Content = () => {
 	const user = useUser();
 	// const user = null;
 	return (
 		<>
-			{user && <LinkStore user={user}/>}
+			{user && <LinkStore user={user} previewData={preview}/>}
 			<StatusChip user={user} />
 		</>
 	)
 }
 
-// const previews = [
-// 	{"url":"https://github.com/developit","title":"developit - Overview","siteName":"GitHub","description":"Web DevRel at @google. Creator of @preactjs and other tiny libraries. - developit","mediaType":"profile","contentType":"text/html; charset=utf-8","images":["https://avatars0.githubusercontent.com/u/105127?s=400&u=69e33cdaa236c093332f7860106b047bd51fadd4&v=4"],"videos":[],"favicons":["https://github.githubassets.com/favicons/favicon.svg"]},
-// 	{"url":"https://hubs.mozilla.com/","title":"Hubs by Mozilla","description":"Share a virtual room with friends. Watch videos, play with 3D objects, or just hang out.","mediaType":"website","contentType":"text/html; charset=utf-8","images":[],"videos":[],"favicons":["https://hubs.mozilla.com/favicon.ico","https://hubs.mozilla.com/app-icon.png"]},
-// 	{ "url": "https://andrejgajdos.com/how-to-create-a-link-preview/", "title": "How to Create a Link Preview: The Definite Guide [Implementation and Demo Included] | Andrej Gajdos", "siteName": "Andrej Gajdos", "description": "The whole strategy of creating link previews, including implementation using open-source libraries in node.js. The whole solution is released as npm package.", "mediaType": "article", "contentType": "text/html; charset=UTF-8", "images": ["https://andrejgajdos.com/wp-content/uploads/2019/11/generating-link-preview-1024x562.png"], "videos": [], "favicons": ["https://andrejgajdos.com/wp-content/uploads/2019/05/cropped-andrejgajdos.com_-32x32.jpg?x80378", "https://andrejgajdos.com/wp-content/uploads/2019/05/cropped-andrejgajdos.com_-192x192.jpg?x80378"] }
-// ]
+const preview = {
+	title: "developit - Overview",
+	description: "Web DevRel at @google. Creator of @preactjs and other tiny libraries. - developit",
+	url: "https://github.com/developit",
+	thumbnail: "https://avatars0.githubusercontent.com/u/105127?s=400&u=69e33cdaa236c093332f7860106b047bd51fadd4&v=4"
+}
+
+const previews = [
+	{"url":"https://github.com/developit","title":"developit - Overview","siteName":"GitHub","description":"Web DevRel at @google. Creator of @preactjs and other tiny libraries. - developit","mediaType":"profile","contentType":"text/html; charset=utf-8","images":["https://avatars0.githubusercontent.com/u/105127?s=400&u=69e33cdaa236c093332f7860106b047bd51fadd4&v=4"],"videos":[],"favicons":["https://github.githubassets.com/favicons/favicon.svg"]},
+	{"url":"https://hubs.mozilla.com/","title":"Hubs by Mozilla","description":"Share a virtual room with friends. Watch videos, play with 3D objects, or just hang out.","mediaType":"website","contentType":"text/html; charset=utf-8","images":[],"videos":[],"favicons":["https://hubs.mozilla.com/favicon.ico","https://hubs.mozilla.com/app-icon.png"]},
+	{ "url": "https://andrejgajdos.com/how-to-create-a-link-preview/", "title": "How to Create a Link Preview: The Definite Guide [Implementation and Demo Included] | Andrej Gajdos", "siteName": "Andrej Gajdos", "description": "The whole strategy of creating link previews, including implementation using open-source libraries in node.js. The whole solution is released as npm package.", "mediaType": "article", "contentType": "text/html; charset=UTF-8", "images": ["https://andrejgajdos.com/wp-content/uploads/2019/11/generating-link-preview-1024x562.png"], "videos": [], "favicons": ["https://andrejgajdos.com/wp-content/uploads/2019/05/cropped-andrejgajdos.com_-32x32.jpg?x80378", "https://andrejgajdos.com/wp-content/uploads/2019/05/cropped-andrejgajdos.com_-192x192.jpg?x80378"] }
+]
 
 // export const Content = () => {
 // 	return <Preview url="https://github.com/mattrossman" />

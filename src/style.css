@@ -22,3 +22,7 @@ form {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+h1 {
+	font-size: 8vw;
+}
