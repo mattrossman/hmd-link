@@ -6,9 +6,9 @@ import { mdiArrowLeftBold, mdiBomb } from '@mdi/js'
 import Icon from '@mdi/react'
 
 import { useUser, useDoc, usePreview } from 'hooks'
-import { Form } from 'components/form'
-import { Preview } from 'components/preview'
-import { StatusChip } from 'components/status'
+import { Form } from 'components/Form'
+import { Preview } from 'components/Preview'
+import { StatusChip } from 'components/StatusChip'
 
 const SpinnerContainer = styled('div')`
 	display: grid;

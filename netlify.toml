@@ -6,4 +6,4 @@
 	framework = "#custom"
 	command = "yarn webpack:dev"
 	targetPort = 9000
-	autoLaunch = true
+	autoLaunch = false

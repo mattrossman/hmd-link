@@ -42,7 +42,6 @@
     "link-preview-js": "^2.0.4",
     "linkpreview-for-node": "^1.1.1",
     "mini.css": "^3.0.1",
-    "mini.css-preact": "^1.0.3",
     "preact": "^10.4.6",
     "prop-types": "^15.7.2",
     "redaxios": "^0.3.0",

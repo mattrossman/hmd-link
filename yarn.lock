@@ -7742,11 +7742,6 @@ mini-css-extract-plugin@^0.9.0:
     schema-utils "^1.0.0"
     webpack-sources "^1.1.0"
 
-mini.css-preact@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/mini.css-preact/-/mini.css-preact-1.0.3.tgz#f5fb5626a68753241c576603978ec68e6a7817fa"
-  integrity sha512-QAZdYMRS66RMtOwXVoAg6ah4Khwh7hZJRqQgCy8tU2HGg1UDsRwlH2AA1SliKJ6c6vRtxjyPcKQ+yrNNFdxdcw==
-
 mini.css@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/mini.css/-/mini.css-3.0.1.tgz#f6236e99997bbd19484d5655d087ec96b887af68"
