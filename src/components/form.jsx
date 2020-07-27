@@ -14,7 +14,7 @@ export const Form = ({urlHandler}) => {
 	const input = useRef(null);
 	const handler = (e) => {
     	e.preventDefault();
-		if (input.current) {
+		if (input.current && input.current.checkValidity()) {
 			console.log('dispatching urlHander: ', input.current.value)
 			urlHandler(input.current.value)
 		}
@@ -22,7 +22,7 @@ export const Form = ({urlHandler}) => {
 	return (
 		<MarginForm autocomplete="off">
 			<div class="row">
-				<WideInput ref={input} type="text" id="url" placeholder="e.g. www.example.com" />
+				<WideInput required ref={input} type="text" id="url" title="URL" pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" />
 			</div>
 			<div className="row">
 				<div className="col-sm-12 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">

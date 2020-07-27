@@ -56,11 +56,7 @@ export const usePreview = () => {
 	const [url, setUrl] = useState(null);
 	const [data, setData] = useState(null)
 	
-	const updateUrl = (url) => {
-		setData(null);
-		setUrl(url)
-		console.log("changed URL")
-	}
+	const clear = () => setData(null);
 
 	useEffect(async () => {
 		const fallbackThumbnail = 'https://picsum.photos/id/1025/200';
@@ -83,5 +79,5 @@ export const usePreview = () => {
 			}
 		}
 	}, [url])
-	return [data, updateUrl]
+	return [data, setUrl, clear]
 }

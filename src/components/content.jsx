@@ -65,7 +65,7 @@ const LinkStore = ({user}) => {
 	const [doc, uploadUrl] = useDoc(user)
 	const [editing, setEditing] = useState(false)
 	const [imgLoaded, setImgLoaded] = useState(false)
-	const [previewData, updatePreviewUrl] = usePreview()
+	const [previewData, updatePreviewUrl, clearPreview] = usePreview()
 	// const doc = {url};
 
 	useEffect(() => {
@@ -76,6 +76,8 @@ const LinkStore = ({user}) => {
 		}
 	}, [doc]);
 	const urlHandler = useCallback((url) => {
+		// TODO: we need to clear out the preview data here
+		clearPreview();
 		uploadUrl(url);
 		setEditing(false)
 	}, [uploadUrl])
