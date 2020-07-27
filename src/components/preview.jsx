@@ -22,7 +22,6 @@ const Thumbnail = styled('img')`
 const Card = styled('div')`
 	color: white;
 	background: rgb(50, 50, 50);
-	box-shadow: 0 0 5px rgb(20, 20, 20);
 	background-color: none;
   	transition: transform .2s, box-shadow .2s; 
 	&:hover {
@@ -72,13 +71,13 @@ const UrlContainer = styled('div')`
 	display: flex;
 `
 
-export const Preview = ({ previewData }) => {
+export const Preview = ({ previewData, onImgLoad, hidden }) => {
 	const { title, description, url, thumbnail } = previewData;
 	return (
 		<DivLink href={url}>
-			<Card className="row card-container">
+			<Card className="row card-container shadowed">
 				<div class="col-sm-12 col-md-4" style="padding: 0; height: auto;">
-					<Thumbnail onLoad={()=>console.log("Image finished loading")} src={thumbnail} alt="site-preview"></Thumbnail>
+					<Thumbnail onLoad={onImgLoad} src={thumbnail} alt="site-preview"></Thumbnail>
 				</div>
 				<div class="col-sm-12 col-md-8" style="padding: 10px">
 					<RightContainer>

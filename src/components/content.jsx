@@ -1,5 +1,5 @@
 import { h, Fragment } from 'preact'
-import styled from 'styled-components'
+import styled, { keyframes, css } from 'styled-components'
 import { useState, useEffect } from 'preact/hooks'
 import axios from 'redaxios'
 
@@ -30,26 +30,42 @@ const Spinner = () => {
 		</SpinnerContainer>
 	)
 }
+// const sleep = ms => new Promise(r => setTimeout(r, ms))
+
+const fadeIn = keyframes`
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+`;
+
+const FadeIn = styled.div`
+	display: ${props => props.visible ? 'block' : 'none'};
+	animation: ${props => props.visible ? fadeIn : null} 0.2s linear;
+`
+
 
 const LinkStore = ({user}) => {
 	const [doc, uploadUrl] = useDoc(user)
+	const [imgLoaded, setImgLoaded] = useState(false)
 	const [previewData, previewStatus, updatePreviewUrl] = usePreview()
 
 	useEffect(() => {
-		if (doc) {
-			updatePreviewUrl(doc.url)
-		}
+		// When firestore detects a new record, request a preview update
+		if (doc) { updatePreviewUrl(doc.url) }
 	}, [doc]);
 
 	if ((doc === null || doc === undefined) && previewStatus !== null) {
-		console.log('Preview status is ', previewStatus);
-		// return <p>No saved link</p>
 		return <Form urlHandler={uploadUrl}/>
 	}
 	else {
-		if (previewData !== null && previewStatus === 'done') {
+		if (previewData && previewStatus === 'done') {
 			return (
-				<Preview previewData={previewData} />
+				<FadeIn visible={imgLoaded}>
+					<Preview style="color: red;" previewData={previewData} onImgLoad={()=>{setImgLoaded(true)}} />
+				</FadeIn>
 			)
 		}
 		else {
