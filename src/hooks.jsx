@@ -53,16 +53,20 @@ export const useDoc = (user) => {
 }
 
 export const usePreview = () => {
-	const [url, setUrl] = useState(null);
+	const [target, setTarget] = useState(null);
 	const [data, setData] = useState(null)
 	
 	const clear = () => setData(null);
+	const setValidTarget = (url) => {
+		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
+		setTarget(prefix + url);
+	}
 
 	useEffect(async () => {
 		const fallbackThumbnail = 'https://picsum.photos/id/1025/200';
-		if (url !== null) {
+		if (target !== null) {
 			try {
-				const response = await axios.post('/.netlify/functions/preview', {url})
+				const response = await axios.post('/.netlify/functions/preview', {url: target})
 				const preview = response.data;
 
 				let thumbnail;
@@ -71,13 +75,15 @@ export const usePreview = () => {
 				else thumbnail = fallbackThumbnail;
 				const title = preview.title || '(No title)'
 				const description = preview.description || '(No description)'
+				const url = preview.url || target;
+				if (!preview.url) console.warning("Preview URL was missing");
 				
 				setData({title, description, url, thumbnail});
 			}
 			catch (e) {
-				setData({url, title: '(No preview)', description:'', thumbnail: fallbackThumbnail})
+				setData({url: target, title: '(No preview)', description:'', thumbnail: fallbackThumbnail})
 			}
 		}
-	}, [url])
-	return [data, setUrl, clear]
+	}, [target])
+	return [data, setValidTarget, clear]
 }

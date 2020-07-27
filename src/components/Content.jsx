@@ -52,8 +52,7 @@ const ActionBarContainer = styled.div`
 
 const ActionBarEditButton = styled.button`
 	background: none;
-	display: inline-grid;
-	grid-auto-flow: column;
+	display: inline-flex;
 	align-items: center;
 	margin: 0;
 `
