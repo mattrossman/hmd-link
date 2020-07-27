@@ -64,6 +64,7 @@ export const usePreview = () => {
 		setUrl(url)
 	})
 	useEffect(async () => {
+		const fallbackThumbnail = 'https://picsum.photos/id/1025/200';
 		if (url !== null) {
 			try {
 				const response = await axios.post('/.netlify/functions/preview', {url})
@@ -72,7 +73,7 @@ export const usePreview = () => {
 				let thumbnail;
 				if (preview.images && preview.images.length > 0) thumbnail = preview.images[0];
 				else if (preview.favicons && preview.favicons.length > 1) thumbnail = preview.favicons[1];
-				else thumbnail = 'https://picsum.photos/id/1025/200';
+				else thumbnail = fallbackThumbnail;
 				const title = preview.title || '(No title)'
 				const description = preview.description || '(No description)'
 				
@@ -80,7 +81,7 @@ export const usePreview = () => {
 				setStatus('done')
 			}
 			catch (e) {
-				console.log('Caught error: ', e)
+				setPreview({url, title: '(No preview)', description:'', thumbnail: fallbackThumbnail})
 				setStatus('error')
 			}
 		}

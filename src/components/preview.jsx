@@ -76,8 +76,8 @@ const Centered = styled.div`
 	align-items: center;
 `
 
-export const Preview = ({ previewData, onImgLoad, hidden }) => {
-	const { title, description, url, thumbnail } = previewData;
+export const Preview = ({ data, status, onImgLoad }) => {
+	let { title, description, url, thumbnail } = data;
 	return (
 		<DivLink href={url} target="_blank">
 			<Card className="row card-container shadowed">

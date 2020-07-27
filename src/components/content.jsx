@@ -84,7 +84,7 @@ const LinkStore = ({user}) => {
 		return <Form urlHandler={urlHandler} />
 	}
 	else {
-		if (previewData && previewStatus === 'done') {
+		if (previewData && previewStatus) {
 			return (
 				<FadeIn visible={imgLoaded}>
 					<ActionBarContainer class="row">
@@ -94,7 +94,7 @@ const LinkStore = ({user}) => {
 							</ActionBarEditButton>
 						</div>
 					</ActionBarContainer>
-					<Preview previewData={previewData} onImgLoad={()=>{setImgLoaded(true)}} />
+					<Preview data={previewData} status={previewStatus} onImgLoad={()=>{setImgLoaded(true)}} />
 				</FadeIn>
 			)
 		}
