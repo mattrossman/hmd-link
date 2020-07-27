@@ -68,14 +68,17 @@ const LinkStore = ({user}) => {
 	// const doc = {url};
 
 	useEffect(() => {
+		console.log("Running doc effect")
 		// When firestore detects a new record, request a preview update
 		if (doc) {
+			console.log("Doc has content");
 			setImgLoaded(false);
 			updatePreviewUrl(doc.url);
 		}
 	}, [doc]);
 	const urlHandler = useCallback((url) => {
 		// TODO: we need to clear out the preview data here
+		console.log("Clearing preview and uploading url")
 		clearPreview();
 		uploadUrl(url);
 		setEditing(false)

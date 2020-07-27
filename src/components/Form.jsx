@@ -6,6 +6,7 @@ import styled from 'styled-components'
 	// TODO: stop autofill
 const WideInput = styled('input')`
 	width: 100%;
+	text-align: center;
 `
 const MarginForm = styled('form')`margin-top: 8em;`
 
@@ -21,6 +22,9 @@ export const Form = ({urlHandler}) => {
 	}
 	return (
 		<MarginForm autocomplete="off">
+			<div class="row">
+				<h2>Enter a URL to broadcast:</h2>
+			</div>
 			<div class="row">
 				<WideInput required ref={input} type="text" id="url" title="URL" pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" />
 			</div>

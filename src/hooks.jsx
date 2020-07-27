@@ -45,7 +45,9 @@ export const useDoc = (user) => {
 	useEffect(() => {
 		if (user !== null) {
 			db.collection("rooms").doc(user.uid).onSnapshot(snapshot => {
-				setDoc(snapshot.data())
+				const data = snapshot.data()
+				console.log("Received new snapshot data: ", data)
+				setDoc(data)
 			})
 		}
 	}, [user])
@@ -53,16 +55,23 @@ export const useDoc = (user) => {
 }
 
 export const usePreview = () => {
-	const [target, setTarget] = useState(null);
+	const [target, setTarget] = useState(null)
 	const [data, setData] = useState(null)
 	
-	const clear = () => setData(null);
+	const clear = () => {
+		setData(null);
+		setTarget(null);
+	}
 	const setValidTarget = (url) => {
 		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
+		console.log("Setting preview target")
 		setTarget(prefix + url);
 	}
 
 	useEffect(async () => {
+		// TODO: This effect is not run if prev target URL matches new one, thus the preview is never rendered
+		// Possible solution: cancel form if url matches
+		console.log("Running target effect")
 		const fallbackThumbnail = 'https://picsum.photos/id/1025/200';
 		if (target !== null) {
 			try {
