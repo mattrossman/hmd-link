@@ -34,9 +34,10 @@ export const useDoc = (user) => {
 	const setDocUrl = useCallback(async (url) => {
 		console.log('running uploadUrl: ', url)
 		if (user !== null) {
+			const minutes = 10
 			const payload = {
 				url,
-				timestamp: Date.now()
+				expires: Date.now() + 1000 * 60 * minutes
 			}
 			console.log('Sending payload: ', payload,' to uid ', user.uid)
 			await db.collection("rooms").doc(user.uid).set(payload)

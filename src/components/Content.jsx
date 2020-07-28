@@ -62,7 +62,7 @@ const useDocDummy = (user) => {
 		const snapshot = new Map();
 		snapshot.exists = true;
 		snapshot.set('url', 'https://github.com/mattrossman')
-		snapshot.set('timestamp', 1595899100855)
+		snapshot.set('expires', 1595899100855)
 		setSnapshot(snapshot)
 	}, [])
 	return [snapshot, uploadUrl]
@@ -80,18 +80,52 @@ const useUserDummy = () => {
 	return user;
 }
 
+const useCountdown = () => {
+	const [endTime, setEndTime] = useState(null)
+	const [msLeft, setMsLeft] = useState(null)
+	const getMsLeft = useCallback(() => {
+		return endTime ? endTime - Date.now() : null
+	}, [endTime])
+	useEffect(() => {
+		if (endTime) {
+			if (msLeft === null) setMsLeft(getMsLeft());
+			if (msLeft > 0) {
+				const timer = setTimeout(() => {
+					setMsLeft(getMsLeft());
+				}, 1000);
+				return () => clearTimeout(timer);
+			}
+		}
+	}, [msLeft, endTime]);
+	return [msLeft, setEndTime]
+}
+
+const pad = (n, width, char) => {
+	char = char || '0';
+	n = n + '';
+	return n.length >= width ? n : new Array(width - n.length + 1).join(char) + n;
+}
+
+const msToString = (ms) => {
+	const minutes = Math.floor((ms / 1000 / 60) % 60)
+	const seconds = Math.floor((ms / 1000) % 60)
+	return `${minutes}:${pad(seconds, 2)}`
+}
 
 const LinkStore = ({user}) => {
-	const [snapshot, setDocUrl] = useDocDummy(user)
+	const [snapshot, setDocUrl] = useDoc(user)
 	const [editing, setEditing] = useState(false)
 	const [imgLoaded, setImgLoaded] = useState(false)
 	const [previewData, updatePreviewUrl, clearPreview] = usePreview()
+	const [msLeft, setEndTime] = useCountdown();
 	
 	useEffect(() => {
 		// When the snapshot changes, request a preview update
 		if (snapshot && snapshot.exists) {
 			setImgLoaded(false);
 			updatePreviewUrl(snapshot.get('url'));
+			setEndTime(snapshot.get('expires'))
+			console.log(snapshot.get('expires'))
 		}
 	}, [snapshot]);
 
@@ -101,10 +135,16 @@ const LinkStore = ({user}) => {
 		setEditing(false)
 	}, [setDocUrl])
 
-	if (editing || (snapshot && !snapshot.exists)) {
+	const onImgLoad = () => {
+		setImgLoaded(true);
+		// setEndTime(Date.now() + 1000*3)
+	}
+	console.log(editing, msLeft)
+	if (editing || (snapshot && !snapshot.exists) || (msLeft && msLeft <= 0)) {
 		return <Form urlHandler={urlHandler} />
 	}
 	else {
+
 		// We are attempting to show a preview
 		if (!previewData) {
 			return <Spinner />
@@ -117,10 +157,10 @@ const LinkStore = ({user}) => {
 								<Icon path={mdiArrowLeftBold} size={2} /><p>Edit link</p>
 							</ActionBarEditButton>
 							<ActionBarDeleteButton onClick={() => setEditing(true)}>
-								<p>Delete</p><Icon path={mdiBomb} size={2} />
+								<p>{msLeft && msToString(msLeft)}</p><Icon path={mdiBomb} size={2} />
 							</ActionBarDeleteButton>
 					</ActionBarContainer>
-					<Preview data={previewData}  onImgLoad={()=>{setImgLoaded(true)}} />
+					<Preview data={previewData}  onImgLoad={onImgLoad} />
 				</FadeIn>
 			)
 		}
@@ -129,7 +169,7 @@ const LinkStore = ({user}) => {
 
 // TODO: remove this, just put stuff directly in the main App
 export const Content = () => {
-	const user = useUserDummy();
+	const user = useUser();
 	// const user = null;
 	return (
 		<>
