@@ -43,6 +43,12 @@ export const useDoc = (user) => {
 			await db.collection("rooms").doc(user.uid).set(payload)
 		}
 	}, [user])
+	const deleteDoc = useCallback(async() => {
+		if (user !== null) {
+			await db.collection("rooms").doc(user.uid).delete()
+			console.log("Deleted records for uid ", user.uid)
+		}
+	}, [user])
 	useEffect(() => {
 		if (user !== null) {
 			db.collection("rooms").doc(user.uid).onSnapshot(snapshot => {
@@ -52,7 +58,7 @@ export const useDoc = (user) => {
 			})
 		}
 	}, [user])
-	return [snapshot, setDocUrl]
+	return [snapshot, setDocUrl, deleteDoc]
 }
 
 export const usePreview = () => {
@@ -72,7 +78,6 @@ export const usePreview = () => {
 	useEffect(async () => {
 		// TODO: This effect is not run if prev target URL matches new one, thus the preview is never rendered
 		// Possible solution: cancel form if url matches
-		console.log("Running target effect")
 		const fallbackThumbnail = 'https://picsum.photos/id/1025/200';
 		if (target !== null) {
 			try {
@@ -96,4 +101,40 @@ export const usePreview = () => {
 		}
 	}, [target])
 	return [data, setValidTarget, clear]
+}
+
+export const useCountdown = (onComplete) => {
+	const [timeLeft, setTimeLeft] = useState(0)
+	const [timer, setTimer] = useState(null)
+	const [endTime, setEndTime] = useState(null)
+
+	const getTimeLeft = useCallback(() => {
+		return endTime && Math.max(endTime - Date.now(), 0)
+	}, [endTime])
+
+	useEffect(() => {
+		if (timer && timeLeft === 0) {
+			clearTimer()
+			onComplete()
+		}
+	}, [timeLeft, timer])
+
+	const clearTimer = useCallback(() => {
+		setTimeLeft(0)
+		clearInterval(timer)
+		setTimer(null)
+	}, [timer])
+	
+	useEffect(() => {
+		if (endTime) {
+			clearTimer()
+			setTimeLeft(getTimeLeft())
+			const timer = setInterval(() => {
+				setTimeLeft(getTimeLeft())
+			}, 1000)
+			setTimer(timer)
+		}
+	}, [endTime])
+	
+	return [timeLeft, setEndTime, clearTimer]
 }

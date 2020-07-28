@@ -5,7 +5,7 @@ import axios from 'redaxios'
 import { mdiArrowLeftBold, mdiBomb } from '@mdi/js'
 import Icon from '@mdi/react'
 
-import { useUser, useDoc, usePreview } from 'hooks'
+import { useUser, useDoc, usePreview, useCountdown } from 'hooks'
 import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
 import { StatusChip } from 'components/StatusChip'
@@ -80,25 +80,28 @@ const useUserDummy = () => {
 	return user;
 }
 
-const useCountdown = () => {
-	const [endTime, setEndTime] = useState(null)
-	const [msLeft, setMsLeft] = useState(null)
-	const getMsLeft = useCallback(() => {
-		return endTime ? endTime - Date.now() : null
-	}, [endTime])
-	useEffect(() => {
-		if (endTime) {
-			if (msLeft === null) setMsLeft(getMsLeft());
-			if (msLeft > 0) {
-				const timer = setTimeout(() => {
-					setMsLeft(getMsLeft());
-				}, 1000);
-				return () => clearTimeout(timer);
-			}
-		}
-	}, [msLeft, endTime]);
-	return [msLeft, setEndTime]
-}
+// const useCountdown = () => {
+// 	const [endTime, setEndTime] = useState(null)
+// 	const [msLeft, setMsLeft] = useState(null)
+// 	const [ticking, setTicking] = useState(false)
+// 	const getMsLeft = useCallback(() => {
+// 		return endTime ? endTime - Date.now() : null
+// 	}, [endTime])
+// 	useEffect(() => {
+// 		if (ticking) {
+// 			const timer = setTimeout(() => {
+// 				setMsLeft(getMsLeft());
+// 			}, 1000);
+// 			return () => clearTimeout(timer);
+// 		}
+// 	}, [msLeft, ticking])
+// 	useEffect(() => {
+// 		if (getMsLeft() > 0) {
+// 			setTicking(true);
+// 		}
+// 	}, [endTime]);
+// 	return [msLeft, setEndTime]
+// }
 
 const pad = (n, width, char) => {
 	char = char || '0';
@@ -113,11 +116,11 @@ const msToString = (ms) => {
 }
 
 const LinkStore = ({user}) => {
-	const [snapshot, setDocUrl] = useDoc(user)
+	const [snapshot, setDocUrl, deleteDoc] = useDoc(user)
 	const [editing, setEditing] = useState(false)
 	const [imgLoaded, setImgLoaded] = useState(false)
 	const [previewData, updatePreviewUrl, clearPreview] = usePreview()
-	const [msLeft, setEndTime] = useCountdown();
+	const [msLeft, setEndTime] = useCountdown(deleteDoc);
 	
 	useEffect(() => {
 		// When the snapshot changes, request a preview update
@@ -125,7 +128,6 @@ const LinkStore = ({user}) => {
 			setImgLoaded(false);
 			updatePreviewUrl(snapshot.get('url'));
 			setEndTime(snapshot.get('expires'))
-			console.log(snapshot.get('expires'))
 		}
 	}, [snapshot]);
 
@@ -139,7 +141,7 @@ const LinkStore = ({user}) => {
 		setImgLoaded(true);
 		// setEndTime(Date.now() + 1000*3)
 	}
-	console.log(editing, msLeft)
+	
 	if (editing || (snapshot && !snapshot.exists) || (msLeft && msLeft <= 0)) {
 		return <Form urlHandler={urlHandler} />
 	}
@@ -150,13 +152,14 @@ const LinkStore = ({user}) => {
 			return <Spinner />
 		}
 		else {
+			// Show preview with action buttons
 			return (
 				<FadeIn visible={imgLoaded}>
 					<ActionBarContainer class="row">
 							<ActionBarEditButton onClick={() => setEditing(true)}>
 								<Icon path={mdiArrowLeftBold} size={2} /><p>Edit link</p>
 							</ActionBarEditButton>
-							<ActionBarDeleteButton onClick={() => setEditing(true)}>
+							<ActionBarDeleteButton onClick={() => deleteDoc()}>
 								<p>{msLeft && msToString(msLeft)}</p><Icon path={mdiBomb} size={2} />
 							</ActionBarDeleteButton>
 					</ActionBarContainer>
