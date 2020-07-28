@@ -1,5 +1,5 @@
 import { h } from 'preact'
-import { useRef, useCallback } from 'preact/hooks'
+import { useState, useRef, useCallback } from 'preact/hooks'
 import styled from 'styled-components'
 
 
@@ -8,38 +8,47 @@ const WideInput = styled('input')`
 	width: 100%;
 	text-align: center;
 `
-const MarginForm = styled('form')`margin-top: 8em;`
+const MarginForm = styled.form`
+	margin-top: 8em;
+`
 
+
+const SubmitButton = styled.button`
+	width: 100%;
+`
 
 export const Form = ({urlHandler}) => {
 	const input = useRef(null);
-	const handler = (e) => {
+	const [url, setUrl] = useState('')
+
+	const onClick = (e) => {
     	e.preventDefault();
 		if (input.current && input.current.checkValidity()) {
 			console.log('dispatching urlHander: ', input.current.value)
 			urlHandler(input.current.value)
 		}
 	}
+	const onChange = useCallback((e) => {
+		setUrl(e.target.value)
+	}, [input])
+	const isValid = useCallback(() => {
+		return input.current && input.current.checkValidity()
+	}, [url])
 	return (
 		<MarginForm autocomplete="off">
 			<div class="row">
 				<h2>Enter a URL to broadcast:</h2>
 			</div>
 			<div class="row">
-				<WideInput required ref={input} type="text" id="url" title="URL" pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" />
+				<WideInput onChange={onChange} required ref={input} type="text" id="url" title="URL"
+					pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" />
 			</div>
 			<div className="row">
 				<div className="col-sm-12 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
-				<button className="primary col-sm"
-					type="submit" onclick={handler}>Submit</button>
+					<SubmitButton className="primary"
+						type="submit" onClick={onClick} disabled={!isValid()} >Submit</SubmitButton>
 				</div>
 			</div>
 		</MarginForm>
 	)
 }
-
-
-		// <form>
-		// 	<h2 className="row">Enter a URL</h2>
-		// 	<input className="row" type="text" id="url" placeholder="e.g. www.example.com"/>
-		// </form>
