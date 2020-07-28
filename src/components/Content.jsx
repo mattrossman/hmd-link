@@ -61,36 +61,34 @@ const ActionBarEditButton = styled.button`
 
 
 const LinkStore = ({user}) => {
-	const [doc, uploadUrl] = useDoc(user)
+	const [snapshot, uploadUrl] = useDoc(user)
 	const [editing, setEditing] = useState(false)
 	const [imgLoaded, setImgLoaded] = useState(false)
 	const [previewData, updatePreviewUrl, clearPreview] = usePreview()
-	// const doc = {url};
-
+	
 	useEffect(() => {
-		console.log("Running doc effect")
-		// When firestore detects a new record, request a preview update
-		if (doc) {
-			console.log("Doc has content");
+		// When the snapshot changes, request a preview update
+		if (snapshot && snapshot.exists) {
 			setImgLoaded(false);
-			updatePreviewUrl(doc.url);
+			updatePreviewUrl(snapshot.get('url'));
 		}
-	}, [doc]);
+	}, [snapshot]);
+
 	const urlHandler = useCallback((url) => {
-		// TODO: we need to clear out the preview data here
-		console.log("Clearing preview and uploading url")
 		clearPreview();
 		uploadUrl(url);
 		setEditing(false)
 	}, [uploadUrl])
 
-	if (editing) {
-		// We don't have a record, and we already tried waiting for a preview
-		// TODO: this logic is weird?? Shouldn't I instead be waiting for a signal from useDoc?
+	if (editing || (snapshot && !snapshot.exists)) {
 		return <Form urlHandler={urlHandler} />
 	}
 	else {
-		if (previewData) {
+		// We are attempting to show a preview
+		if (!previewData) {
+			return <Spinner />
+		}
+		else {
 			return (
 				<FadeIn visible={imgLoaded}>
 					<ActionBarContainer class="row">
@@ -102,11 +100,6 @@ const LinkStore = ({user}) => {
 					</ActionBarContainer>
 					<Preview data={previewData}  onImgLoad={()=>{console.log("loaded"); setImgLoaded(true)}} />
 				</FadeIn>
-			)
-		}
-		else {
-			return (
-				<Spinner />
 			)
 		}
 	}

@@ -30,7 +30,7 @@ export const useUser = () => {
 }
 
 export const useDoc = (user) => {
-	const [doc, setDoc] = useState(null)
+	const [snapshot, setSnapshot] = useState(null)
 	const uploadUrl = useCallback(async (url) => {
 		console.log('running uploadUrl: ', url)
 		if (user !== null) {
@@ -47,11 +47,11 @@ export const useDoc = (user) => {
 			db.collection("rooms").doc(user.uid).onSnapshot(snapshot => {
 				const data = snapshot.data()
 				console.log("Received new snapshot data: ", data)
-				setDoc(data)
+				setSnapshot(snapshot)
 			})
 		}
 	}, [user])
-	return [doc, uploadUrl]
+	return [snapshot, uploadUrl]
 }
 
 export const usePreview = () => {
@@ -82,8 +82,8 @@ export const usePreview = () => {
 				if (preview.images && preview.images.length > 0) thumbnail = preview.images[0];
 				else if (preview.favicons && preview.favicons.length > 1) thumbnail = preview.favicons[1];
 				else thumbnail = fallbackThumbnail;
-				const title = preview.title || '(No title)'
-				const description = preview.description || '(No description)'
+				const title = preview.siteName || preview.title || '(No title)'
+				const description = preview.description || ''
 				const url = preview.url || target;
 				if (!preview.url) console.warning("Preview URL was missing");
 				

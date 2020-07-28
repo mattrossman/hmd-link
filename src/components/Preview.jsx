@@ -13,6 +13,7 @@ const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do e
 
 const Thumbnail = styled('img')`
 	display: block;
+	background-color: white;
   	object-fit: cover;
 	height: 100%;
 	width: 100%;
