@@ -31,7 +31,7 @@ export const useUser = () => {
 
 export const useDoc = (user) => {
 	const [snapshot, setSnapshot] = useState(null)
-	const uploadUrl = useCallback(async (url) => {
+	const setDocUrl = useCallback(async (url) => {
 		console.log('running uploadUrl: ', url)
 		if (user !== null) {
 			const payload = {
@@ -51,7 +51,7 @@ export const useDoc = (user) => {
 			})
 		}
 	}, [user])
-	return [snapshot, uploadUrl]
+	return [snapshot, setDocUrl]
 }
 
 export const usePreview = () => {

@@ -38,14 +38,6 @@ const FadeIn = styled.div`
 	animation: ${props => props.visible ? fadeIn : null} .2s linear;
 `
 
-const BackControls = () => {
-	return (
-		<div class="row">
-			<p>Visit this link on your</p>
-		</div>
-	)
-}
-
 const ActionBarContainer = styled.div`
 	margin-bottom: 1rem;
 `
@@ -57,11 +49,40 @@ const ActionBarEditButton = styled.button`
 	margin: 0;
 `
 
+const ActionBarDeleteButton = styled(ActionBarEditButton)`
+	float: right;
+`
+
 // const ActionBarLeftText = styled.``
+
+const useDocDummy = (user) => {
+	const [snapshot, setSnapshot] = useState(null);
+	const uploadUrl = () => console.log("Running dummy uploadUrl")
+	useEffect(() => {
+		const snapshot = new Map();
+		snapshot.exists = true;
+		snapshot.set('url', 'https://github.com/mattrossman')
+		snapshot.set('timestamp', 1595899100855)
+		setSnapshot(snapshot)
+	}, [])
+	return [snapshot, uploadUrl]
+}
+
+const useUserDummy = () => {
+	const [user, setUser] = useState(null)
+	useEffect(() => {
+		setUser({
+			displayName: 'dummy-room',
+			uid: 123456789
+		})
+	}, [])
+
+	return user;
+}
 
 
 const LinkStore = ({user}) => {
-	const [snapshot, uploadUrl] = useDoc(user)
+	const [snapshot, setDocUrl] = useDocDummy(user)
 	const [editing, setEditing] = useState(false)
 	const [imgLoaded, setImgLoaded] = useState(false)
 	const [previewData, updatePreviewUrl, clearPreview] = usePreview()
@@ -76,9 +97,9 @@ const LinkStore = ({user}) => {
 
 	const urlHandler = useCallback((url) => {
 		clearPreview();
-		uploadUrl(url);
+		setDocUrl(url);
 		setEditing(false)
-	}, [uploadUrl])
+	}, [setDocUrl])
 
 	if (editing || (snapshot && !snapshot.exists)) {
 		return <Form urlHandler={urlHandler} />
@@ -92,13 +113,14 @@ const LinkStore = ({user}) => {
 			return (
 				<FadeIn visible={imgLoaded}>
 					<ActionBarContainer class="row">
-						<div class="col-sm-6">
 							<ActionBarEditButton onClick={() => setEditing(true)}>
 								<Icon path={mdiArrowLeftBold} size={2} /><p>Edit link</p>
 							</ActionBarEditButton>
-						</div>
+							<ActionBarDeleteButton onClick={() => setEditing(true)}>
+								<p>Delete</p><Icon path={mdiBomb} size={2} />
+							</ActionBarDeleteButton>
 					</ActionBarContainer>
-					<Preview data={previewData}  onImgLoad={()=>{console.log("loaded"); setImgLoaded(true)}} />
+					<Preview data={previewData}  onImgLoad={()=>{setImgLoaded(true)}} />
 				</FadeIn>
 			)
 		}
@@ -107,7 +129,7 @@ const LinkStore = ({user}) => {
 
 // TODO: remove this, just put stuff directly in the main App
 export const Content = () => {
-	const user = useUser();
+	const user = useUserDummy();
 	// const user = null;
 	return (
 		<>
