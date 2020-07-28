@@ -2,7 +2,7 @@ import { h, Fragment } from 'preact'
 import styled, { keyframes, css } from 'styled-components'
 import { useState, useEffect, useCallback } from 'preact/hooks'
 import axios from 'redaxios'
-import { mdiArrowLeftBold, mdiBomb } from '@mdi/js'
+import { mdiClose, mdiArrowLeft, mdiBomb } from '@mdi/js'
 import Icon from '@mdi/react'
 
 import { useUser, useDoc, usePreview, useCountdown } from 'hooks'
@@ -120,7 +120,7 @@ const LinkStore = ({user}) => {
 	const [editing, setEditing] = useState(false)
 	const [imgLoaded, setImgLoaded] = useState(false)
 	const [previewData, updatePreviewUrl, clearPreview] = usePreview()
-	const [msLeft, setEndTime] = useCountdown(deleteDoc);
+	const [msLeft, setEndTime, clearTimer] = useCountdown(deleteDoc);
 	
 	useEffect(() => {
 		// When the snapshot changes, request a preview update
@@ -137,11 +137,15 @@ const LinkStore = ({user}) => {
 		setEditing(false)
 	}, [setDocUrl])
 
+	const deleteHandler = () => {
+		deleteDoc();
+		clearTimer()
+	}
 	const onImgLoad = () => {
 		setImgLoaded(true);
 		// setEndTime(Date.now() + 1000*3)
 	}
-	
+
 	if (editing || (snapshot && !snapshot.exists) || (msLeft && msLeft <= 0)) {
 		return <Form urlHandler={urlHandler} />
 	}
@@ -157,9 +161,9 @@ const LinkStore = ({user}) => {
 				<FadeIn visible={imgLoaded}>
 					<ActionBarContainer class="row">
 							<ActionBarEditButton onClick={() => setEditing(true)}>
-								<Icon path={mdiArrowLeftBold} size={2} /><p>Edit link</p>
+								<Icon path={mdiArrowLeft} size={2} /><p>Edit link</p>
 							</ActionBarEditButton>
-							<ActionBarDeleteButton onClick={() => deleteDoc()}>
+							<ActionBarDeleteButton onClick={deleteHandler}>
 								<p>{msLeft && msToString(msLeft)}</p><Icon path={mdiBomb} size={2} />
 							</ActionBarDeleteButton>
 					</ActionBarContainer>
