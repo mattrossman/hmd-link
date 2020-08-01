@@ -5,6 +5,7 @@ const doFadeIn = keyframes`
 	to {opacity: 1;}
 `
 
-export const FadeIn = styled.div`
-	animation: doFadeIn .3s forwards;
+const FadeIn = styled.div`
+	animation: ${doFadeIn} .3s forwards;
 `
+export default FadeIn

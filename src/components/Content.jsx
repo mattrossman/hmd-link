@@ -2,17 +2,18 @@ import { h, Fragment } from 'preact'
 import styled, { keyframes, css } from 'styled-components'
 import { useState, useEffect, useCallback } from 'preact/hooks'
 import axios from 'redaxios'
-import { mdiClose, mdiArrowLeft, mdiBomb } from '@mdi/js'
+import { mdiPlus, mdiArrowLeft, mdiBomb } from '@mdi/js'
 import Icon from '@mdi/react'
 
 import { useUser, useDoc, usePreview, useCountdown } from 'hooks'
 import { useDummyUser, useDummyDoc } from 'hooks-dummy'
 import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
-import { StatusChip } from 'components/StatusChip'
 import Loading from './Loading'
+import FadeIn from './FadeIn'
+import ActionBar from './ActionBar'
 
-const SpinnerContainer = styled('div')`
+const SpinnerContainer = styled(FadeIn)`
 	display: grid;
 	place-items: center;
 `
@@ -26,34 +27,34 @@ const Spinner = () => {
 }
 // const sleep = ms => new Promise(r => setTimeout(r, ms))
 
-const fadeIn = keyframes`
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-`;
+// const fadeIn = keyframes`
+// 	from {
+// 		opacity: 0;
+// 	}
+// 	to {
+// 		opacity: 1;
+// 	}
+// `;
 
-const FadeIn = styled.div`
-	display: ${props => props.visible ? 'block' : 'none'};
-	animation: ${props => props.visible ? fadeIn : null} .2s linear;
-`
+// const FadeIn = styled.div`
+// 	display: ${props => props.visible ? 'block' : 'none'};
+// 	animation: ${props => props.visible ? fadeIn : null} .2s linear;
+// `
 
-const ActionBarContainer = styled.div`
-	margin-bottom: 1rem;
-`
+// const ActionBarContainer = styled.div`
+// 	margin-bottom: 1rem;
+// `
 
-const ActionBarEditButton = styled.button`
-	background: none;
-	display: inline-flex;
-	align-items: center;
-	margin: 0;
-`
+// const ActionBarEditButton = styled.button`
+// 	background: none;
+// 	display: inline-flex;
+// 	align-items: center;
+// 	margin: 0;
+// `
 
-const ActionBarDeleteButton = styled(ActionBarEditButton)`
-	float: right;
-`
+// const ActionBarDeleteButton = styled(ActionBarEditButton)`
+// 	float: right;
+// `
 
 // const ActionBarLeftText = styled.``
 
@@ -176,15 +177,26 @@ const LinkStore = ({user}) => {
 	}
 }
 
-// TODO: remove this, just put stuff directly in the main App
-export const Content = () => {
-	const user = useDummyUser();
-	// const user = null;
+const WaitingScreen = () => {
+	const left = <><Icon path={mdiPlus} size={2} /><p>Add link</p></>
 	return (
-		<>
+		<FadeIn>
+			<ActionBar left={left} />
 			<Loading />
-		</>
+		</FadeIn>
 	)
+}
+
+// TODO: remove this, just put stuff directly in the main App
+export const Content = ({user}) => {
+	if (user !== null) {
+		return (
+			<WaitingScreen />
+		)
+	}
+	else {
+		return <Spinner />
+	}
 }
 
 			// {user && <LinkStore user={user} previewData={preview}/>}

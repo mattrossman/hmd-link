@@ -1,12 +1,13 @@
 import { h, render } from 'preact'
 
 import styled from 'styled-components'
-import { useUser } from 'hooks'
+import { useDummyUser } from 'hooks-dummy'
 
 import 'mini.css/dist/mini-dark.min.css'
 import 'style.css'
 import { Header } from 'components/Header'
 import { Content } from 'components/Content'
+import { StatusChip } from 'components/StatusChip'
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
@@ -27,11 +28,12 @@ const Container = ({children}) => {
 }
 
 const App = () => {
-	const user = useUser();
+	const user = useDummyUser(1000);
 	return(
 		<Container>
 			<Header />
-			<Content />
+			<Content user={user}/>
+			<StatusChip user={user} />
 		</Container>
 	)
 }

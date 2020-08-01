@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'preact/hooks'
 
+const sleep = (ms) => new Promise(r => setTimeout(r, ms))
+
 export const useDummyDoc = (user) => {
 	const [snapshot, setSnapshot] = useState(null);
 	const uploadUrl = () => console.log("Running dummy uploadUrl")
@@ -14,9 +16,10 @@ export const useDummyDoc = (user) => {
 	return [snapshot, uploadUrl, deleteDoc]
 }
 
-export const useDummyUser = () => {
+export const useDummyUser = (delay) => {
 	const [user, setUser] = useState(null)
-	useEffect(() => {
+	useEffect(async () => {
+		await sleep(delay);
 		setUser({
 			displayName: 'dummy-room',
 			uid: 123456789
