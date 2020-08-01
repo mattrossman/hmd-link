@@ -6,9 +6,11 @@ import { mdiClose, mdiArrowLeft, mdiBomb } from '@mdi/js'
 import Icon from '@mdi/react'
 
 import { useUser, useDoc, usePreview, useCountdown } from 'hooks'
+import { useDummyUser, useDummyDoc } from 'hooks-dummy'
 import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
 import { StatusChip } from 'components/StatusChip'
+import Loading from './Loading'
 
 const SpinnerContainer = styled('div')`
 	display: grid;
@@ -176,15 +178,17 @@ const LinkStore = ({user}) => {
 
 // TODO: remove this, just put stuff directly in the main App
 export const Content = () => {
-	const user = useUser();
+	const user = useDummyUser();
 	// const user = null;
 	return (
 		<>
-			{user && <LinkStore user={user} previewData={preview}/>}
-			<StatusChip user={user} />
+			<Loading />
 		</>
 	)
 }
+
+			// {user && <LinkStore user={user} previewData={preview}/>}
+			// <StatusChip user={user} />
 
 const preview = {
 	title: "developit - Overview",
