@@ -3,13 +3,9 @@ import styled from 'styled-components'
 import { useState, useEffect } from 'preact/hooks'
 
 
-const FixedFooter = styled('div')`
-	position:fixed;
+const ChipContainer = styled.div`
 	display: grid;
-	place-items: center;
-	left:0px;
-	bottom:0px;
-	width:100%;
+	place-content: center;
 `
 
 const BottomChip = styled('div')`
@@ -47,10 +43,10 @@ export const StatusChip = ({ user }) => {
 		you should be able to share links between them.
 	`
 	return (
-		<FixedFooter>
+		<ChipContainer>
 			<BottomChip className="shadowed tooltip" aria-label={tooltipText}>
 				<p><Dot color={color} /> {message}</p>
 			</BottomChip>
-		</FixedFooter>
+		</ChipContainer>
 	)
 }

@@ -40,20 +40,27 @@ const RippleContainer = styled.div`
 	display: grid;
 	place-items: center;
 	position: relative;
-	height: 400px;
+	height: 100px;
+	width: 100px;
+	margin: 20px;
 `
 
 const Loading = (props) => {
 	return (
-		<RippleContainer {...props}>
-			<IconContainer>
-				<Icon style="fill: white" />
-			</IconContainer>
-			<Ripple />
-			<Ripple delay="-1s" />
-			<Ripple delay="-2s" />
-			<Ripple delay="-3s" />
-		</RippleContainer>
+		<div style="display: grid; place-items: center; height: 100%;">
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<RippleContainer {...props}>
+					<IconContainer>
+						<Icon style="fill: white" />
+					</IconContainer>
+					<Ripple />
+					<Ripple delay="-1s" />
+					<Ripple delay="-2s" />
+					<Ripple delay="-3s" />
+				</RippleContainer>
+				<p>Waiting for a link...</p>
+			</div>
+		</div>
 	)
 }
 export default Loading

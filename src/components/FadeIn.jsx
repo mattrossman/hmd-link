@@ -7,5 +7,6 @@ const doFadeIn = keyframes`
 
 const FadeIn = styled.div`
 	animation: ${doFadeIn} .3s forwards;
+	height: 100%;
 `
 export default FadeIn

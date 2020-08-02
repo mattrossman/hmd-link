@@ -21,7 +21,7 @@ export const useDummyUser = (delay) => {
 	useEffect(async () => {
 		await sleep(delay);
 		setUser({
-			displayName: 'dummy-room',
+			displayName: 'dummy-room-name',
 			uid: 123456789
 		})
 	}, [])

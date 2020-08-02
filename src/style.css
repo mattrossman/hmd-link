@@ -1,5 +1,6 @@
 html, body {
 	background: rgb(30, 30, 30);
+	height: 100%;
 }
 
 form {
@@ -21,8 +22,4 @@ form {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-}
-
-h1 {
-	font-size: 8vw;
 }

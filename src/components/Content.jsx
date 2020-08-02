@@ -3,7 +3,6 @@ import styled, { keyframes, css } from 'styled-components'
 import { useState, useEffect, useCallback } from 'preact/hooks'
 import axios from 'redaxios'
 import { mdiPlus, mdiArrowLeft, mdiBomb } from '@mdi/js'
-import Icon from '@mdi/react'
 
 import { useUser, useDoc, usePreview, useCountdown } from 'hooks'
 import { useDummyUser, useDummyDoc } from 'hooks-dummy'
@@ -11,7 +10,6 @@ import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
 import Loading from './Loading'
 import FadeIn from './FadeIn'
-import ActionBar from './ActionBar'
 
 const SpinnerContainer = styled(FadeIn)`
 	display: grid;
@@ -27,84 +25,6 @@ const Spinner = () => {
 }
 // const sleep = ms => new Promise(r => setTimeout(r, ms))
 
-// const fadeIn = keyframes`
-// 	from {
-// 		opacity: 0;
-// 	}
-// 	to {
-// 		opacity: 1;
-// 	}
-// `;
-
-// const FadeIn = styled.div`
-// 	display: ${props => props.visible ? 'block' : 'none'};
-// 	animation: ${props => props.visible ? fadeIn : null} .2s linear;
-// `
-
-// const ActionBarContainer = styled.div`
-// 	margin-bottom: 1rem;
-// `
-
-// const ActionBarEditButton = styled.button`
-// 	background: none;
-// 	display: inline-flex;
-// 	align-items: center;
-// 	margin: 0;
-// `
-
-// const ActionBarDeleteButton = styled(ActionBarEditButton)`
-// 	float: right;
-// `
-
-// const ActionBarLeftText = styled.``
-
-const useDocDummy = (user) => {
-	const [snapshot, setSnapshot] = useState(null);
-	const uploadUrl = () => console.log("Running dummy uploadUrl")
-	useEffect(() => {
-		const snapshot = new Map();
-		snapshot.exists = true;
-		snapshot.set('url', 'https://github.com/mattrossman')
-		snapshot.set('expires', 1595899100855)
-		setSnapshot(snapshot)
-	}, [])
-	return [snapshot, uploadUrl]
-}
-
-const useUserDummy = () => {
-	const [user, setUser] = useState(null)
-	useEffect(() => {
-		setUser({
-			displayName: 'dummy-room',
-			uid: 123456789
-		})
-	}, [])
-
-	return user;
-}
-
-// const useCountdown = () => {
-// 	const [endTime, setEndTime] = useState(null)
-// 	const [msLeft, setMsLeft] = useState(null)
-// 	const [ticking, setTicking] = useState(false)
-// 	const getMsLeft = useCallback(() => {
-// 		return endTime ? endTime - Date.now() : null
-// 	}, [endTime])
-// 	useEffect(() => {
-// 		if (ticking) {
-// 			const timer = setTimeout(() => {
-// 				setMsLeft(getMsLeft());
-// 			}, 1000);
-// 			return () => clearTimeout(timer);
-// 		}
-// 	}, [msLeft, ticking])
-// 	useEffect(() => {
-// 		if (getMsLeft() > 0) {
-// 			setTicking(true);
-// 		}
-// 	}, [endTime]);
-// 	return [msLeft, setEndTime]
-// }
 
 const pad = (n, width, char) => {
 	char = char || '0';
@@ -177,26 +97,33 @@ const LinkStore = ({user}) => {
 	}
 }
 
-const WaitingScreen = () => {
-	const left = <><Icon path={mdiPlus} size={2} /><p>Add link</p></>
-	return (
-		<FadeIn>
-			<ActionBar left={left} />
-			<Loading />
-		</FadeIn>
-	)
-}
+const ContentContainer = styled(FadeIn)`
+	min-height: 0;
+`
 
 // TODO: remove this, just put stuff directly in the main App
-export const Content = ({user}) => {
+export const Content = ({user, setActions}) => {
+	let content;
 	if (user !== null) {
-		return (
-			<WaitingScreen />
-		)
+		useEffect(() => {
+			setActions({
+				left: {
+					icon: mdiPlus,
+					label: 'Add link',
+					action: () => alert('click')
+				}
+			});
+		}, [])
+		content =  <Loading />
 	}
 	else {
-		return <Spinner />
+		content = <Spinner />
 	}
+	return (
+		<ContentContainer key={content}>
+			{content}
+		</ContentContainer>
+	)
 }
 
 			// {user && <LinkStore user={user} previewData={preview}/>}
