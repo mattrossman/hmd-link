@@ -37,10 +37,7 @@ const App = () => {
 		<Sections>
 			<Header />  {/* 1 */}
 			<UserProvider>
-				<ActivityProvider>
-					<ActionBar /> {/* 2 */}
-					<Content /> {/* 3 */}
-				</ActivityProvider>
+				<Content /> {/* 2, 3 */}
 				<StatusChip /> {/* 4 */}
 			</UserProvider>
 		</Sections>

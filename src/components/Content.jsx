@@ -8,10 +8,13 @@ import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
 import Waiting from './Waiting'
 import FadeIn from './FadeIn'
+import ActionBar from './ActionBar'
 
-const SpinnerContainer = styled(FadeIn)`
+const SpinnerContainer = styled.div`
 	display: grid;
 	place-items: center;
+	width: 100%;
+	height: 100%;
 `
 
 const Spinner = () => {
@@ -36,7 +39,7 @@ const msToString = (ms) => {
 	return `${minutes}:${pad(seconds, 2)}`
 }
 
-const ContentContainer = styled(FadeIn)`
+const MainContent = styled.div`
 	min-height: 0;
 `
 
@@ -44,41 +47,40 @@ const ContentContainer = styled(FadeIn)`
 export const Content = () => {
 	const user = useUserContext()
 	const [editing, setEditing] = useState(false);
-	const {setActions} = useActivityContext()
 	let content;
+	let actions = { left: null, right: null};
 	if (user === null) {
 		content = <Spinner />
 	}
 	else {
-		useEffect(() => {
-			const actions = editing ? {
-				rightAction: {
+		if (editing) {
+			actions = {
+				right: {
 					icon: mdiClose,
 					label: 'Cancel',
 					action: () => setEditing(false)
 				}
 			}
-			:
-			{
-				leftAction: {
+			content = <Form onComplete={(url) => console.log('hander got url ', url)}/>
+		}
+		else {
+			actions = {
+				left: {
 					icon: mdiPlus,
 					label: 'Add link',
 					action: () => setEditing(true)
 				}
 			}
-			setActions(actions)
-		}, [editing])
-		if (editing) {
-			content = <Form onComplete={(url) => console.log('hander got url ', url)}/>
-		}
-		else {
 			content = <Waiting />
 		}
 	}
 	return (
-		<ContentContainer key={content}>
+		<>
+		<ActionBar actions={actions} />
+		<MainContent>
 			{content}
-		</ContentContainer>
+		</MainContent>
+		</>
 	)
 }
 

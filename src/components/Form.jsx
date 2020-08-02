@@ -8,10 +8,6 @@ const WideInput = styled('input')`
 	width: 100%;
 	text-align: center;
 `
-const MarginForm = styled.form`
-	margin-top: 8em;
-`
-
 
 const SubmitButton = styled.button`
 	width: 100%;
@@ -35,10 +31,7 @@ export const Form = ({onComplete}) => {
 		return input.current && input.current.checkValidity()
 	}, [url])
 	return (
-		<MarginForm autocomplete="off">
-			<div class="row">
-				<h2>Enter a URL to broadcast:</h2>
-			</div>
+		<form autocomplete="off">
 			<div class="row">
 				<WideInput onChange={onChange} required ref={input} type="text" id="url" title="URL"
 					pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" />
@@ -49,6 +42,6 @@ export const Form = ({onComplete}) => {
 						type="submit" onClick={onClick} disabled={!isValid()} >Submit</SubmitButton>
 				</div>
 			</div>
-		</MarginForm>
+		</form>
 	)
 }
