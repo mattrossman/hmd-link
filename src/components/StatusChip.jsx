@@ -1,6 +1,7 @@
 import { h } from 'preact'
 import styled from 'styled-components'
 import { useState, useEffect } from 'preact/hooks'
+import { useUserContext } from 'context'
 
 
 const ChipContainer = styled.div`
@@ -28,7 +29,8 @@ const Dot = styled('span')`
 	display: inline-block;
 `
 
-export const StatusChip = ({ user }) => {
+export const StatusChip = () => {
+	const user = useUserContext()
 	const [color, setColor] = useState('orange')
 	const [message, setMessage] = useState('Connecting...')
 	useEffect(() => {

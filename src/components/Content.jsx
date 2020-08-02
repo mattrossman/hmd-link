@@ -1,11 +1,11 @@
 import { h, Fragment } from 'preact'
 import styled, { keyframes, css } from 'styled-components'
 import { useState, useEffect, useCallback } from 'preact/hooks'
-import axios from 'redaxios'
 import { mdiPlus, mdiArrowLeft, mdiBomb } from '@mdi/js'
 
 import { useUser, useDoc, usePreview, useCountdown } from 'hooks'
 import { useDummyUser, useDummyDoc } from 'hooks-dummy'
+import { useUserContext } from 'context'
 import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
 import Loading from './Loading'
@@ -102,8 +102,21 @@ const ContentContainer = styled(FadeIn)`
 `
 
 // TODO: remove this, just put stuff directly in the main App
-export const Content = ({user, setActions}) => {
+export const Content = ({setActions}) => {
+	const user = useUserContext()
+	const [snapshot, uploadUrl, deleteDoc] = useDummyDoc(user)
 	let content;
+
+	if (snapshot === null) {
+		content = <Spinner />
+	}
+	else if (!snapshot.exists) {
+		content = <Form />
+	}
+	else {
+		content = <Preview />
+	}
+
 	if (user !== null) {
 		useEffect(() => {
 			setActions({

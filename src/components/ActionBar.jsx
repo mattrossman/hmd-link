@@ -20,6 +20,7 @@ const ActionBarButtonRight = styled(ActionBarButtonLeft)`
 
 const ActionBar = ({actions, ...props}) => {
 	const { left, right } = actions;
+	// e.g. actions = { left: { icon: mdiIcon, label: 'Do thing', action: doThing }, ... }
 	return (
 		<ActionBarContainer key={actions} {...props}>
 			{left && <ActionBarButtonLeft onClick={left.action}>

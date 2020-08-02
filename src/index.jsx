@@ -1,10 +1,11 @@
 import { h, render } from 'preact'
 import { useState } from 'preact/hooks'
-import styled from 'styled-components'
-import { useDummyUser } from 'hooks-dummy'
+import { UserProvider } from 'context'
 
 import 'mini.css/dist/mini-dark.min.css'
 import 'style.css'
+import styled from 'styled-components'
+
 import { Header } from 'components/Header'
 import { Content } from 'components/Content'
 import { StatusChip } from 'components/StatusChip'
@@ -31,14 +32,15 @@ const Sections = ({children}) => {
 }
 
 const App = () => {
-	const user = useDummyUser(1000);
 	const [actions, setActions] = useState({left: null, right: null})
 	return(
 		<Sections>
 			<Header />
-			<ActionBar actions={actions} />
-			<Content user={user} setActions={setActions} />
-			<StatusChip user={user} />
+			<UserProvider>
+				<ActionBar actions={actions} />
+				<Content setActions={setActions} />
+				<StatusChip />
+			</UserProvider>
 		</Sections>
 	)
 }
