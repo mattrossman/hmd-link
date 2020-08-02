@@ -45,7 +45,7 @@ const RippleContainer = styled.div`
 	margin: 20px;
 `
 
-const Loading = (props) => {
+const Waiting = (props) => {
 	return (
 		<div style="display: grid; place-items: center; height: 100%;">
 			<div style="display: flex; flex-direction: column; align-items: center;">
@@ -63,4 +63,4 @@ const Loading = (props) => {
 		</div>
 	)
 }
-export default Loading
+export default Waiting

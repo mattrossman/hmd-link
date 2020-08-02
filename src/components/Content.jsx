@@ -6,7 +6,7 @@ import { mdiPlus, mdiArrowLeft, mdiBomb } from '@mdi/js'
 import { useUserContext, useActivityContext } from 'util/context'
 import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
-import Loading from './Loading'
+import Waiting from './Waiting'
 import FadeIn from './FadeIn'
 
 const SpinnerContainer = styled(FadeIn)`
@@ -56,7 +56,7 @@ export const Content = ({setActions}) => {
 				}
 			})
 		}, [])
-		content =  <Loading />
+		content =  <Waiting />
 	}
 	else {
 		content = <Spinner />
