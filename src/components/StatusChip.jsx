@@ -1,7 +1,7 @@
 import { h } from 'preact'
 import styled from 'styled-components'
 import { useState, useEffect } from 'preact/hooks'
-import { useUserContext } from 'context'
+import { useUserContext } from 'util/context'
 
 
 const ChipContainer = styled.div`

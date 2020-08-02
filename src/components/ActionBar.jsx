@@ -2,6 +2,7 @@ import { h } from 'preact'
 import styled from 'styled-components'
 import Icon from '@mdi/react'
 import FadeIn from './FadeIn'
+import { useActivityContext } from 'util/context'
 
 const ActionBarContainer = styled(FadeIn)`
 	margin-bottom: 2vh;
@@ -18,16 +19,17 @@ const ActionBarButtonRight = styled(ActionBarButtonLeft)`
 	float: right;
 `
 
-const ActionBar = ({actions, ...props}) => {
-	const { left, right } = actions;
-	// e.g. actions = { left: { icon: mdiIcon, label: 'Do thing', action: doThing }, ... }
+const ActionBar = ({...props}) => {
+	// For some reason nested destructuring doesn't work here
+	const { activity } = useActivityContext();
+	const { leftAction, rightAction } = activity;
 	return (
-		<ActionBarContainer key={actions} {...props}>
-			{left && <ActionBarButtonLeft onClick={left.action}>
-				<Icon path={left.icon} size={2} /><p>{left.label}</p>
+		<ActionBarContainer key={activity} {...props}>
+			{leftAction && <ActionBarButtonLeft onClick={leftAction.action}>
+				<Icon path={leftAction.icon} size={2} /><p>{leftAction.label}</p>
 			</ActionBarButtonLeft>}
-			{right && <ActionBarButtonRight  onClick={right.action}>
-				<p>{right.label}</p><Icon path={right.icon} size={2} />
+			{rightAction && <ActionBarButtonRight  onClick={rightAction.action}>
+				<p>{rightAction.label}</p><Icon path={rightAction.icon} size={2} />
 			</ActionBarButtonRight>}
 		</ActionBarContainer>
 	)

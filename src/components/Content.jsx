@@ -3,9 +3,7 @@ import styled, { keyframes, css } from 'styled-components'
 import { useState, useEffect, useCallback } from 'preact/hooks'
 import { mdiPlus, mdiArrowLeft, mdiBomb } from '@mdi/js'
 
-import { useUser, useDoc, usePreview, useCountdown } from 'hooks'
-import { useDummyUser, useDummyDoc } from 'hooks-dummy'
-import { useUserContext } from 'context'
+import { useUserContext, useActivityContext } from 'util/context'
 import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
 import Loading from './Loading'
@@ -38,65 +36,6 @@ const msToString = (ms) => {
 	return `${minutes}:${pad(seconds, 2)}`
 }
 
-const LinkStore = ({user}) => {
-	const [snapshot, setDocUrl, deleteDoc] = useDoc(user)
-	const [editing, setEditing] = useState(false)
-	const [imgLoaded, setImgLoaded] = useState(false)
-	const [previewData, updatePreviewUrl, clearPreview] = usePreview()
-	const [msLeft, setEndTime, clearTimer] = useCountdown(deleteDoc);
-	
-	useEffect(() => {
-		// When the snapshot changes, request a preview update
-		if (snapshot && snapshot.exists) {
-			setImgLoaded(false);
-			updatePreviewUrl(snapshot.get('url'));
-			setEndTime(snapshot.get('expires'))
-		}
-	}, [snapshot]);
-
-	const urlHandler = useCallback((url) => {
-		clearPreview();
-		setDocUrl(url);
-		setEditing(false)
-	}, [setDocUrl])
-
-	const deleteHandler = () => {
-		deleteDoc();
-		clearTimer()
-	}
-	const onImgLoad = () => {
-		setImgLoaded(true);
-		// setEndTime(Date.now() + 1000*3)
-	}
-
-	if (editing || (snapshot && !snapshot.exists) || (msLeft && msLeft <= 0)) {
-		return <Form urlHandler={urlHandler} />
-	}
-	else {
-
-		// We are attempting to show a preview
-		if (!previewData) {
-			return <Spinner />
-		}
-		else {
-			// Show preview with action buttons
-			return (
-				<FadeIn visible={imgLoaded}>
-					<ActionBarContainer class="row">
-							<ActionBarEditButton onClick={() => setEditing(true)}>
-								<Icon path={mdiArrowLeft} size={2} /><p>Edit link</p>
-							</ActionBarEditButton>
-							<ActionBarDeleteButton onClick={deleteHandler}>
-								<p>{msLeft && msToString(msLeft)}</p><Icon path={mdiBomb} size={2} />
-							</ActionBarDeleteButton>
-					</ActionBarContainer>
-					<Preview data={previewData}  onImgLoad={onImgLoad} />
-				</FadeIn>
-			)
-		}
-	}
-}
-
 const ContentContainer = styled(FadeIn)`
 	min-height: 0;
 `
@@ -104,28 +43,18 @@ const ContentContainer = styled(FadeIn)`
 // TODO: remove this, just put stuff directly in the main App
 export const Content = ({setActions}) => {
 	const user = useUserContext()
-	const [snapshot, uploadUrl, deleteDoc] = useDummyDoc(user)
+	const { activity, setActivity } = useActivityContext()
 	let content;
-
-	if (snapshot === null) {
-		content = <Spinner />
-	}
-	else if (!snapshot.exists) {
-		content = <Form />
-	}
-	else {
-		content = <Preview />
-	}
-
 	if (user !== null) {
 		useEffect(() => {
-			setActions({
-				left: {
+			setActivity({
+				name: 'start',
+				leftAction: {
 					icon: mdiPlus,
 					label: 'Add link',
 					action: () => alert('click')
 				}
-			});
+			})
 		}, [])
 		content =  <Loading />
 	}

@@ -1,6 +1,6 @@
 import { h, render } from 'preact'
 import { useState } from 'preact/hooks'
-import { UserProvider } from 'context'
+import { UserProvider, ActivityProvider } from 'util/context'
 
 import 'mini.css/dist/mini-dark.min.css'
 import 'style.css'
@@ -32,14 +32,16 @@ const Sections = ({children}) => {
 }
 
 const App = () => {
-	const [actions, setActions] = useState({left: null, right: null})
+	// The app has 4 main sections, labeled below
 	return(
 		<Sections>
-			<Header />
+			<Header />  {/* 1 */}
 			<UserProvider>
-				<ActionBar actions={actions} />
-				<Content setActions={setActions} />
-				<StatusChip />
+				<ActivityProvider>
+					<ActionBar /> {/* 2 */}
+					<Content /> {/* 3 */}
+				</ActivityProvider>
+				<StatusChip /> {/* 4 */}
 			</UserProvider>
 		</Sections>
 	)
