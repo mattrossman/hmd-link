@@ -1,7 +1,7 @@
 import { h, Fragment } from 'preact'
 import styled, { keyframes, css } from 'styled-components'
 import { useState, useEffect, useCallback } from 'preact/hooks'
-import { mdiPlus, mdiArrowLeft, mdiBomb } from '@mdi/js'
+import { mdiPlus, mdiArrowLeft, mdiBomb, mdiClose } from '@mdi/js'
 
 import { useUserContext, useActivityContext } from 'util/context'
 import { Form } from 'components/Form'
@@ -41,25 +41,39 @@ const ContentContainer = styled(FadeIn)`
 `
 
 // TODO: remove this, just put stuff directly in the main App
-export const Content = ({setActions}) => {
+export const Content = () => {
 	const user = useUserContext()
-	const { activity, setActivity } = useActivityContext()
+	const [editing, setEditing] = useState(false);
+	const {setActions} = useActivityContext()
 	let content;
-	if (user !== null) {
+	if (user === null) {
+		content = <Spinner />
+	}
+	else {
 		useEffect(() => {
-			setActivity({
-				name: 'start',
+			const actions = editing ? {
+				rightAction: {
+					icon: mdiClose,
+					label: 'Cancel',
+					action: () => setEditing(false)
+				}
+			}
+			:
+			{
 				leftAction: {
 					icon: mdiPlus,
 					label: 'Add link',
-					action: () => alert('click')
+					action: () => setEditing(true)
 				}
-			})
-		}, [])
-		content =  <Waiting />
-	}
-	else {
-		content = <Spinner />
+			}
+			setActions(actions)
+		}, [editing])
+		if (editing) {
+			content = <Form onComplete={(url) => console.log('hander got url ', url)}/>
+		}
+		else {
+			content = <Waiting />
+		}
 	}
 	return (
 		<ContentContainer key={content}>

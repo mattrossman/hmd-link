@@ -15,19 +15,20 @@ export const UserProvider = ({children}) => {
 export const useUserContext = () => useContext(UserContext)
 
 // Provide info on the current screen and available actions
-const initialActivityState = {
-	name: null,
+const initialActions = {
 	leftAction: null,
 	rightAction: null
 }
 const ActivityContext = createContext({
-	activity: initialActivityState,
-	setActivity: () => {}
+	actions: initialActions,
+	setActions: () => {},
+	setIntent: () => {},
 })
 export const ActivityProvider = ({children}) => {
-	const [activity, setActivity] = useState(initialActivityState)
+	const [actions, setActions] = useState(initialActions)
+	const [intent, setIntent] = useState('wait')
 	return (
-		<ActivityContext.Provider value={{activity, setActivity}}>
+		<ActivityContext.Provider value={{actions, setActions, intent, setIntent}}>
 			{children}
 		</ActivityContext.Provider>
 	)

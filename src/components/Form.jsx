@@ -17,15 +17,15 @@ const SubmitButton = styled.button`
 	width: 100%;
 `
 
-export const Form = ({urlHandler}) => {
+export const Form = ({onComplete}) => {
 	const input = useRef(null);
 	const [url, setUrl] = useState('')
 
 	const onClick = (e) => {
     	e.preventDefault();
 		if (input.current && input.current.checkValidity()) {
-			console.log('dispatching urlHander: ', input.current.value)
-			urlHandler(input.current.value)
+			console.log('dispatching onComplete: ', input.current.value)
+			onComplete(input.current.value)
 		}
 	}
 	const onChange = useCallback((e) => {

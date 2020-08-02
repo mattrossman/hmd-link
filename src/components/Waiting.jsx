@@ -1,6 +1,10 @@
 import { h } from 'preact'
-import styled, { keyframes } from 'styled-components'
+import { useEffect } from 'preact/hooks'
 
+import styled, { keyframes } from 'styled-components'
+import { mdiPlus } from '@mdi/js'
+
+import { useActivityContext } from 'util/context'
 import Icon from './Icon'
 
 const doRipple = keyframes`

@@ -21,10 +21,12 @@ const ActionBarButtonRight = styled(ActionBarButtonLeft)`
 
 const ActionBar = ({...props}) => {
 	// For some reason nested destructuring doesn't work here
-	const { activity } = useActivityContext();
-	const { leftAction, rightAction } = activity;
+	const { actions } = useActivityContext();
+	const { leftAction, rightAction } = actions;
+	// const leftAction = null;
+	// const rightAction = null;
 	return (
-		<ActionBarContainer key={activity} {...props}>
+		<ActionBarContainer key={leftAction} {...props}>
 			{leftAction && <ActionBarButtonLeft onClick={leftAction.action}>
 				<Icon path={leftAction.icon} size={2} /><p>{leftAction.label}</p>
 			</ActionBarButtonLeft>}
