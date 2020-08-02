@@ -14,7 +14,7 @@ form {
 }
 
 .tooltip:after {
-	width: 300px;
+	width: min(400px, 90vw);
 	white-space: normal;
 }
 
