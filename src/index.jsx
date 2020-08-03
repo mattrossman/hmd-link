@@ -1,6 +1,6 @@
 import { h, render } from 'preact'
 import { useState } from 'preact/hooks'
-import { UserProvider, ActivityProvider } from 'util/context'
+import { UserProvider, DataProvider } from 'util/context'
 
 import 'mini.css/dist/mini-dark.min.css'
 import 'style.css'
@@ -37,7 +37,9 @@ const App = () => {
 		<Sections>
 			<Header />  {/* 1 */}
 			<UserProvider>
-				<Content /> {/* 2, 3 */}
+				<DataProvider>
+					<Content /> {/* 2, 3 */}
+				</DataProvider>
 				<StatusChip /> {/* 4 */}
 			</UserProvider>
 		</Sections>

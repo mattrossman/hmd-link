@@ -3,7 +3,7 @@ import styled, { keyframes, css } from 'styled-components'
 import { useState, useEffect, useCallback } from 'preact/hooks'
 import { mdiPlus, mdiArrowLeft, mdiBomb, mdiClose } from '@mdi/js'
 
-import { useUserContext, useActivityContext } from 'util/context'
+import { useUserContext, useDataContext } from 'util/context'
 import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
 import Waiting from './Waiting'
@@ -46,9 +46,14 @@ const MainContent = styled.div`
 // TODO: remove this, just put stuff directly in the main App
 export const Content = () => {
 	const user = useUserContext()
+	const { snapshot, upload, clear } = useDataContext();
 	const [editing, setEditing] = useState(false);
 	let content;
 	let actions = { left: null, right: null};
+	const onCompleteForm = (url) => {
+		upload(url)
+		setEditing(false)
+	}
 	if (user === null) {
 		content = <Spinner />
 	}
@@ -61,7 +66,7 @@ export const Content = () => {
 					action: () => setEditing(false)
 				}
 			}
-			content = <Form onComplete={(url) => console.log('hander got url ', url)}/>
+			content = <Form onComplete={onCompleteForm}/>
 		}
 		else {
 			actions = {

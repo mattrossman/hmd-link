@@ -1,11 +1,12 @@
 import { h, createContext } from 'preact'
+import { useUser, useData } from 'util/hooks'
 import { useDummyUser } from 'util/hooks-dummy'
 import { useContext, useState } from 'preact/hooks';
 
 // Provide Firebase user
 const UserContext = createContext(null);
 export const UserProvider = ({children}) => {
-	const user = useDummyUser(0);
+	const user = useDummyUser()
 	return (
 		<UserContext.Provider value={user}>
 			{children}
@@ -39,5 +40,15 @@ export const useActivityContext = () => useContext(ActivityContext)
 const DataContext = createContext({
 	snapshot: null,
 	upload: () => {},
-	delete: () => {}
+	clear: () => {}
 })
+export const DataProvider = ({children}) => {
+	const user = useUserContext();
+	const [snapshot, upload, clear] = useData(user);
+	return (
+		<DataContext.Provider value={{snapshot, upload, clear}}>
+			{children}
+		</DataContext.Provider>
+	)
+}
+export const useDataContext = () => useContext(DataContext)
