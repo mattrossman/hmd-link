@@ -5,7 +5,7 @@ import { useContext, useState } from 'preact/hooks';
 // Provide Firebase user
 const UserContext = createContext(null);
 export const UserProvider = ({children}) => {
-	const user = useDummyUser(1000);
+	const user = useDummyUser(0);
 	return (
 		<UserContext.Provider value={user}>
 			{children}
