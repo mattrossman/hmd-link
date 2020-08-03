@@ -16,6 +16,7 @@ const WideInput = styled('input')`
 	margin-bottom: 20px;
 	&:focus {
 		transform: scale(1);
+    	outline: none;
 	}
 	&&&&& { 
 		border: 2px solid white;
