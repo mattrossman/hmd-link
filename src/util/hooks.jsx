@@ -106,11 +106,7 @@ export const usePreview = () => {
 	const [target, setTarget] = useState(null)
 	const [data, setData] = useState(null)
 	
-	const clear = () => {
-		setData(null);
-		setTarget(null);
-	}
-	const setValidTarget = (url) => {
+	const setTargetValidate = (url) => {
 		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
 		console.log("Setting preview target")
 		setTarget(prefix + url);
@@ -141,7 +137,7 @@ export const usePreview = () => {
 			}
 		}
 	}, [target])
-	return [data, setValidTarget, clear]
+	return [data, setTargetValidate]
 }
 
 export const useCountdown = (onComplete) => {

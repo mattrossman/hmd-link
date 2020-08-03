@@ -9,21 +9,9 @@ import { Preview } from 'components/Preview'
 import Waiting from './Waiting'
 import FadeIn from './FadeIn'
 import ActionBar from './ActionBar'
+import Spinner from './Spinner'
 
-const SpinnerContainer = styled.div`
-	display: grid;
-	place-items: center;
-	width: 100%;
-	height: 100%;
-`
 
-const Spinner = () => {
-	return (
-		<SpinnerContainer>
-			<div class="spinner"></div>
-		</SpinnerContainer>
-	)
-}
 // const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 
@@ -50,6 +38,9 @@ export const Content = () => {
 	const [editing, setEditing] = useState(false);
 	let content;
 	let actions = { left: null, right: null};
+
+	const canPreview = snapshot && snapshot.exists()
+
 	const onCompleteForm = (url) => {
 		upload(url)
 		setEditing(false)
@@ -69,14 +60,31 @@ export const Content = () => {
 			content = <Form onComplete={onCompleteForm}/>
 		}
 		else {
-			actions = {
-				left: {
-					icon: mdiPlus,
-					label: 'Add link',
-					action: () => setEditing(true)
+			if (canPreview) {
+				actions = {
+					left: {
+						icon: mdiArrowLeft,
+						label: 'Edit link',
+						action: () => setEditing(true)
+					},
+					right: {
+						icon: mdiBomb,
+						label: 'Delete',
+						action: clear
+					}
 				}
+				content = <Preview />
 			}
-			content = <Waiting />
+			else {
+				actions = {
+					left: {
+						icon: mdiPlus,
+						label: 'Add link',
+						action: () => setEditing(true)
+					}
+				}
+				content = <Waiting />
+			}
 		}
 	}
 	return (
