@@ -106,44 +106,33 @@ export const useDoc = (user) => {
 }
 
 export const usePreview = () => {
-	const [target, setValidTarget] = useState(null)
 	const [data, setData] = useState(null)
 	
-	const setTarget = (url) => {
-		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
-		console.log("Setting preview target")
-		setValidTarget(prefix + url);
-	}
-	const clear = () => {
+	const getPreview = async (url) => {
 		setData(null)
-		console.log("clearing preview")
-	}
-	useEffect(async () => {
-		// TODO: This effect is not run if prev target URL matches new one, thus the preview is never rendered
-		// Possible solution: cancel form if url matches
+		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
+		const target = prefix + url
 		const fallbackThumbnail = 'https://picsum.photos/id/1025/200';
-		if (target !== null) {
-			try {
-				const response = await axios.post('/.netlify/functions/preview', {url: target})
-				const preview = response.data;
+		try {
+			const response = await axios.post('/.netlify/functions/preview', {url: target})
+			const preview = response.data;
 
-				let thumbnail;
-				if (preview.images && preview.images.length > 0) thumbnail = preview.images[0];
-				else if (preview.favicons && preview.favicons.length > 1) thumbnail = preview.favicons[1];
-				else thumbnail = fallbackThumbnail;
-				const title = preview.siteName || preview.title || '(No title)'
-				const description = preview.description || ''
-				const url = preview.url || target;
-				if (!preview.url) console.warning("Preview URL was missing");
-				
-				setData({title, description, url, thumbnail});
-			}
-			catch (e) {
-				setData({url: target, title: '(No preview)', description:'', thumbnail: fallbackThumbnail})
-			}
+			let thumbnail;
+			if (preview.images && preview.images.length > 0) thumbnail = preview.images[0];
+			else if (preview.favicons && preview.favicons.length > 1) thumbnail = preview.favicons[1];
+			else thumbnail = fallbackThumbnail;
+			const title = preview.siteName || preview.title || '(No title)'
+			const description = preview.description || ''
+			const url = preview.url || target;
+			if (!preview.url) console.warning("Preview URL was missing");
+			
+			setData({title, description, url, thumbnail});
 		}
-	}, [target])
-	return [data, setTarget, clear]
+		catch (e) {
+			setData({url: target, title: '(No preview)', description:'', thumbnail: fallbackThumbnail})
+		}
+	}
+	return [data, getPreview]
 }
 
 export const useCountdown = (onComplete) => {

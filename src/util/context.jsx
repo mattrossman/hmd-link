@@ -15,6 +15,7 @@ export const UserProvider = ({children}) => {
 }
 export const useUserContext = () => useContext(UserContext)
 
+// TODO: remove this unused context
 // Provide info on the current screen and available actions
 const initialActions = {
 	leftAction: null,
@@ -49,9 +50,6 @@ export const DataProvider = ({children}) => {
 	useEffect(() => {
 		if (snapshot && snapshot.exists()) {
 			setTarget(snapshot.child('url').val())
-		}
-		else {
-			clearPreview()
 		}
 	}, [snapshot])
 	return (
