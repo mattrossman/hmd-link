@@ -1,5 +1,6 @@
 html, body {
 	background: rgb(30, 30, 30);
+	height: 100%;
 }
 
 form {
@@ -13,7 +14,7 @@ form {
 }
 
 .tooltip:after {
-	width: 300px;
+	width: min(400px, 90vw);
 	white-space: normal;
 }
 
@@ -21,8 +22,4 @@ form {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-}
-
-h1 {
-	font-size: 8vw;
 }

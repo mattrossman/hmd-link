@@ -12,10 +12,14 @@ module.exports = {
 	devServer: {
 		contentBase: path.join(__dirname, 'dist'),
 		compress: true,
-		port: 9000
+		port: 9000,
+		disableHostCheck: true,
 	},
 	plugins: [
-		new HtmlWebpackPlugin({ template: './src/index.html', }),
+		new HtmlWebpackPlugin({
+			template: './src/index.html',
+			favicon: './src/assets/favicon.ico'
+		}),
 		new MiniCssExtractPlugin()
 	],
 	module: {

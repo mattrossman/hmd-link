@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'preact/hooks'
 import axios from 'redaxios';
 import * as firebase from "firebase/app";
-import "firebase/firestore";
+import "firebase/database";
 import "firebase/auth";
 
 
@@ -9,11 +9,14 @@ const firebaseConfig = {
 	apiKey: process.env.FIREBASE_API_KEY,
 	authDomain: process.env.FIREBASE_AUTH_DOMAIN,
 	projectId: process.env.FIREBASE_PROJECT_ID,
+    databaseURL: process.env.FIREBASE_DATABASE_URL,
 }
 
+console.log(firebaseConfig);
+
 if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore()
 const auth = firebase.auth()
+const db = firebase.database()
 
 
 export const useUser = () => {
@@ -27,6 +30,47 @@ export const useUser = () => {
 		setUser(auth.currentUser)
 	}, [])
 	return user;
+}
+
+export const useData = (user) => {
+	const [snapshot, setSnapshot] = useState(null);
+	const [ref, setRef] = useState(null);
+
+	useEffect(() => {
+		if (user !== null) {
+			const ref = db.ref('rooms/' + user.uid)
+			setRef(ref)
+			ref.on('value', (snapshot) => {
+				setSnapshot(snapshot);
+				console.log('Received snapshot', snapshot)
+			})
+			return () => ref.off('value')
+		}
+	}, [user])
+
+	const upload = useCallback(async (url) => {
+		if (ref !== null) {
+			console.log('setting url ', url)
+			try {
+				await ref.set({
+					url,
+					timestamp: Date.now()
+				})
+				console.log('set succeeded')
+			}
+			catch (e) {
+				console.log('failed to upload: ', e)
+			}
+		}
+	}, [ref]);
+
+	const clear = useCallback((url) => {
+		if (ref !== null) {
+			ref.remove();
+		}
+	}, [ref])
+
+	return [snapshot, upload, clear]
 }
 
 export const useDoc = (user) => {
@@ -65,11 +109,7 @@ export const usePreview = () => {
 	const [target, setTarget] = useState(null)
 	const [data, setData] = useState(null)
 	
-	const clear = () => {
-		setData(null);
-		setTarget(null);
-	}
-	const setValidTarget = (url) => {
+	const setTargetValidate = (url) => {
 		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
 		console.log("Setting preview target")
 		setTarget(prefix + url);
@@ -100,7 +140,7 @@ export const usePreview = () => {
 			}
 		}
 	}, [target])
-	return [data, setValidTarget, clear]
+	return [data, setTargetValidate]
 }
 
 export const useCountdown = (onComplete) => {

@@ -1,107 +1,19 @@
 import { h, Fragment } from 'preact'
 import styled, { keyframes, css } from 'styled-components'
 import { useState, useEffect, useCallback } from 'preact/hooks'
-import axios from 'redaxios'
-import { mdiArrowLeftBold, mdiBomb } from '@mdi/js'
-import Icon from '@mdi/react'
+import { mdiPlus, mdiArrowLeft, mdiBomb, mdiClose } from '@mdi/js'
 
-import { useUser, useDoc, usePreview, useCountdown } from 'hooks'
+import { useUserContext, useDataContext } from 'util/context'
 import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
-import { StatusChip } from 'components/StatusChip'
+import Waiting from './Waiting'
+import FadeIn from './FadeIn'
+import ActionBar from './ActionBar'
+import Spinner from './Spinner'
 
-const SpinnerContainer = styled('div')`
-	display: grid;
-	place-items: center;
-`
 
-const Spinner = () => {
-	return (
-		<SpinnerContainer>
-			<div class="spinner"></div>
-		</SpinnerContainer>
-	)
-}
 // const sleep = ms => new Promise(r => setTimeout(r, ms))
 
-const fadeIn = keyframes`
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-`;
-
-const FadeIn = styled.div`
-	display: ${props => props.visible ? 'block' : 'none'};
-	animation: ${props => props.visible ? fadeIn : null} .2s linear;
-`
-
-const ActionBarContainer = styled.div`
-	margin-bottom: 1rem;
-`
-
-const ActionBarEditButton = styled.button`
-	background: none;
-	display: inline-flex;
-	align-items: center;
-	margin: 0;
-`
-
-const ActionBarDeleteButton = styled(ActionBarEditButton)`
-	float: right;
-`
-
-// const ActionBarLeftText = styled.``
-
-const useDocDummy = (user) => {
-	const [snapshot, setSnapshot] = useState(null);
-	const uploadUrl = () => console.log("Running dummy uploadUrl")
-	useEffect(() => {
-		const snapshot = new Map();
-		snapshot.exists = true;
-		snapshot.set('url', 'https://github.com/mattrossman')
-		snapshot.set('expires', 1595899100855)
-		setSnapshot(snapshot)
-	}, [])
-	return [snapshot, uploadUrl]
-}
-
-const useUserDummy = () => {
-	const [user, setUser] = useState(null)
-	useEffect(() => {
-		setUser({
-			displayName: 'dummy-room',
-			uid: 123456789
-		})
-	}, [])
-
-	return user;
-}
-
-// const useCountdown = () => {
-// 	const [endTime, setEndTime] = useState(null)
-// 	const [msLeft, setMsLeft] = useState(null)
-// 	const [ticking, setTicking] = useState(false)
-// 	const getMsLeft = useCallback(() => {
-// 		return endTime ? endTime - Date.now() : null
-// 	}, [endTime])
-// 	useEffect(() => {
-// 		if (ticking) {
-// 			const timer = setTimeout(() => {
-// 				setMsLeft(getMsLeft());
-// 			}, 1000);
-// 			return () => clearTimeout(timer);
-// 		}
-// 	}, [msLeft, ticking])
-// 	useEffect(() => {
-// 		if (getMsLeft() > 0) {
-// 			setTicking(true);
-// 		}
-// 	}, [endTime]);
-// 	return [msLeft, setEndTime]
-// }
 
 const pad = (n, width, char) => {
 	char = char || '0';
@@ -115,72 +27,77 @@ const msToString = (ms) => {
 	return `${minutes}:${pad(seconds, 2)}`
 }
 
-const LinkStore = ({user}) => {
-	const [snapshot, setDocUrl, deleteDoc] = useDoc(user)
-	const [editing, setEditing] = useState(false)
-	const [imgLoaded, setImgLoaded] = useState(false)
-	const [previewData, updatePreviewUrl, clearPreview] = usePreview()
-	const [msLeft, setEndTime] = useCountdown(deleteDoc);
-	
-	useEffect(() => {
-		// When the snapshot changes, request a preview update
-		if (snapshot && snapshot.exists) {
-			setImgLoaded(false);
-			updatePreviewUrl(snapshot.get('url'));
-			setEndTime(snapshot.get('expires'))
-		}
-	}, [snapshot]);
-
-	const urlHandler = useCallback((url) => {
-		clearPreview();
-		setDocUrl(url);
-		setEditing(false)
-	}, [setDocUrl])
-
-	const onImgLoad = () => {
-		setImgLoaded(true);
-		// setEndTime(Date.now() + 1000*3)
-	}
-	
-	if (editing || (snapshot && !snapshot.exists) || (msLeft && msLeft <= 0)) {
-		return <Form urlHandler={urlHandler} />
-	}
-	else {
-
-		// We are attempting to show a preview
-		if (!previewData) {
-			return <Spinner />
-		}
-		else {
-			// Show preview with action buttons
-			return (
-				<FadeIn visible={imgLoaded}>
-					<ActionBarContainer class="row">
-							<ActionBarEditButton onClick={() => setEditing(true)}>
-								<Icon path={mdiArrowLeftBold} size={2} /><p>Edit link</p>
-							</ActionBarEditButton>
-							<ActionBarDeleteButton onClick={() => deleteDoc()}>
-								<p>{msLeft && msToString(msLeft)}</p><Icon path={mdiBomb} size={2} />
-							</ActionBarDeleteButton>
-					</ActionBarContainer>
-					<Preview data={previewData}  onImgLoad={onImgLoad} />
-				</FadeIn>
-			)
-		}
-	}
-}
+const MainContent = styled(FadeIn)`
+	display: grid;
+	grid-template-rows: auto 1fr;
+`
 
 // TODO: remove this, just put stuff directly in the main App
 export const Content = () => {
-	const user = useUser();
-	// const user = null;
+	const user = useUserContext()
+	const { snapshot, upload, clear } = useDataContext();
+	const [editing, setEditing] = useState(false);
+	let content;
+	let actions = { left: null, right: null};
+
+	const canPreview = snapshot && snapshot.exists()
+
+	const onCompleteForm = (url) => {
+		upload(url)
+		setEditing(false)
+	}
+	if (user === null || snapshot === null) {
+		content = <Spinner />
+	}
+	else {
+		if (editing) {
+			actions = {
+				right: {
+					icon: mdiClose,
+					label: 'Cancel',
+					action: () => setEditing(false)
+				}
+			}
+			content = <Form onComplete={onCompleteForm}/>
+		}
+		else {
+			if (canPreview) {
+				actions = {
+					left: {
+						icon: mdiArrowLeft,
+						label: 'Edit link',
+						action: () => setEditing(true)
+					},
+					right: {
+						icon: mdiBomb,
+						label: 'Delete',
+						action: clear
+					}
+				}
+				content = <Preview />
+			}
+			else {
+				actions = {
+					left: {
+						icon: mdiPlus,
+						label: 'Add link',
+						action: () => setEditing(true)
+					}
+				}
+				content = <Waiting />
+			}
+		}
+	}
 	return (
-		<>
-			{user && <LinkStore user={user} previewData={preview}/>}
-			<StatusChip user={user} />
-		</>
+		<MainContent key={actions}>
+			<ActionBar actions={actions} />
+			{content}
+		</MainContent>
 	)
 }
+
+			// {user && <LinkStore user={user} previewData={preview}/>}
+			// <StatusChip user={user} />
 
 const preview = {
 	title: "developit - Overview",

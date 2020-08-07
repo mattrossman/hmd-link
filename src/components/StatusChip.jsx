@@ -1,15 +1,12 @@
 import { h } from 'preact'
 import styled from 'styled-components'
 import { useState, useEffect } from 'preact/hooks'
+import { useUserContext } from 'util/context'
 
 
-const FixedFooter = styled('div')`
-	position:fixed;
+const ChipContainer = styled.div`
 	display: grid;
-	place-items: center;
-	left:0px;
-	bottom:0px;
-	width:100%;
+	place-content: center;
 `
 
 const BottomChip = styled('div')`
@@ -32,7 +29,8 @@ const Dot = styled('span')`
 	display: inline-block;
 `
 
-export const StatusChip = ({ user }) => {
+export const StatusChip = () => {
+	const user = useUserContext()
 	const [color, setColor] = useState('orange')
 	const [message, setMessage] = useState('Connecting...')
 	useEffect(() => {
@@ -42,15 +40,15 @@ export const StatusChip = ({ user }) => {
 		}
 	}, [user])
 	const tooltipText=`
-		This is your room name, determined by your public IP.
+		This is your room name, assigned by your public IP.
 		As long as your headset and companion device show the same room name,
-		you should be able to share links between them.
+		you can share links between them.
 	`
 	return (
-		<FixedFooter>
+		<ChipContainer>
 			<BottomChip className="shadowed tooltip" aria-label={tooltipText}>
 				<p><Dot color={color} /> {message}</p>
 			</BottomChip>
-		</FixedFooter>
+		</ChipContainer>
 	)
 }
