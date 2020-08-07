@@ -40,7 +40,10 @@ export const useData = (user) => {
 		if (user !== null) {
 			const ref = db.ref('rooms/' + user.uid)
 			setRef(ref)
-			ref.on('value', setSnapshot)
+			ref.on('value', (snapshot) => {
+				setSnapshot(snapshot);
+				console.log('Received snapshot', snapshot)
+			})
 			return () => ref.off('value')
 		}
 	}, [user])

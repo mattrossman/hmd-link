@@ -45,7 +45,7 @@ export const Content = () => {
 		upload(url)
 		setEditing(false)
 	}
-	if (user === null) {
+	if (user === null || snapshot === null) {
 		content = <Spinner />
 	}
 	else {
