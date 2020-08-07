@@ -85,13 +85,13 @@ export const Preview = () => {
 	const [thumbnailReady, setThumbnailReady] = useState(false);
 
 	useEffect(async () => {
-		if (snapshot && snapshot.exists) {
+		if (snapshot && snapshot.exists()) {
 			const { url } = snapshot.val()
 			setTargetValidate(url)
 		}
 	}, [snapshot])
-	return (
-		data && <><DivLink href={data.url} target="_blank" hidden={!thumbnailReady}>
+	const preview = data && (
+		<DivLink href={data.url} target="_blank" hidden={!thumbnailReady}>
 			<Card className="row card-container shadowed">
 				<div class="col-sm-12 col-md-4" style="padding: 0; height: auto;">
 					<Thumbnail onLoad={() => setThumbnailReady(true)} src={data.thumbnail} alt="site-preview"></Thumbnail>
@@ -112,7 +112,11 @@ export const Preview = () => {
 				</div>
 			</Card>
 		</DivLink>
-		{!thumbnailReady && <Spinner />}
+	)
+	return (
+		<>
+		{preview} 
+		{(!data || !thumbnailReady) && <Spinner />}
 		</>
 	)
 }

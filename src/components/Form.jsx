@@ -51,7 +51,7 @@ const CenterRow = styled.div`
 `
 CenterRow.defaultProps = {className: 'row'}
 
-export const Form = ({onComplete}) => {
+export const Form = ({onComplete, ...props}) => {
 	const input = useRef(null);
 	const [url, setUrl] = useState('')
 	useEffect(() => {
@@ -73,7 +73,7 @@ export const Form = ({onComplete}) => {
 		return input.current && input.current.checkValidity()
 	}, [url])
 	return (
-		<form autocomplete="off">
+		<form autocomplete="off" {...props}>
 			<CenterRow>
 				<CenteredHeading>Enter a URL</CenteredHeading>
 			</CenterRow>

@@ -23,3 +23,15 @@ form {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+@keyframes doFadeIn {
+	from { opacity: 0;}
+}
+
+.fade {
+	animation: doFadeIn 1s;
+}
+
+.fade.out {
+	display: none;
+}

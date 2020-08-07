@@ -27,7 +27,7 @@ const msToString = (ms) => {
 	return `${minutes}:${pad(seconds, 2)}`
 }
 
-const MainContent = styled(FadeIn)`
+const MainContent = styled.div`
 	display: grid;
 	grid-template-rows: auto 1fr;
 `
@@ -40,58 +40,60 @@ export const Content = () => {
 	let content;
 	let actions = { left: null, right: null};
 
-	const canPreview = snapshot && snapshot.exists()
 
 	const onCompleteForm = (url) => {
 		upload(url)
 		setEditing(false)
 	}
-	if (user === null || snapshot === null) {
-		content = <Spinner />
-	}
-	else {
-		if (editing) {
-			actions = {
-				right: {
-					icon: mdiClose,
-					label: 'Cancel',
-					action: () => setEditing(false)
-				}
-			}
-			content = <Form onComplete={onCompleteForm}/>
-		}
-		else {
-			if (canPreview) {
-				actions = {
-					left: {
-						icon: mdiArrowLeft,
-						label: 'Edit link',
-						action: () => setEditing(true)
-					},
-					right: {
-						icon: mdiBomb,
-						label: 'Delete',
-						action: clear
-					}
-				}
-				content = <Preview />
-			}
-			else {
-				actions = {
-					left: {
-						icon: mdiPlus,
-						label: 'Add link',
-						action: () => setEditing(true)
-					}
-				}
-				content = <Waiting />
+
+	const connecting = user == null || snapshot == null;
+	const waiting = snapshot && !snapshot.exists() && !editing
+	const previewing = snapshot && snapshot.exists() && !editing
+	console.log(connecting, waiting, previewing)
+	if (editing) {
+		actions = {
+			right: {
+				icon: mdiClose,
+				label: 'Cancel',
+				action: () => setEditing(false)
 			}
 		}
 	}
+	if (previewing) {
+		actions = {
+			left: {
+				icon: mdiArrowLeft,
+				label: 'Edit link',
+				action: () => setEditing(true)
+			},
+			right: {
+				icon: mdiBomb,
+				label: 'Delete',
+				action: clear
+			}
+		}
+	}
+	if (waiting) {
+		actions = {
+			left: {
+				icon: mdiPlus,
+				label: 'Add link',
+				action: () => setEditing(true)
+			}
+		}
+	}
+
 	return (
-		<MainContent key={actions}>
-			<ActionBar actions={actions} />
-			{content}
+		<MainContent>
+			<FadeIn key={actions}> { /* Action bar */}
+				<ActionBar actions={actions} />
+			</FadeIn>
+			<div>
+				<Spinner className={`fade ${!connecting && 'out'}`} />
+				<Waiting className={`fade ${!waiting && 'out'}`} />
+				<Preview hidden={!previewing}/>
+				<Form onComplete={onCompleteForm} className={`fade ${!editing && 'out'}`}/>
+			</div>
 		</MainContent>
 	)
 }

@@ -49,11 +49,23 @@ const RippleContainer = styled.div`
 	margin: 20px;
 `
 
+const Centered = styled.div`
+	display: grid;
+	place-items: center;
+	height: 100%;
+`
+
+const Rows = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
+
 const Waiting = (props) => {
 	return (
-		<div style="display: grid; place-items: center; height: 100%;">
-			<div style="display: flex; flex-direction: column; align-items: center;">
-				<RippleContainer {...props}>
+		<Centered {...props}>
+			<Rows>
+				<RippleContainer>
 					<IconContainer>
 						<Icon style="fill: white" />
 					</IconContainer>
@@ -63,8 +75,8 @@ const Waiting = (props) => {
 					<Ripple delay="-3s" />
 				</RippleContainer>
 				<p>Waiting for a link...</p>
-			</div>
-		</div>
+			</Rows>
+		</Centered>
 	)
 }
 export default Waiting
