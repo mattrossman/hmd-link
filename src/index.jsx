@@ -15,7 +15,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 const Grid = styled.div`
 	display: grid;
-	grid-template-rows: auto auto 1fr auto;
+	grid-template-rows: auto 1fr auto;
 	min-height: 100%;
 `
 
@@ -32,15 +32,15 @@ const Sections = ({children}) => {
 }
 
 const App = () => {
-	// The app has 4 main sections, labeled below
+	// The app has 3 main sections, labeled below
 	return(
 		<Sections>
 			<Header />  {/* 1 */}
 			<UserProvider>
 				<DataProvider>
-					<Content /> {/* 2, 3 */}
+					<Content /> {/* 2 */}
 				</DataProvider>
-				<StatusChip /> {/* 4 */}
+				<StatusChip /> {/* 3 */}
 			</UserProvider>
 		</Sections>
 	)

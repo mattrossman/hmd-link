@@ -27,8 +27,9 @@ const msToString = (ms) => {
 	return `${minutes}:${pad(seconds, 2)}`
 }
 
-const MainContent = styled.div`
-	min-height: 0;
+const MainContent = styled(FadeIn)`
+	display: grid;
+	grid-template-rows: auto 1fr;
 `
 
 // TODO: remove this, just put stuff directly in the main App
@@ -88,12 +89,10 @@ export const Content = () => {
 		}
 	}
 	return (
-		<>
-		<ActionBar actions={actions} />
-		<MainContent>
+		<MainContent key={actions}>
+			<ActionBar actions={actions} />
 			{content}
 		</MainContent>
-		</>
 	)
 }
 
