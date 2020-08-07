@@ -80,16 +80,9 @@ const Centered = styled.div`
 `
 
 export const Preview = () => {
-	const {snapshot} = useDataContext()
-	const [data, setTargetValidate] = usePreview()
+	const {preview: data} = useDataContext()
 	const [thumbnailReady, setThumbnailReady] = useState(false);
 
-	useEffect(async () => {
-		if (snapshot && snapshot.exists()) {
-			const { url } = snapshot.val()
-			setTargetValidate(url)
-		}
-	}, [snapshot])
 	const preview = data && (
 		<DivLink href={data.url} target="_blank" hidden={!thumbnailReady}>
 			<Card className="row card-container shadowed">

@@ -106,13 +106,13 @@ export const useDoc = (user) => {
 }
 
 export const usePreview = () => {
-	const [target, setTarget] = useState(null)
+	const [target, setValidTarget] = useState(null)
 	const [data, setData] = useState(null)
 	
-	const setTargetValidate = (url) => {
+	const setTarget = (url) => {
 		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
 		console.log("Setting preview target")
-		setTarget(prefix + url);
+		setValidTarget(prefix + url);
 	}
 
 	useEffect(async () => {
@@ -140,7 +140,7 @@ export const usePreview = () => {
 			}
 		}
 	}, [target])
-	return [data, setTargetValidate]
+	return [data, setTarget]
 }
 
 export const useCountdown = (onComplete) => {

@@ -83,16 +83,22 @@ export const Content = () => {
 		}
 	}
 
+	if (user == null || snapshot == null)
+		content = <Spinner />
+	else if (editing)
+		content = <Form onComplete={onCompleteForm} />
+	else {
+		if (snapshot.exists())
+			content = <Preview />
+		else
+			content = <Waiting />
+	}
+
 	return (
 		<MainContent>
-			<FadeIn key={actions}> { /* Action bar */}
-				<ActionBar actions={actions} />
-			</FadeIn>
+			<ActionBar actions={actions} />
 			<div>
-				<Spinner className={`fade ${!connecting && 'out'}`} />
-				<Waiting className={`fade ${!waiting && 'out'}`} />
-				<Preview hidden={!previewing}/>
-				<Form onComplete={onCompleteForm} className={`fade ${!editing && 'out'}`}/>
+				{content}
 			</div>
 		</MainContent>
 	)

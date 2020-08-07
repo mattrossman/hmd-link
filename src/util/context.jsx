@@ -1,7 +1,7 @@
 import { h, createContext } from 'preact'
-import { useUser, useData } from 'util/hooks'
+import { useUser, useData, usePreview } from 'util/hooks'
 import { useDummyUser } from 'util/hooks-dummy'
-import { useContext, useState } from 'preact/hooks';
+import { useContext, useState, useEffect } from 'preact/hooks';
 
 // Provide Firebase user
 const UserContext = createContext(null);
@@ -45,8 +45,14 @@ const DataContext = createContext({
 export const DataProvider = ({children}) => {
 	const user = useUserContext();
 	const [snapshot, upload, clear] = useData(user);
+	const [preview, setTarget] = usePreview()
+	useEffect(() => {
+		if (snapshot && snapshot.exists()) {
+			setTarget(snapshot.child('url').val())
+		}
+	}, [snapshot])
 	return (
-		<DataContext.Provider value={{snapshot, upload, clear}}>
+		<DataContext.Provider value={{snapshot, upload, clear, preview}}>
 			{children}
 		</DataContext.Provider>
 	)
