@@ -16,7 +16,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms))
 const Grid = styled.div`
 	display: grid;
 	grid-template-rows: auto auto 1fr auto;
-	height: inherit;
+	min-height: 100%;
 `
 
 const Sections = ({children}) => {
