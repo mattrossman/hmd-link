@@ -44,15 +44,18 @@ const DataContext = createContext({
 })
 export const DataProvider = ({children}) => {
 	const user = useUserContext();
-	const [snapshot, upload, clear] = useData(user);
-	const [preview, setTarget] = usePreview()
+	const [snapshot, upload, clearData] = useData(user);
+	const [preview, setTarget, clearPreview] = usePreview()
 	useEffect(() => {
 		if (snapshot && snapshot.exists()) {
 			setTarget(snapshot.child('url').val())
 		}
+		else {
+			clearPreview()
+		}
 	}, [snapshot])
 	return (
-		<DataContext.Provider value={{snapshot, upload, clear, preview}}>
+		<DataContext.Provider value={{snapshot, upload, clear: clearData, preview}}>
 			{children}
 		</DataContext.Provider>
 	)

@@ -114,7 +114,10 @@ export const usePreview = () => {
 		console.log("Setting preview target")
 		setValidTarget(prefix + url);
 	}
-
+	const clear = () => {
+		setData(null)
+		console.log("clearing preview")
+	}
 	useEffect(async () => {
 		// TODO: This effect is not run if prev target URL matches new one, thus the preview is never rendered
 		// Possible solution: cancel form if url matches
@@ -140,7 +143,7 @@ export const usePreview = () => {
 			}
 		}
 	}, [target])
-	return [data, setTarget]
+	return [data, setTarget, clear]
 }
 
 export const useCountdown = (onComplete) => {

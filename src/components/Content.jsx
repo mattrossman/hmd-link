@@ -49,7 +49,6 @@ export const Content = () => {
 	const connecting = user == null || snapshot == null;
 	const waiting = snapshot && !snapshot.exists() && !editing
 	const previewing = snapshot && snapshot.exists() && !editing
-	console.log(connecting, waiting, previewing)
 	if (editing) {
 		actions = {
 			right: {
