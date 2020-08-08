@@ -14,21 +14,11 @@ import Spinner from './Spinner'
 // const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 
-const pad = (n, width, char) => {
-	char = char || '0';
-	n = n + '';
-	return n.length >= width ? n : new Array(width - n.length + 1).join(char) + n;
-}
 
-const msToString = (ms) => {
-	const minutes = Math.floor((ms / 1000 / 60) % 60)
-	const seconds = Math.floor((ms / 1000) % 60)
-	return `${minutes}:${pad(seconds, 2)}`
-}
 
 export const Content = () => {
 	const user = useUserContext()
-	const { snapshot, upload, clearData, clearPreview } = useDataContext();
+	const { snapshot, upload, clearData, clearPreview, timeLeft } = useDataContext();
 	const [editing, setEditing] = useState(false);
 
 	const onCompleteForm = (url) => {
@@ -44,7 +34,7 @@ export const Content = () => {
 		return <Form onComplete={onCompleteForm} closeAction={() => setEditing(false)}/>
 	}
 	else {
-		if (snapshot.exists()) {
+		if (snapshot.exists() && timeLeft > 0) {
 			return <Preview editAction={() => setEditing(true)} deleteAction={clearData} />
 		}
 		else {

@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import Icon from '@mdi/react'
 import { mdiOpenInNew, mdiWeb, mdiArrowLeft, mdiBomb } from '@mdi/js'
 
-import { usePreview } from 'util/hooks'
 import { useDataContext } from '../util/context'
 import Spinner from './Spinner'
 import ActionBar from 'components/ActionBar'
@@ -94,17 +93,22 @@ const MarginIcon = styled(Icon)`
 	margin: 2em;
 `
 
+const pad = (n, width, char) => {
+	char = char || '0';
+	n = n + '';
+	return n.length >= width ? n : new Array(width - n.length + 1).join(char) + n;
+}
+
+const msToString = (ms) => {
+	const minutes = Math.floor((ms / 1000 / 60) % 60)
+	const seconds = Math.floor((ms / 1000) % 60)
+	return `${minutes}:${pad(seconds, 2)}`
+}
+
 export const Preview = ({editAction, deleteAction}) => {
-	const {preview: data} = useDataContext()
+	const {preview: data, timeLeft} = useDataContext()
 	const [thumbnailReady, setThumbnailReady] = useState(true);
 
-	// useEffect(() => {
-	// 	console.log('running data effect', data)
-	// 	if (data && data.thumbnail)
-	// 		setThumbnailReady(false)
-	// 	else
-	// 		setThumbnailReady(true)
-	// }, [data])
 	const actions = {
 		left: {
 			icon: mdiArrowLeft,
@@ -113,12 +117,13 @@ export const Preview = ({editAction, deleteAction}) => {
 		},
 		right: {
 			icon: mdiBomb,
-			label: 'Delete',
+			label: msToString(timeLeft + 1000),
 			action: deleteAction
 		}
 	}
 
 	const preview = data && (
+		<div>
 		<DivLink href={data.url} target="_blank">
 			<Card className="row card-container shadowed">
 				<ThumbnailContainer>
@@ -143,12 +148,13 @@ export const Preview = ({editAction, deleteAction}) => {
 				</div>
 			</Card>
 		</DivLink>
+		</div>
 	)
 	return (
 		<ContentView>
 			<ActionBar actions={actions} />
 			{preview} 
-			{(!data || !thumbnailReady) && <Spinner />}
+			{!thumbnailReady && <Spinner />}
 		</ContentView>
 	)
 }

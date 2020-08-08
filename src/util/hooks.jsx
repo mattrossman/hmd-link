@@ -71,38 +71,6 @@ export const useData = (user) => {
 	return [snapshot, upload, clear]
 }
 
-export const useDoc = (user) => {
-	const [snapshot, setSnapshot] = useState(null)
-	const setDocUrl = useCallback(async (url) => {
-		console.log('running uploadUrl: ', url)
-		if (user !== null) {
-			const minutes = 10
-			const payload = {
-				url,
-				expires: Date.now() + 1000 * 60 * minutes
-			}
-			console.log('Sending payload: ', payload,' to uid ', user.uid)
-			await db.collection("rooms").doc(user.uid).set(payload)
-		}
-	}, [user])
-	const deleteDoc = useCallback(async() => {
-		if (user !== null) {
-			await db.collection("rooms").doc(user.uid).delete()
-			console.log("Deleted records for uid ", user.uid)
-		}
-	}, [user])
-	useEffect(() => {
-		if (user !== null) {
-			db.collection("rooms").doc(user.uid).onSnapshot(snapshot => {
-				const data = snapshot.data()
-				console.log("Received new snapshot data: ", data)
-				setSnapshot(snapshot)
-			})
-		}
-	}, [user])
-	return [snapshot, setDocUrl, deleteDoc]
-}
-
 export const usePreview = () => {
 	const [data, setData] = useState(null)
 	
@@ -144,7 +112,7 @@ export const useCountdown = (onComplete) => {
 	useEffect(() => {
 		if (timer && timeLeft === 0) {
 			clearTimer()
-			onComplete()
+			onComplete && onComplete()
 		}
 	}, [timeLeft, timer])
 
