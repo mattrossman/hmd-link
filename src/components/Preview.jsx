@@ -82,7 +82,7 @@ const Centered = styled.div`
 
 const ThumbnailContainer = styled.div`
 	padding: 0;
-	height: auto;
+	min-height: 150px;
 	display: grid;
 	place-items: center;
 	background-color: #444;
