@@ -1,5 +1,5 @@
 import { h, render } from 'preact'
-import { useState } from 'preact/hooks'
+import { useState, useReducer } from 'preact/hooks'
 import { UserProvider, DataProvider } from 'util/context'
 
 import 'mini.css/dist/mini-dark.min.css'
@@ -33,9 +33,10 @@ const Sections = ({children}) => {
 
 const App = () => {
 	// The app has 3 main sections, labeled below
+	const [help, toggleHelp] = useReducer(x=>!x, false)
 	return(
 		<Sections>
-			<Header />  {/* 1 */}
+			<Header toggleHelp={toggleHelp}/>  {/* 1 */}
 			<UserProvider>
 				<DataProvider>
 					<Content /> {/* 2 */}

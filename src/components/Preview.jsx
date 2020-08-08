@@ -1,14 +1,15 @@
 import { h, Fragment } from 'preact'
-import { useState, useEffect } from 'preact/hooks'
+import { useState, useEffect, useCallback } from 'preact/hooks'
 import axios from 'redaxios'
 
 import styled from 'styled-components'
 import Icon from '@mdi/react'
-import { mdiOpenInNew } from '@mdi/js'
+import { mdiOpenInNew, mdiWeb, mdiArrowLeft, mdiBomb } from '@mdi/js'
 
-import { usePreview } from 'util/hooks'
 import { useDataContext } from '../util/context'
 import Spinner from './Spinner'
+import ActionBar from 'components/ActionBar'
+import { ContentView } from 'util/ui'
 
 const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
@@ -79,23 +80,58 @@ const Centered = styled.div`
 	align-items: center;
 `
 
-export const Preview = () => {
-	const {snapshot} = useDataContext()
-	const [data, setTargetValidate] = usePreview()
-	const [thumbnailReady, setThumbnailReady] = useState(false);
+const ThumbnailContainer = styled.div`
+	padding: 0;
+	height: auto;
+	display: grid;
+	place-items: center;
+	background-color: #444;
+`
+ThumbnailContainer.defaultProps = {className: "col-sm-12 col-md-4"}
 
-	useEffect(async () => {
-		if (snapshot && snapshot.exists) {
-			const { url } = snapshot.val()
-			setTargetValidate(url)
+const MarginIcon = styled(Icon)`
+	margin: 2em;
+`
+
+const pad = (n, width, char) => {
+	char = char || '0';
+	n = n + '';
+	return n.length >= width ? n : new Array(width - n.length + 1).join(char) + n;
+}
+
+const msToString = (ms) => {
+	const minutes = Math.floor((ms / 1000 / 60) % 60)
+	const seconds = Math.floor((ms / 1000) % 60)
+	return `${minutes}:${pad(seconds, 2)}`
+}
+
+export const Preview = ({editAction, deleteAction}) => {
+	const {preview: data, timeLeft} = useDataContext()
+	const [thumbnailReady, setThumbnailReady] = useState(true);
+
+	const actions = {
+		left: {
+			icon: mdiArrowLeft,
+			label: 'Edit link',
+			action: editAction
+		},
+		right: {
+			icon: mdiBomb,
+			label: msToString(timeLeft + 1000),
+			action: deleteAction
 		}
-	}, [snapshot])
-	return (
-		data && <><DivLink href={data.url} target="_blank" hidden={!thumbnailReady}>
+	}
+
+	const preview = data && (
+		<div>
+		<DivLink href={data.url} target="_blank">
 			<Card className="row card-container shadowed">
-				<div class="col-sm-12 col-md-4" style="padding: 0; height: auto;">
-					<Thumbnail onLoad={() => setThumbnailReady(true)} src={data.thumbnail} alt="site-preview"></Thumbnail>
-				</div>
+				<ThumbnailContainer>
+					{ data.thumbnail
+						? <Thumbnail src={data.thumbnail} alt="site-preview" />
+						: <MarginIcon path={mdiWeb} size={3} />
+					}
+				</ThumbnailContainer>
 				<div class="col-sm-12 col-md-8" style="padding: 10px">
 					<RightContainer>
 						<h2 class="truncate-width">{data.title}</h2>
@@ -112,7 +148,13 @@ export const Preview = () => {
 				</div>
 			</Card>
 		</DivLink>
-		{!thumbnailReady && <Spinner />}
-		</>
+		</div>
+	)
+	return (
+		<ContentView>
+			<ActionBar actions={actions} />
+			{preview} 
+			{!thumbnailReady && <Spinner />}
+		</ContentView>
 	)
 }

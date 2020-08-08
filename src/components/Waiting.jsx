@@ -4,8 +4,9 @@ import { useEffect } from 'preact/hooks'
 import styled, { keyframes } from 'styled-components'
 import { mdiPlus } from '@mdi/js'
 
-import { useActivityContext } from 'util/context'
-import Icon from './Icon'
+import Logo from './Logo'
+import ActionBar from 'components/ActionBar'
+import { ContentView } from 'util/ui'
 
 const doRipple = keyframes`
 	from {
@@ -28,7 +29,7 @@ const Ripple = styled.div`
 	animation-delay: ${props => props.delay || 0};
 `
 
-const IconContainer = styled.div`
+const LogoContainer = styled.div`
 	position: absolute;
 	box-shadow: 0 0 5px black;
 	display: grid;
@@ -49,22 +50,44 @@ const RippleContainer = styled.div`
 	margin: 20px;
 `
 
-const Waiting = (props) => {
+const Centered = styled.div`
+	display: grid;
+	place-items: center;
+	height: 100%;
+`
+
+const Rows = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
+
+const Waiting = ({addAction, ...props}) => {
+	const actions = {
+		left: {
+			icon: mdiPlus,
+			label: 'Add link',
+			action: addAction
+		}
+	}
 	return (
-		<div style="display: grid; place-items: center; height: 100%;">
-			<div style="display: flex; flex-direction: column; align-items: center;">
-				<RippleContainer {...props}>
-					<IconContainer>
-						<Icon style="fill: white" />
-					</IconContainer>
-					<Ripple />
-					<Ripple delay="-1s" />
-					<Ripple delay="-2s" />
-					<Ripple delay="-3s" />
-				</RippleContainer>
-				<p>Waiting for a link...</p>
-			</div>
-		</div>
+		<ContentView>
+			<ActionBar actions={actions} />
+			<Centered {...props}>
+				<Rows>
+					<RippleContainer>
+						<LogoContainer>
+							<Logo style="fill: white" />
+						</LogoContainer>
+						<Ripple />
+						<Ripple delay="-1s" />
+						<Ripple delay="-2s" />
+						<Ripple delay="-3s" />
+					</RippleContainer>
+					<p>Waiting for a link...</p>
+				</Rows>
+			</Centered>
+		</ContentView>
 	)
 }
 export default Waiting

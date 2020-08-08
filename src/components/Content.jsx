@@ -6,98 +6,42 @@ import { mdiPlus, mdiArrowLeft, mdiBomb, mdiClose } from '@mdi/js'
 import { useUserContext, useDataContext } from 'util/context'
 import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
+import { ContentView } from 'util/ui'
 import Waiting from './Waiting'
-import FadeIn from './FadeIn'
-import ActionBar from './ActionBar'
 import Spinner from './Spinner'
 
 
 // const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 
-const pad = (n, width, char) => {
-	char = char || '0';
-	n = n + '';
-	return n.length >= width ? n : new Array(width - n.length + 1).join(char) + n;
-}
 
-const msToString = (ms) => {
-	const minutes = Math.floor((ms / 1000 / 60) % 60)
-	const seconds = Math.floor((ms / 1000) % 60)
-	return `${minutes}:${pad(seconds, 2)}`
-}
 
-const MainContent = styled(FadeIn)`
-	display: grid;
-	grid-template-rows: auto 1fr;
-`
-
-// TODO: remove this, just put stuff directly in the main App
 export const Content = () => {
 	const user = useUserContext()
-	const { snapshot, upload, clear } = useDataContext();
+	const { snapshot, upload, clearData, clearPreview, timeLeft } = useDataContext();
 	const [editing, setEditing] = useState(false);
-	let content;
-	let actions = { left: null, right: null};
-
-	const canPreview = snapshot && snapshot.exists()
 
 	const onCompleteForm = (url) => {
 		upload(url)
 		setEditing(false)
+		clearPreview()
 	}
-	if (user === null || snapshot === null) {
-		content = <Spinner />
+
+	if (user == null || snapshot == null) {
+		return <ContentView><div /> <Spinner /></ContentView>
+	}
+	else if (editing) {
+		return <Form onComplete={onCompleteForm} closeAction={() => setEditing(false)}/>
 	}
 	else {
-		if (editing) {
-			actions = {
-				right: {
-					icon: mdiClose,
-					label: 'Cancel',
-					action: () => setEditing(false)
-				}
-			}
-			content = <Form onComplete={onCompleteForm}/>
+		if (snapshot.exists() && timeLeft > 0) {
+			return <Preview editAction={() => setEditing(true)} deleteAction={clearData} />
 		}
 		else {
-			if (canPreview) {
-				actions = {
-					left: {
-						icon: mdiArrowLeft,
-						label: 'Edit link',
-						action: () => setEditing(true)
-					},
-					right: {
-						icon: mdiBomb,
-						label: 'Delete',
-						action: clear
-					}
-				}
-				content = <Preview />
-			}
-			else {
-				actions = {
-					left: {
-						icon: mdiPlus,
-						label: 'Add link',
-						action: () => setEditing(true)
-					}
-				}
-				content = <Waiting />
-			}
+			return <Waiting addAction={() => setEditing(true)} />
 		}
 	}
-	return (
-		<MainContent key={actions}>
-			<ActionBar actions={actions} />
-			{content}
-		</MainContent>
-	)
 }
-
-			// {user && <LinkStore user={user} previewData={preview}/>}
-			// <StatusChip user={user} />
 
 const preview = {
 	title: "developit - Overview",

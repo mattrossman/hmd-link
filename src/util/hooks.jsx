@@ -12,8 +12,6 @@ const firebaseConfig = {
     databaseURL: process.env.FIREBASE_DATABASE_URL,
 }
 
-console.log(firebaseConfig);
-
 if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth()
 const db = firebase.database()
@@ -73,74 +71,33 @@ export const useData = (user) => {
 	return [snapshot, upload, clear]
 }
 
-export const useDoc = (user) => {
-	const [snapshot, setSnapshot] = useState(null)
-	const setDocUrl = useCallback(async (url) => {
-		console.log('running uploadUrl: ', url)
-		if (user !== null) {
-			const minutes = 10
-			const payload = {
-				url,
-				expires: Date.now() + 1000 * 60 * minutes
-			}
-			console.log('Sending payload: ', payload,' to uid ', user.uid)
-			await db.collection("rooms").doc(user.uid).set(payload)
-		}
-	}, [user])
-	const deleteDoc = useCallback(async() => {
-		if (user !== null) {
-			await db.collection("rooms").doc(user.uid).delete()
-			console.log("Deleted records for uid ", user.uid)
-		}
-	}, [user])
-	useEffect(() => {
-		if (user !== null) {
-			db.collection("rooms").doc(user.uid).onSnapshot(snapshot => {
-				const data = snapshot.data()
-				console.log("Received new snapshot data: ", data)
-				setSnapshot(snapshot)
-			})
-		}
-	}, [user])
-	return [snapshot, setDocUrl, deleteDoc]
-}
-
 export const usePreview = () => {
-	const [target, setTarget] = useState(null)
 	const [data, setData] = useState(null)
 	
-	const setTargetValidate = (url) => {
+	const clearPreview = () => setData(null)
+	const getPreview = async (url) => {
+		setData(null)
 		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
-		console.log("Setting preview target")
-		setTarget(prefix + url);
-	}
+		const target = prefix + url
+		try {
+			const response = await axios.post('/.netlify/functions/preview', {url: target})
+			const preview = response.data;
 
-	useEffect(async () => {
-		// TODO: This effect is not run if prev target URL matches new one, thus the preview is never rendered
-		// Possible solution: cancel form if url matches
-		const fallbackThumbnail = 'https://picsum.photos/id/1025/200';
-		if (target !== null) {
-			try {
-				const response = await axios.post('/.netlify/functions/preview', {url: target})
-				const preview = response.data;
-
-				let thumbnail;
-				if (preview.images && preview.images.length > 0) thumbnail = preview.images[0];
-				else if (preview.favicons && preview.favicons.length > 1) thumbnail = preview.favicons[1];
-				else thumbnail = fallbackThumbnail;
-				const title = preview.siteName || preview.title || '(No title)'
-				const description = preview.description || ''
-				const url = preview.url || target;
-				if (!preview.url) console.warning("Preview URL was missing");
-				
-				setData({title, description, url, thumbnail});
-			}
-			catch (e) {
-				setData({url: target, title: '(No preview)', description:'', thumbnail: fallbackThumbnail})
-			}
+			let thumbnail;
+			if (preview.images && preview.images.length > 0) thumbnail = preview.images[0];
+			else if (preview.favicons && preview.favicons.length > 1) thumbnail = preview.favicons[1];
+			const title = preview.siteName || preview.title || '(No title)'
+			const description = preview.description || ''
+			const url = preview.url || target;
+			if (!preview.url) console.warning("Preview URL was missing");
+			
+			setData({title, description, url, thumbnail});
 		}
-	}, [target])
-	return [data, setTargetValidate]
+		catch (e) {
+			setData({url: target, title: '(No preview)', description:'', thumbnail: null})
+		}
+	}
+	return [data, getPreview, clearPreview]
 }
 
 export const useCountdown = (onComplete) => {
@@ -155,7 +112,7 @@ export const useCountdown = (onComplete) => {
 	useEffect(() => {
 		if (timer && timeLeft === 0) {
 			clearTimer()
-			onComplete()
+			onComplete && onComplete()
 		}
 	}, [timeLeft, timer])
 

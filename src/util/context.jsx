@@ -1,7 +1,7 @@
 import { h, createContext } from 'preact'
-import { useUser, useData } from 'util/hooks'
+import { useUser, useData, usePreview, useCountdown } from 'util/hooks'
 import { useDummyUser } from 'util/hooks-dummy'
-import { useContext, useState } from 'preact/hooks';
+import { useContext, useState, useEffect } from 'preact/hooks';
 
 // Provide Firebase user
 const UserContext = createContext(null);
@@ -15,6 +15,7 @@ export const UserProvider = ({children}) => {
 }
 export const useUserContext = () => useContext(UserContext)
 
+// TODO: remove this unused context
 // Provide info on the current screen and available actions
 const initialActions = {
 	leftAction: null,
@@ -44,9 +45,19 @@ const DataContext = createContext({
 })
 export const DataProvider = ({children}) => {
 	const user = useUserContext();
-	const [snapshot, upload, clear] = useData(user);
+	const [snapshot, upload, clearData] = useData(user);
+	const [preview, setTarget, clearPreview] = usePreview()
+	const [timeLeft, setEndTime, clearTimer] = useCountdown()
+
+	useEffect(() => {
+		if (snapshot && snapshot.exists()) {
+			setTarget(snapshot.child('url').val())
+			setEndTime(snapshot.child('timestamp').val() + 1000*60*5)
+		}
+	}, [snapshot])
+
 	return (
-		<DataContext.Provider value={{snapshot, upload, clear}}>
+		<DataContext.Provider value={{snapshot, upload, clearData, preview, clearPreview, timeLeft}}>
 			{children}
 		</DataContext.Provider>
 	)
