@@ -112,7 +112,6 @@ export const usePreview = () => {
 		setData(null)
 		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
 		const target = prefix + url
-		const fallbackThumbnail = 'https://picsum.photos/id/1025/200';
 		try {
 			const response = await axios.post('/.netlify/functions/preview', {url: target})
 			const preview = response.data;
@@ -120,7 +119,6 @@ export const usePreview = () => {
 			let thumbnail;
 			if (preview.images && preview.images.length > 0) thumbnail = preview.images[0];
 			else if (preview.favicons && preview.favicons.length > 1) thumbnail = preview.favicons[1];
-			else thumbnail = fallbackThumbnail;
 			const title = preview.siteName || preview.title || '(No title)'
 			const description = preview.description || ''
 			const url = preview.url || target;
@@ -129,7 +127,7 @@ export const usePreview = () => {
 			setData({title, description, url, thumbnail});
 		}
 		catch (e) {
-			setData({url: target, title: '(No preview)', description:'', thumbnail: fallbackThumbnail})
+			setData({url: target, title: '(No preview)', description:'', thumbnail: null})
 		}
 	}
 	return [data, getPreview]

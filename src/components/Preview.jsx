@@ -1,10 +1,10 @@
 import { h, Fragment } from 'preact'
-import { useState, useEffect } from 'preact/hooks'
+import { useState, useEffect, useCallback } from 'preact/hooks'
 import axios from 'redaxios'
 
 import styled from 'styled-components'
 import Icon from '@mdi/react'
-import { mdiOpenInNew } from '@mdi/js'
+import { mdiOpenInNew, mdiWeb } from '@mdi/js'
 
 import { usePreview } from 'util/hooks'
 import { useDataContext } from '../util/context'
@@ -79,16 +79,40 @@ const Centered = styled.div`
 	align-items: center;
 `
 
+const ThumbnailContainer = styled.div`
+	padding: 0;
+	height: auto;
+	display: grid;
+	place-items: center;
+	background-color: #444;
+`
+ThumbnailContainer.defaultProps = {className: "col-sm-12 col-md-4"}
+
+const MarginIcon = styled(Icon)`
+	margin: 2em;
+`
+
 export const Preview = () => {
 	const {preview: data} = useDataContext()
-	const [thumbnailReady, setThumbnailReady] = useState(false);
+	const [thumbnailReady, setThumbnailReady] = useState(true);
+
+	// useEffect(() => {
+	// 	console.log('running data effect', data)
+	// 	if (data && data.thumbnail)
+	// 		setThumbnailReady(false)
+	// 	else
+	// 		setThumbnailReady(true)
+	// }, [data])
 
 	const preview = data && (
-		<DivLink href={data.url} target="_blank" hidden={!thumbnailReady}>
+		<DivLink href={data.url} target="_blank">
 			<Card className="row card-container shadowed">
-				<div class="col-sm-12 col-md-4" style="padding: 0; height: auto;">
-					<Thumbnail onLoad={() => setThumbnailReady(true)} src={data.thumbnail} alt="site-preview"></Thumbnail>
-				</div>
+				<ThumbnailContainer>
+					{ data.thumbnail
+						? <Thumbnail src={data.thumbnail} alt="site-preview" />
+						: <MarginIcon path={mdiWeb} size={3} />
+					}
+				</ThumbnailContainer>
 				<div class="col-sm-12 col-md-8" style="padding: 10px">
 					<RightContainer>
 						<h2 class="truncate-width">{data.title}</h2>
