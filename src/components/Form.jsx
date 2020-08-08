@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import ActionBar from 'components/ActionBar'
 import { ContentView } from 'util/ui'
 import { mdiClose } from '@mdi/js'
-
+import { useDataContext } from 'util/context'
 
 	// TODO: stop autofill
 const WideInput = styled('input')`
@@ -57,6 +57,7 @@ CenterRow.defaultProps = {className: 'row'}
 export const Form = ({onComplete, closeAction, ...props}) => {
 	const input = useRef(null);
 	const [url, setUrl] = useState('')
+	const { snapshot, timeLeft } = useDataContext()
 	useEffect(() => {
 		if (input.current) {
 			input.current.focus();
@@ -83,6 +84,11 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 			action: closeAction
 		}
 	}
+	useEffect(()=> {
+		if (snapshot && snapshot.exists() && timeLeft > 0){
+			setUrl(snapshot.child('url').val());
+		}
+	}, [snapshot])
 	return (
 		<ContentView>
 			<ActionBar actions={actions}/>
@@ -92,7 +98,7 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 				</CenterRow>
 				<CenterRow>
 					<WideInput onChange={onChangeInput} autoFocus required ref={input} type="text" id="url" title="URL"
-						pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" />
+						pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" value={url}/>
 				</CenterRow>
 				<div className="row">
 					<div className="col-sm-12 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
