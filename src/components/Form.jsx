@@ -54,6 +54,16 @@ const CenterRow = styled.div`
 `
 CenterRow.defaultProps = {className: 'row'}
 
+const Warning = styled.p`
+	color: red;
+	width: 100%;
+	text-align: center;
+`
+
+
+const isValidLength = (val) => val.length <= 2000
+const isUrl = (val) => val.match(/(https?:\/\/)?.+\..+/)
+
 export const Form = ({onComplete, closeAction, ...props}) => {
 	const input = useRef(null);
 	const [url, setUrl] = useState('')
@@ -74,8 +84,9 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 		setUrl(e.target.value)
 	}, [input])
 	const isValid = useCallback(() => {
-		return input.current && input.current.checkValidity()
+		return input.current && isValidLength(input.current.value) && isUrl(input.current.value)
 	}, [url])
+	const tooLong = input.current && !isValidLength(input.current.value)
 
 	const actions = {
 		right: {
@@ -98,10 +109,11 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 				</CenterRow>
 				<CenterRow>
 					<WideInput onChange={onChangeInput} autoFocus required ref={input} type="text" id="url" title="URL"
-						pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" value={url}/>
+						pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" autocapitalize="off" value={url}/>
 				</CenterRow>
 				<div className="row">
 					<div className="col-sm-12 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
+						{tooLong && <Warning>URL too long :(</Warning>}
 						<SubmitButton className="primary"
 							type="submit" onClick={onClickSubmit} disabled={!isValid()} >Submit</SubmitButton>
 					</div>

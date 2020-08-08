@@ -2,24 +2,51 @@ import { useState, useEffect } from 'preact/hooks'
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms))
 
-export const useDummyDoc = (user) => {
-	const [snapshot, setSnapshot] = useState(null);
-	const uploadUrl = () => console.log("Running dummy uploadUrl")
-	const deleteDoc = () => console.log("Running dummy deleteDoc")
-	useEffect(() => {
-		const snapshot = new Map();
-		snapshot.exists = true;
-		snapshot.set('url', 'https://github.com/mattrossman')
-		snapshot.set('expires', 1595899100855)
-		setSnapshot(snapshot)
-	}, [])
-	return [snapshot, uploadUrl, deleteDoc]
+class SnapshotChild {
+	constructor(val) {
+		this._val = val
+	}
+
+	val() {
+		return this._val;
+	}
 }
 
-export const useDummyUser = (delay) => {
+class Snapshot {
+	constructor(exists, obj = {}) {
+		this.exists = () => exists
+		this.obj = obj
+	}
+
+	child(key) {
+		return new SnapshotChild(this.obj[key])
+	}
+}
+
+export const useDummyData = (user) => {
+	const [snapshot, setSnapshot] = useState(null);
+	const upload = async (url) => {
+		await sleep(100)
+		const snapshot = new Snapshot(true, {
+			timestamp: Date.now(),
+			url
+		})
+		setSnapshot(snapshot)
+	}
+	const clear = async () => {
+		await sleep(100)
+		setSnapshot(new Snapshot(false))
+	}
+	useEffect(() => {
+		clear()
+	}, [])
+	return [snapshot, upload, clear]
+}
+
+export const useDummyUser = () => {
 	const [user, setUser] = useState(null)
 	useEffect(async () => {
-		await sleep(delay);
+		await sleep(500);
 		setUser({
 			displayName: 'dummy-room-name',
 			uid: 123456789

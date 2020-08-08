@@ -1,12 +1,13 @@
 import { h, createContext } from 'preact'
 import { useUser, useData, usePreview, useCountdown } from 'util/hooks'
-import { useDummyUser } from 'util/hooks-dummy'
+import { useDummyUser, useDummyData } from 'util/hooks-dummy'
 import { useContext, useState, useEffect } from 'preact/hooks';
 
 // Provide Firebase user
 const UserContext = createContext(null);
 export const UserProvider = ({children}) => {
-	const user = useUser()
+	// const user = useUser()
+	const user = useDummyUser()
 	return (
 		<UserContext.Provider value={user}>
 			{children}
@@ -15,29 +16,6 @@ export const UserProvider = ({children}) => {
 }
 export const useUserContext = () => useContext(UserContext)
 
-// TODO: remove this unused context
-// Provide info on the current screen and available actions
-const initialActions = {
-	leftAction: null,
-	rightAction: null
-}
-const ActivityContext = createContext({
-	actions: initialActions,
-	setActions: () => {},
-	setIntent: () => {},
-})
-export const ActivityProvider = ({children}) => {
-	const [actions, setActions] = useState(initialActions)
-	const [intent, setIntent] = useState('wait')
-	return (
-		<ActivityContext.Provider value={{actions, setActions, intent, setIntent}}>
-			{children}
-		</ActivityContext.Provider>
-	)
-}
-export const useActivityContext = () => useContext(ActivityContext)
-
-
 const DataContext = createContext({
 	snapshot: null,
 	upload: () => {},
@@ -45,7 +23,7 @@ const DataContext = createContext({
 })
 export const DataProvider = ({children}) => {
 	const user = useUserContext();
-	const [snapshot, upload, clearData] = useData(user);
+	const [snapshot, upload, clearData] = useDummyData(user);
 	const [preview, setTarget, clearPreview] = usePreview()
 	const [timeLeft, setEndTime, clearTimer] = useCountdown()
 

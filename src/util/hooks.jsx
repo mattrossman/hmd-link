@@ -52,7 +52,7 @@ export const useData = (user) => {
 			try {
 				await ref.set({
 					url,
-					timestamp: Date.now()
+					timestamp: firebase.database.ServerValue.TIMESTAMP
 				})
 				console.log('set succeeded')
 			}
