@@ -35,7 +35,7 @@ const MainContent = styled.div`
 // TODO: remove this, just put stuff directly in the main App
 export const Content = () => {
 	const user = useUserContext()
-	const { snapshot, upload, clear } = useDataContext();
+	const { snapshot, upload, clearData, clearPreview } = useDataContext();
 	const [editing, setEditing] = useState(false);
 	let content;
 	let actions = { left: null, right: null};
@@ -44,6 +44,7 @@ export const Content = () => {
 	const onCompleteForm = (url) => {
 		upload(url)
 		setEditing(false)
+		clearPreview()
 	}
 
 	const connecting = user == null || snapshot == null;
@@ -68,7 +69,7 @@ export const Content = () => {
 			right: {
 				icon: mdiBomb,
 				label: 'Delete',
-				action: clear
+				action: clearData
 			}
 		}
 	}

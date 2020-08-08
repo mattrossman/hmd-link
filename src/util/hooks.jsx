@@ -108,6 +108,7 @@ export const useDoc = (user) => {
 export const usePreview = () => {
 	const [data, setData] = useState(null)
 	
+	const clearPreview = () => setData(null)
 	const getPreview = async (url) => {
 		setData(null)
 		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
@@ -130,7 +131,7 @@ export const usePreview = () => {
 			setData({url: target, title: '(No preview)', description:'', thumbnail: null})
 		}
 	}
-	return [data, getPreview]
+	return [data, getPreview, clearPreview]
 }
 
 export const useCountdown = (onComplete) => {

@@ -53,7 +53,7 @@ export const DataProvider = ({children}) => {
 		}
 	}, [snapshot])
 	return (
-		<DataContext.Provider value={{snapshot, upload, clear: clearData, preview}}>
+		<DataContext.Provider value={{snapshot, upload, clearData, preview, clearPreview}}>
 			{children}
 		</DataContext.Provider>
 	)
