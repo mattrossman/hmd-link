@@ -39,18 +39,17 @@ export const Content = () => {
 	const [editing, setEditing] = useState(false);
 	let content;
 	let actions = { left: null, right: null};
-
-
 	const onCompleteForm = (url) => {
 		upload(url)
 		setEditing(false)
 		clearPreview()
 	}
 
-	const connecting = user == null || snapshot == null;
-	const waiting = snapshot && !snapshot.exists() && !editing
-	const previewing = snapshot && snapshot.exists() && !editing
-	if (editing) {
+	if (user == null || snapshot == null) {
+		content = <Spinner />
+	}
+	else if (editing) {
+		content = <Form onComplete={onCompleteForm} />
 		actions = {
 			right: {
 				icon: mdiClose,
@@ -59,39 +58,32 @@ export const Content = () => {
 			}
 		}
 	}
-	if (previewing) {
-		actions = {
-			left: {
-				icon: mdiArrowLeft,
-				label: 'Edit link',
-				action: () => setEditing(true)
-			},
-			right: {
-				icon: mdiBomb,
-				label: 'Delete',
-				action: clearData
-			}
-		}
-	}
-	if (waiting) {
-		actions = {
-			left: {
-				icon: mdiPlus,
-				label: 'Add link',
-				action: () => setEditing(true)
-			}
-		}
-	}
-
-	if (user == null || snapshot == null)
-		content = <Spinner />
-	else if (editing)
-		content = <Form onComplete={onCompleteForm} />
 	else {
-		if (snapshot.exists())
+		if (snapshot.exists()) {
 			content = <Preview />
-		else
+			actions = {
+				left: {
+					icon: mdiArrowLeft,
+					label: 'Edit link',
+					action: () => setEditing(true)
+				},
+				right: {
+					icon: mdiBomb,
+					label: 'Delete',
+					action: clearData
+				}
+			}
+		}
+		else {
 			content = <Waiting />
+			actions = {
+				left: {
+					icon: mdiPlus,
+					label: 'Add link',
+					action: () => setEditing(true)
+				}
+			}
+		}
 	}
 
 	return (
