@@ -1,6 +1,9 @@
 import { h } from 'preact'
 import { useState, useRef, useEffect, useCallback } from 'preact/hooks'
 import styled from 'styled-components'
+import ActionBar from 'components/ActionBar'
+import { ContentView } from 'util/ui'
+import { mdiClose } from '@mdi/js'
 
 
 	// TODO: stop autofill
@@ -51,7 +54,7 @@ const CenterRow = styled.div`
 `
 CenterRow.defaultProps = {className: 'row'}
 
-export const Form = ({onComplete, ...props}) => {
+export const Form = ({onComplete, closeAction, ...props}) => {
 	const input = useRef(null);
 	const [url, setUrl] = useState('')
 	useEffect(() => {
@@ -72,21 +75,32 @@ export const Form = ({onComplete, ...props}) => {
 	const isValid = useCallback(() => {
 		return input.current && input.current.checkValidity()
 	}, [url])
+
+	const actions = {
+		right: {
+			icon: mdiClose,
+			label: 'Cancel',
+			action: closeAction
+		}
+	}
 	return (
-		<form autocomplete="off" {...props}>
-			<CenterRow>
-				<CenteredHeading>Enter a URL</CenteredHeading>
-			</CenterRow>
-			<CenterRow>
-				<WideInput onChange={onChangeInput} autoFocus required ref={input} type="text" id="url" title="URL"
-					pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" />
-			</CenterRow>
-			<div className="row">
-				<div className="col-sm-12 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
-					<SubmitButton className="primary"
-						type="submit" onClick={onClickSubmit} disabled={!isValid()} >Submit</SubmitButton>
+		<ContentView>
+			<ActionBar actions={actions}/>
+			<form autocomplete="off" {...props}>
+				<CenterRow>
+					<CenteredHeading>Enter a URL</CenteredHeading>
+				</CenterRow>
+				<CenterRow>
+					<WideInput onChange={onChangeInput} autoFocus required ref={input} type="text" id="url" title="URL"
+						pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" />
+				</CenterRow>
+				<div className="row">
+					<div className="col-sm-12 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
+						<SubmitButton className="primary"
+							type="submit" onClick={onClickSubmit} disabled={!isValid()} >Submit</SubmitButton>
+					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		</ContentView>
 	)
 }

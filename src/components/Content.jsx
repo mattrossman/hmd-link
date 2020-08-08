@@ -6,9 +6,8 @@ import { mdiPlus, mdiArrowLeft, mdiBomb, mdiClose } from '@mdi/js'
 import { useUserContext, useDataContext } from 'util/context'
 import { Form } from 'components/Form'
 import { Preview } from 'components/Preview'
+import { ContentView } from 'util/ui'
 import Waiting from './Waiting'
-import FadeIn from './FadeIn'
-import ActionBar from './ActionBar'
 import Spinner from './Spinner'
 
 
@@ -27,18 +26,11 @@ const msToString = (ms) => {
 	return `${minutes}:${pad(seconds, 2)}`
 }
 
-const MainContent = styled.div`
-	display: grid;
-	grid-template-rows: auto 1fr;
-`
-
-// TODO: remove this, just put stuff directly in the main App
 export const Content = () => {
 	const user = useUserContext()
 	const { snapshot, upload, clearData, clearPreview } = useDataContext();
 	const [editing, setEditing] = useState(false);
-	let content;
-	let actions = { left: null, right: null};
+
 	const onCompleteForm = (url) => {
 		upload(url)
 		setEditing(false)
@@ -46,58 +38,20 @@ export const Content = () => {
 	}
 
 	if (user == null || snapshot == null) {
-		content = <Spinner />
+		return <ContentView><div /> <Spinner /></ContentView>
 	}
 	else if (editing) {
-		content = <Form onComplete={onCompleteForm} />
-		actions = {
-			right: {
-				icon: mdiClose,
-				label: 'Cancel',
-				action: () => setEditing(false)
-			}
-		}
+		return <Form onComplete={onCompleteForm} closeAction={() => setEditing(false)}/>
 	}
 	else {
 		if (snapshot.exists()) {
-			content = <Preview />
-			actions = {
-				left: {
-					icon: mdiArrowLeft,
-					label: 'Edit link',
-					action: () => setEditing(true)
-				},
-				right: {
-					icon: mdiBomb,
-					label: 'Delete',
-					action: clearData
-				}
-			}
+			return <Preview editAction={() => setEditing(true)} deleteAction={clearData} />
 		}
 		else {
-			content = <Waiting />
-			actions = {
-				left: {
-					icon: mdiPlus,
-					label: 'Add link',
-					action: () => setEditing(true)
-				}
-			}
+			return <Waiting addAction={() => setEditing(true)} />
 		}
 	}
-
-	return (
-		<MainContent>
-			<ActionBar actions={actions} />
-			<div>
-				{content}
-			</div>
-		</MainContent>
-	)
 }
-
-			// {user && <LinkStore user={user} previewData={preview}/>}
-			// <StatusChip user={user} />
 
 const preview = {
 	title: "developit - Overview",

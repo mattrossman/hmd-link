@@ -12,8 +12,6 @@ const firebaseConfig = {
     databaseURL: process.env.FIREBASE_DATABASE_URL,
 }
 
-console.log(firebaseConfig);
-
 if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth()
 const db = firebase.database()

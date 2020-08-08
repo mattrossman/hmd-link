@@ -4,11 +4,13 @@ import axios from 'redaxios'
 
 import styled from 'styled-components'
 import Icon from '@mdi/react'
-import { mdiOpenInNew, mdiWeb } from '@mdi/js'
+import { mdiOpenInNew, mdiWeb, mdiArrowLeft, mdiBomb } from '@mdi/js'
 
 import { usePreview } from 'util/hooks'
 import { useDataContext } from '../util/context'
 import Spinner from './Spinner'
+import ActionBar from 'components/ActionBar'
+import { ContentView } from 'util/ui'
 
 const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
@@ -92,7 +94,7 @@ const MarginIcon = styled(Icon)`
 	margin: 2em;
 `
 
-export const Preview = () => {
+export const Preview = ({editAction, deleteAction}) => {
 	const {preview: data} = useDataContext()
 	const [thumbnailReady, setThumbnailReady] = useState(true);
 
@@ -103,6 +105,18 @@ export const Preview = () => {
 	// 	else
 	// 		setThumbnailReady(true)
 	// }, [data])
+	const actions = {
+		left: {
+			icon: mdiArrowLeft,
+			label: 'Edit link',
+			action: editAction
+		},
+		right: {
+			icon: mdiBomb,
+			label: 'Delete',
+			action: deleteAction
+		}
+	}
 
 	const preview = data && (
 		<DivLink href={data.url} target="_blank">
@@ -131,9 +145,10 @@ export const Preview = () => {
 		</DivLink>
 	)
 	return (
-		<>
-		{preview} 
-		{(!data || !thumbnailReady) && <Spinner />}
-		</>
+		<ContentView>
+			<ActionBar actions={actions} />
+			{preview} 
+			{(!data || !thumbnailReady) && <Spinner />}
+		</ContentView>
 	)
 }
