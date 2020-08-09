@@ -46,6 +46,9 @@ const SubmitButton = styled.button`
 
 const CenteredHeading = styled.h2`
 	text-align: center;
+	@media(max-height: 500px) {
+		margin-top: -30px;
+	}
 `
 
 const CenterRow = styled.div`
@@ -112,7 +115,7 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 						pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" autocapitalize="off" value={url}/>
 				</CenterRow>
 				<div className="row">
-					<div className="col-sm-12 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
+					<div className="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
 						{tooLong && <Warning>URL too long :(</Warning>}
 						<SubmitButton className="primary"
 							type="submit" onClick={onClickSubmit} disabled={!isValid()} >Submit</SubmitButton>

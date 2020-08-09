@@ -3,11 +3,13 @@ import { useUser, useData, usePreview, useCountdown } from 'util/hooks'
 import { useDummyUser, useDummyData } from 'util/hooks-dummy'
 import { useContext, useState, useEffect } from 'preact/hooks';
 
+const DUMMY = true;
+
 // Provide Firebase user
 const UserContext = createContext(null);
 export const UserProvider = ({children}) => {
 	// const user = useUser()
-	const user = useDummyUser()
+	const user = DUMMY ? useDummyUser() : useUser()
 	return (
 		<UserContext.Provider value={user}>
 			{children}
@@ -23,7 +25,7 @@ const DataContext = createContext({
 })
 export const DataProvider = ({children}) => {
 	const user = useUserContext();
-	const [snapshot, upload, clearData] = useDummyData(user);
+	const [snapshot, upload, clearData] = DUMMY ? useDummyData(user) : useData(user)
 	const [preview, setTarget, clearPreview] = usePreview()
 	const [timeLeft, setEndTime, clearTimer] = useCountdown()
 
