@@ -40,7 +40,6 @@ export const useData = (user) => {
 			setRef(ref)
 			ref.on('value', (snapshot) => {
 				setSnapshot(snapshot);
-				console.log('Received snapshot', snapshot)
 			})
 			return () => ref.off('value')
 		}
@@ -100,14 +99,28 @@ export const usePreview = () => {
 	return [data, getPreview, clearPreview]
 }
 
+const useServerOffset = () => {
+	const [offset, setOffset] = useState(null)
+
+	useEffect(() => {
+		const offsetRef = db.ref('/.info/serverTimeOffset')
+		offsetRef.on('value', (snap) => {
+			setOffset(snap.val())
+		})
+		return () => offsetRef.off('value')
+	}, [])
+	return offset
+}
+
 export const useCountdown = (onComplete) => {
 	const [timeLeft, setTimeLeft] = useState(0)
 	const [timer, setTimer] = useState(null)
 	const [endTime, setEndTime] = useState(null)
+	const offset = useServerOffset()
 
 	const getTimeLeft = useCallback(() => {
-		return endTime && Math.max(endTime - Date.now(), 0)
-	}, [endTime])
+		return endTime && offset && Math.max(endTime - (Date.now() + offset), 0)
+	}, [endTime, offset])
 
 	useEffect(() => {
 		if (timer && timeLeft === 0) {
@@ -123,7 +136,7 @@ export const useCountdown = (onComplete) => {
 	}, [timer])
 	
 	useEffect(() => {
-		if (endTime) {
+		if (endTime && offset) {
 			clearTimer()
 			setTimeLeft(getTimeLeft())
 			const timer = setInterval(() => {
@@ -131,7 +144,7 @@ export const useCountdown = (onComplete) => {
 			}, 1000)
 			setTimer(timer)
 		}
-	}, [endTime])
+	}, [endTime, offset])
 	
 	return [timeLeft, setEndTime, clearTimer]
 }

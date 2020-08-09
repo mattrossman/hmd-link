@@ -34,6 +34,9 @@ export const DataProvider = ({children}) => {
 			setTarget(snapshot.child('url').val())
 			setEndTime(snapshot.child('timestamp').val() + 1000*60*5)
 		}
+		else {
+			clearTimer();
+		}
 	}, [snapshot])
 
 	return (
