@@ -3,7 +3,7 @@ const stringHash = require('string-hash')
 const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
 
 
-const getAdminAuth = () => {
+const init = () => {
 	if (admin.apps.length == 0) {
 		const key = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 		admin.initializeApp({
@@ -11,7 +11,6 @@ const getAdminAuth = () => {
 			databaseURL: process.env.FIREBASE_DATABASE_URL
 		});
 	}
-	return admin.auth()
 }
 
 const getPublicIp = (headers) => {
@@ -46,7 +45,8 @@ const setupDisplayName = async (auth, uid) => {
 
 
 exports.handler = async event => {
-	const auth = getAdminAuth()
+	init();
+	const auth = admin.auth()
 	const uid = stringHash(getPublicIp(event.headers)).toString()
 	await setupDisplayName(auth, uid)
 	const token = await auth.createCustomToken(uid)
