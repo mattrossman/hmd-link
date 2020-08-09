@@ -1,41 +1,34 @@
-body {
-	margin: 0;
-	font-family: monospace;
-}
-.container {
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 15px;
-    padding-right: 15px;
-	height: 100vh;
-    display: grid;
-	grid-template-rows: auto 1fr auto;
-	box-shadow:0 0 10px #aaa;
+html, body {
+	background: rgb(30, 30, 30);
+	height: 100%;
 }
 
-@media (min-width: 622px) {
-    .container {
-        width: 600px;
-     }
+form {
+	background: none;
+	border: none;
+	padding: 0;
 }
 
-.header {
-	text-align: center;
-	padding-top: 3em;
-	/* background-color: lightblue; */
+.shadowed {
+	box-shadow: 0 0 5px rgb(20, 20, 20);
 }
 
-.header > h2 {
-	font-style: italic;
-	font-weight: lighter;
-	font-size: 14px;
+.tooltip:after {
+	width: min(400px, 90vw);
+	white-space: normal;
+	clip: none;
+	-webkit-clip-path: inset(50%);
+	clip-path:inset(50%);
 }
 
-.footer {
-	text-align: center;
-	/* background-color: lightgreen; */
+.tooltip:hover:after {
+	-webkit-clip-path: inset(0%);
+	clip-path:inset(0%);
 }
 
-.content {
-	padding: 2em
+
+.truncate-width {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
