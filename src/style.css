@@ -16,7 +16,16 @@ form {
 .tooltip:after {
 	width: min(400px, 90vw);
 	white-space: normal;
+	clip: none;
+	-webkit-clip-path: inset(50%);
+	clip-path:inset(50%);
 }
+
+.tooltip:hover:after {
+	-webkit-clip-path: inset(0%);
+	clip-path:inset(0%);
+}
+
 
 .truncate-width {
 	white-space: nowrap;
