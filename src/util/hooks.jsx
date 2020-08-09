@@ -3,7 +3,7 @@ import axios from 'redaxios';
 import * as firebase from "firebase/app";
 import "firebase/database";
 import "firebase/auth";
-
+import { sleep } from './hooks-dummy'
 
 const firebaseConfig = {
 	apiKey: process.env.FIREBASE_API_KEY,
@@ -79,6 +79,7 @@ export const usePreview = () => {
 		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
 		const target = prefix + url
 		try {
+			// await sleep(1000)
 			const response = await axios.post('/.netlify/functions/preview', {url: target})
 			const preview = response.data;
 

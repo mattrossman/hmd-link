@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'preact/hooks'
 
-const sleep = (ms) => new Promise(r => setTimeout(r, ms))
+export const sleep = (ms) => new Promise(r => setTimeout(r, ms))
 
 class SnapshotChild {
 	constructor(val) {
@@ -26,7 +26,6 @@ class Snapshot {
 export const useDummyData = (user) => {
 	const [snapshot, setSnapshot] = useState(null);
 	const upload = async (url) => {
-		await sleep(100)
 		const snapshot = new Snapshot(true, {
 			timestamp: Date.now(),
 			url

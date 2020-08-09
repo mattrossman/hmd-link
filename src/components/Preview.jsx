@@ -1,5 +1,5 @@
 import { h, Fragment } from 'preact'
-import { useState, useEffect, useCallback } from 'preact/hooks'
+import { useState, useEffect, useRef } from 'preact/hooks'
 import axios from 'redaxios'
 
 import styled from 'styled-components'
@@ -107,7 +107,8 @@ const msToString = (ms) => {
 
 export const Preview = ({editAction, deleteAction}) => {
 	const {preview: data, timeLeft} = useDataContext()
-	const [thumbnailReady, setThumbnailReady] = useState(true);
+	const [loading, setLoading] = useState(true);
+	const img = useRef(null)
 
 	const actions = {
 		left: {
@@ -121,14 +122,32 @@ export const Preview = ({editAction, deleteAction}) => {
 			action: deleteAction
 		}
 	}
+	const imgCompleted = () => img && img.current && img.current.complete
+	useEffect(() => {
+			if (data) {
+				if (data.thumbnail && !imgCompleted()) {
+					setLoading(true)  // Wait for img to complete rendering
+				}
+				else {
+					setLoading(false)  // No need to wait for fallback icon
+				}
+			}
+			else {
+				setLoading(true)  // Wait to receive data
+			}
+	}, [data])
+
+	const onThumbLoad = () => {
+		setLoading(false)
+	}
 
 	const preview = data && (
-		<div>
+		<div hidden={loading}>
 		<DivLink href={data.url} target="_blank">
 			<Card className="row card-container shadowed">
 				<ThumbnailContainer>
 					{ data.thumbnail
-						? <Thumbnail src={data.thumbnail} alt="site-preview" />
+						? <Thumbnail src={data.thumbnail} ref={img} alt="site-preview" onLoad={onThumbLoad} />
 						: <MarginIcon path={mdiWeb} size={3} />
 					}
 				</ThumbnailContainer>
@@ -154,7 +173,7 @@ export const Preview = ({editAction, deleteAction}) => {
 		<ContentView>
 			<ActionBar actions={actions} />
 			{preview} 
-			{!thumbnailReady && <Spinner />}
+			{loading && <Spinner />}
 		</ContentView>
 	)
 }

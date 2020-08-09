@@ -1,4 +1,5 @@
 import { h } from 'preact'
+import { useEffect, useState } from 'preact/hooks'
 import styled from 'styled-components'
 
 const SpinnerContainer = styled.div`
@@ -9,6 +10,9 @@ const SpinnerContainer = styled.div`
 `
 
 const Spinner = (props) => {
+	useEffect(() => {
+		console.log('mounting spinner')
+	}, [])
 	return (
 		<SpinnerContainer {...props}>
 			<div class="spinner"></div>
