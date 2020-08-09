@@ -2,7 +2,7 @@ import { h } from 'preact'
 import { useEffect } from 'preact/hooks'
 
 import styled, { keyframes } from 'styled-components'
-import { mdiPlus } from '@mdi/js'
+import { mdiPlus, mdiInformationOutline } from '@mdi/js'
 
 import Logo from './Logo'
 import ActionBar from 'components/ActionBar'
@@ -64,12 +64,16 @@ const Rows = styled.div`
 	align-items: center;
 `
 
-const Waiting = ({addAction, ...props}) => {
+const Waiting = ({addAction, helpAction, ...props}) => {
 	const actions = {
 		left: {
 			icon: mdiPlus,
 			label: 'Add link',
 			action: addAction
+		},
+		right: {
+			icon: mdiInformationOutline,
+			action: helpAction
 		}
 	}
 	return (

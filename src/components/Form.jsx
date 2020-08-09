@@ -94,7 +94,7 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 	const actions = {
 		right: {
 			icon: mdiClose,
-			label: 'Cancel',
+			label: 'Close',
 			action: closeAction
 		}
 	}

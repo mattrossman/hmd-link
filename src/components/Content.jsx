@@ -9,6 +9,7 @@ import { Preview } from 'components/Preview'
 import { ContentView } from 'util/ui'
 import Waiting from './Waiting'
 import Spinner from './Spinner'
+import Help from './Help'
 
 
 // const sleep = ms => new Promise(r => setTimeout(r, ms))
@@ -18,8 +19,9 @@ import Spinner from './Spinner'
 
 export const Content = () => {
 	const user = useUserContext()
-	const { snapshot, upload, clearData, clearPreview, timeLeft } = useDataContext();
-	const [editing, setEditing] = useState(false);
+	const { snapshot, upload, clearData, clearPreview, timeLeft } = useDataContext()
+	const [editing, setEditing] = useState(false)
+	const [showHelp, setShowHelp] = useState(false)
 
 	const onCompleteForm = (url) => {
 		upload(url)
@@ -30,6 +32,9 @@ export const Content = () => {
 	if (user == null || snapshot == null) {
 		return <ContentView><div /> <Spinner /></ContentView>
 	}
+	if (showHelp) {
+		return <Help closeAction={() => setShowHelp(false)} />
+	}
 	else if (editing) {
 		return <Form onComplete={onCompleteForm} closeAction={() => setEditing(false)}/>
 	}
@@ -38,7 +43,7 @@ export const Content = () => {
 			return <Preview editAction={() => setEditing(true)} deleteAction={clearData} />
 		}
 		else {
-			return <Waiting addAction={() => setEditing(true)} />
+			return <Waiting addAction={() => setEditing(true)} helpAction={() => setShowHelp(true)} />
 		}
 	}
 }

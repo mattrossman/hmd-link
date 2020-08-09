@@ -3,6 +3,9 @@ import styled from 'styled-components'
 
 const BottomMargin = styled.div`
 	margin-bottom: 4rem;
+	@media (max-height: 850px) {
+		margin-bottom: 2rem;
+	}
 	@media (max-height: 500px) {
 		margin-bottom: 0;
 	}

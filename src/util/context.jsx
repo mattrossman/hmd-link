@@ -3,7 +3,7 @@ import { useUser, useData, usePreview, useCountdown } from 'util/hooks'
 import { useDummyUser, useDummyData } from 'util/hooks-dummy'
 import { useContext, useState, useEffect } from 'preact/hooks';
 
-const DUMMY = false;
+const DUMMY = true;
 
 // Provide Firebase user
 const UserContext = createContext(null);
