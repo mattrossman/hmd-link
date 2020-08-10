@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, useCallback } from 'preact/hooks'
 import styled from 'styled-components'
 import ActionBar from 'components/ActionBar'
 import { ContentView } from 'util/ui'
-import { mdiClose, mdiAlert } from '@mdi/js'
+import { mdiClose, mdiAlert, mdiSend } from '@mdi/js'
 import Icon from '@mdi/react'
 import { useDataContext } from 'util/context'
 
@@ -31,19 +31,50 @@ const WideInput = styled('input')`
 	}
 `
 
-const SubmitButton = styled.button`
+const InputContainer = styled.div`
 	width: 100%;
+	height: 50px;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	border: 2px solid #222;
+	box-shadow: 0 0 5px black;
+	background-color: #111;
+	border-radius: 25px;
+	overflow: hidden;
+	margin-top: 20px;
+`
+
+const RawInput = styled.input`
+	text-align: center;
+	text-indent: 75px;
+	&& {
+		background: none;
+		border: none;
+	}
+	&:active, &:focus {
+		border: none;
+        outline: none;
+	}
+`
+
+const NewButton = styled.button`
+	width: 75px;
+	display: grid;
+	place-items: center;
+	margin: 0;
 	&:disabled {
 		background-color: #333;
 	}
-	transition: transform .3s;
-	&:hover:not([disabled]) {
-		transform: scale(1.1);
+	& > svg {
+		transition: transform .2s;
 	}
-	&:focus:not([disabled]) {
-		transform: scale(1.1);
+	&:hover:not([disabled]), &:focus:not([disabled]) {
+		& > svg {
+			transform: scale(1.4);
+		}
 	}
 `
+NewButton.defaultProps = {className: 'primary'}
 
 const CenteredHeading = styled.h2`
 	text-align: center;
@@ -74,6 +105,10 @@ const Warning = styled.p`
 	& > * {
 		margin: 0 10px;
 	}
+`
+
+const Error = styled(Warning)`
+	color: #cc3300;
 `
 
 const isValidLength = (val) => val.length <= 2000
@@ -116,6 +151,8 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 			setUrl(snapshot.child('url').val());
 		}
 	}, [snapshot])
+	const warning = <Warning><Icon path={mdiAlert} size={0.75} /> Don't put sensitive information in shared URLs</Warning>
+	const lengthError = <Error><Icon path={mdiClose} size={0.75} /> Please enter a shorter URL</Error>
 	return (
 		<ContentView>
 			<ActionBar actions={actions}/>
@@ -124,19 +161,17 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 					<CenteredHeading>Enter a URL</CenteredHeading>
 				</CenterRow>
 				<CenterRow>
-					<Warning><Icon path={mdiAlert} size={0.75} /> Don't put sensitive information in shared URLs</Warning>
+					<InputContainer>
+						<RawInput onChange={onChangeInput} autoFocus required ref={input} type="text" id="url" title="URL"
+							placeholder="www.example.com" autoCapitalize="off" value={url} />
+						<NewButton type="submit" onClick={onClickSubmit} disabled={!isValid()} title="Submit URL">
+							<Icon path={mdiSend} size={1} />
+						</NewButton>
+					</InputContainer>
 				</CenterRow>
 				<CenterRow>
-					<WideInput onChange={onChangeInput} autoFocus required ref={input} type="text" id="url" title="URL"
-						pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" autocapitalize="off" value={url}/>
+					{ tooLong ? lengthError : warning }
 				</CenterRow>
-				<div className="row">
-					<div className="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
-						{tooLong && <ValidationMessage>URL too long :(</ValidationMessage>}
-						<SubmitButton className="primary"
-							type="submit" onClick={onClickSubmit} disabled={!isValid()} >Submit</SubmitButton>
-					</div>
-				</div>
 			</form>
 		</ContentView>
 	)

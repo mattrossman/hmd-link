@@ -119,7 +119,7 @@ export const Preview = ({editAction, deleteAction}) => {
 		},
 		right: {
 			icon: mdiBomb,
-			label: msToString(timeLeft + 1000),
+			label: msToString(Math.min(timeLeft + 1000, 1000*60*5)),
 			action: deleteAction,
 			title: "Delete shared link"
 		}
