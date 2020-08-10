@@ -6,7 +6,7 @@ import { mdiPlus, mdiInformationOutline } from '@mdi/js'
 
 import Logo from 'components/Logo'
 import ActionBar from 'components/ActionBar'
-import { ContentView } from './common'
+import View from 'components/View'
 
 const size = 75
 
@@ -79,7 +79,7 @@ export default function Waiting ({addAction, helpAction, ...props}) {
 		}
 	}
 	return (
-		<ContentView>
+		<View className="fadeIn" key="waiting">
 			<ActionBar actions={actions} />
 			<Centered {...props}>
 				<Rows>
@@ -95,6 +95,6 @@ export default function Waiting ({addAction, helpAction, ...props}) {
 					<p>Waiting for a link...</p>
 				</Rows>
 			</Centered>
-		</ContentView>
+		</View>
 	)
 }

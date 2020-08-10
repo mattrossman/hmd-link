@@ -8,7 +8,7 @@ import { mdiOpenInNew, mdiWeb, mdiArrowLeft, mdiBomb } from '@mdi/js'
 
 import Spinner from 'components/Spinner'
 import ActionBar from 'components/ActionBar'
-import { ContentView } from './common'
+import View from 'components/View'
 
 const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
@@ -146,7 +146,7 @@ export default function Preview ({editAction, deleteAction}) {
 	}
 
 	const preview = data && (
-		<div hidden={loading}>
+		<div hidden={loading} className="fadeIn" key={data}>
 		<DivLink href={data.url} target="_blank">
 			<Card className="row card-container shadowed">
 				<ThumbnailContainer>
@@ -174,10 +174,10 @@ export default function Preview ({editAction, deleteAction}) {
 		</div>
 	)
 	return (
-		<ContentView>
+		<View className="fadeIn" key="preview">
 			<ActionBar actions={actions} />
 			{preview} 
 			{loading && <Spinner />}
-		</ContentView>
+		</View>
 	)
 }

@@ -32,3 +32,12 @@ form {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+@keyframes doFadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+.fadeIn {
+	animation: doFadeIn 0.2s;
+}

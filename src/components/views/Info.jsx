@@ -3,8 +3,8 @@ import { h } from 'preact'
 import styled from 'styled-components'
 import { mdiClose, mdiGithub  } from '@mdi/js'
 
-import { ContentView } from './common'
-import ActionBar from '../ActionBar'
+import View from 'components/View'
+import ActionBar from 'components/ActionBar'
 
 const Section = styled.div`
 	margin-bottom: 40px;
@@ -34,7 +34,7 @@ export default function Help({closeAction, ...props}) {
 		}
 	}
 	return (
-		<ContentView>
+		<View className="fadeIn" key="info">
 			<ActionBar actions={actions} />
 			<div>
 				<CenterSection>
@@ -70,6 +70,6 @@ export default function Help({closeAction, ...props}) {
 					</p>
 				</Section>
 			</div>
-		</ContentView>
+		</View>
 	)
 }

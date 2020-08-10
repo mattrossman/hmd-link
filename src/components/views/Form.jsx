@@ -7,7 +7,7 @@ import Icon from '@mdi/react'
 import { mdiClose, mdiAlert, mdiSend } from '@mdi/js'
 
 import ActionBar from 'components/ActionBar'
-import { ContentView } from './common'
+import View from 'components/View'
 
 const InputContainer = styled.div`
 	width: 100%;
@@ -128,7 +128,7 @@ export default function Form ({onComplete, closeAction, ...props}) {
 	const warning = <Warning><Icon path={mdiAlert} size={0.75} /> Don't put sensitive information in shared URLs</Warning>
 	const lengthError = <Error><Icon path={mdiClose} size={0.75} /> Please enter a shorter URL</Error>
 	return (
-		<ContentView>
+		<View className="fadeIn" key="form">
 			<ActionBar actions={actions}/>
 			<form {...props}>
 				<CenterRow>
@@ -147,6 +147,6 @@ export default function Form ({onComplete, closeAction, ...props}) {
 					{ tooLong ? lengthError : warning }
 				</CenterRow>
 			</form>
-		</ContentView>
+		</View>
 	)
 }

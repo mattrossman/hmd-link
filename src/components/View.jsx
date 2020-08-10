@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
-export const ContentView = styled.div`
+const View = styled.div`
 	display: grid;
 	grid-template-rows: auto 1fr;
 `
+export default View

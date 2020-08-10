@@ -11,7 +11,7 @@ const SpinnerContainer = styled.div`
 
 export default function Spinner(props) {
 	return (
-		<SpinnerContainer {...props}>
+		<SpinnerContainer {...props} className="fadeIn">
 			<div class="spinner"></div>
 		</SpinnerContainer>
 	)
