@@ -8,6 +8,14 @@ const Section = styled.div`
 	margin-bottom: 40px;
 `
 
+const CenterSection = styled(Section)`
+	text-align: center;
+`
+
+const Step = styled.li`
+	margin-left: 20px;
+`
+
 export default function Help({closeAction, ...props}) {
 	const actions = {
 		left: {
@@ -27,13 +35,17 @@ export default function Help({closeAction, ...props}) {
 		<ContentView>
 			<ActionBar actions={actions} />
 			<div>
-				<Section>
+				<CenterSection>
 					<i>(HMD) = head-mounted display</i>
-					<h2>Quickstart</h2>
+				</CenterSection>
+				<Section>
+					<h2>Instructions</h2>
+					<p>Visit <b>hmd.link</b> on both your 2D device and XR headset:</p>
 					<ol>
-						<li><b>On your desktop/laptop/phone:</b> click "Add link" and submit a URL</li>
-						<li><b>On your XR headset:</b> verify room name and click link preview</li>
+						<Step><b>On your 2D device:</b> click "Add link" and submit a URL</Step>
+						<Step><b>On your XR headset:</b> verify room name and click link preview</Step>
 					</ol>
+					<p>Consider bookmarking the page in your XR browser for easy access.</p>
 				</Section>
 				<Section>
 					<h2>Why?</h2>

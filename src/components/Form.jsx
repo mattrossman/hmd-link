@@ -118,11 +118,6 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 	const input = useRef(null);
 	const [url, setUrl] = useState('')
 	const { snapshot, timeLeft } = useDataContext()
-	useEffect(() => {
-		if (input.current) {
-			input.current.focus();
-		}
-	}, [])
 	const onClickSubmit = (e) => {
     	e.preventDefault();
 		if (input.current && input.current.checkValidity()) {
@@ -130,9 +125,9 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 			onComplete(input.current.value)
 		}
 	}
-	const onChangeInput = useCallback((e) => {
+	const onChangeInput = (e) => {
 		setUrl(e.target.value)
-	}, [input])
+	}
 	const isValid = useCallback(() => {
 		return input.current && isValidLength(input.current.value) && isUrl(input.current.value)
 	}, [url])
@@ -147,10 +142,16 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 		}
 	}
 	useEffect(()=> {
-		if (snapshot && snapshot.exists() && timeLeft > 0){
-			setUrl(snapshot.child('url').val());
+		if (input && input.current) {
+			if (snapshot && snapshot.exists() && timeLeft > 0){
+				input.current.value = snapshot.child('url').val()
+				input.current.select();
+			}
+			else {
+				input.current.focus();
+			}
 		}
-	}, [snapshot])
+	}, [snapshot, input])
 	const warning = <Warning><Icon path={mdiAlert} size={0.75} /> Don't put sensitive information in shared URLs</Warning>
 	const lengthError = <Error><Icon path={mdiClose} size={0.75} /> Please enter a shorter URL</Error>
 	return (
@@ -162,8 +163,8 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 				</CenterRow>
 				<CenterRow>
 					<InputContainer>
-						<RawInput onChange={onChangeInput} autoFocus required ref={input} type="text" id="url" title="URL"
-							placeholder="www.example.com" autoCapitalize="off" value={url} />
+						<RawInput onChange={onChangeInput} required ref={input} type="text" id="url" title="URL"
+							placeholder="www.example.com" autoCapitalize="off" />
 						<NewButton type="submit" onClick={onClickSubmit} disabled={!isValid()} title="Submit URL">
 							<Icon path={mdiSend} size={1} />
 						</NewButton>

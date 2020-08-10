@@ -35,6 +35,9 @@ const Card = styled('div')`
 `
 
 const DivLink = styled('a')`
+	&&& {
+		text-decoration: none;
+	}
 	&:hover {
 		text-decoration: none;
 	}
