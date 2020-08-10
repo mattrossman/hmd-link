@@ -107,7 +107,8 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 		right: {
 			icon: mdiClose,
 			label: 'Close',
-			action: closeAction
+			action: closeAction,
+			title: "Close"
 		}
 	}
 	useEffect(()=> {

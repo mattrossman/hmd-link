@@ -69,11 +69,13 @@ const Waiting = ({addAction, helpAction, ...props}) => {
 		left: {
 			icon: mdiPlus,
 			label: 'Add link',
-			action: addAction
+			action: addAction,
+			title: "Add a link to share"
 		},
 		right: {
 			icon: mdiInformationOutline,
-			action: helpAction
+			action: helpAction,
+			title: "Info"
 		}
 	}
 	return (

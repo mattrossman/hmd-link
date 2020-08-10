@@ -114,12 +114,14 @@ export const Preview = ({editAction, deleteAction}) => {
 		left: {
 			icon: mdiArrowLeft,
 			label: 'Edit link',
-			action: editAction
+			action: editAction,
+			title: "Edit shared link"
 		},
 		right: {
 			icon: mdiBomb,
 			label: msToString(timeLeft + 1000),
-			action: deleteAction
+			action: deleteAction,
+			title: "Delete shared link"
 		}
 	}
 	const imgCompleted = () => img && img.current && img.current.complete

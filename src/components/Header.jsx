@@ -12,7 +12,13 @@ const BottomMargin = styled.div`
 `
 
 const Title = styled.h1`
-	font-size: max(10vh, 42pt);
+	font-size: 60pt;
+	@media (max-height: 850px) {
+		font-size: 48pt
+	}
+	@media (max-height: 500px) {
+		font-size: 42pt
+	}
 `
 
 export const Header = () => {
