@@ -29,8 +29,10 @@ export default function Help({closeAction, ...props}) {
 				</Section>
 				<Section>
 					<h3>Why?</h3>
-					<p>Typing long URLs in XR web browers is a tedious process. With hmd.link you can send links from your primary device
+					<p>Typing long URLs with virtual XR keyboards is a tedious process. With hmd.link you can send links from your primary device
 						to your XR headset without any setup or special software.
+					</p>
+					<p>Now you can spend less time typing and more time experiencing!
 					</p>
 				</Section>
 				<Section>

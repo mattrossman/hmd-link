@@ -3,7 +3,8 @@ import { useState, useRef, useEffect, useCallback } from 'preact/hooks'
 import styled from 'styled-components'
 import ActionBar from 'components/ActionBar'
 import { ContentView } from 'util/ui'
-import { mdiClose } from '@mdi/js'
+import { mdiClose, mdiAlert } from '@mdi/js'
+import Icon from '@mdi/react'
 import { useDataContext } from 'util/context'
 
 	// TODO: stop autofill
@@ -46,6 +47,7 @@ const SubmitButton = styled.button`
 
 const CenteredHeading = styled.h2`
 	text-align: center;
+	margin-bottom: 0;
 	@media(max-height: 500px) {
 		margin-top: -30px;
 	}
@@ -57,12 +59,22 @@ const CenterRow = styled.div`
 `
 CenterRow.defaultProps = {className: 'row'}
 
-const Warning = styled.p`
+const ValidationMessage = styled.p`
 	color: red;
 	width: 100%;
 	text-align: center;
 `
 
+const Warning = styled.p`
+	color: #ffcc00;
+	font-size: 10pt;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	& > * {
+		margin: 0 10px;
+	}
+`
 
 const isValidLength = (val) => val.length <= 2000
 const isUrl = (val) => val.match(/(https?:\/\/)?.+\..+/)
@@ -111,12 +123,15 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 					<CenteredHeading>Enter a URL</CenteredHeading>
 				</CenterRow>
 				<CenterRow>
+					<Warning><Icon path={mdiAlert} size={0.75} /> Don't put sensitive information in shared URLs</Warning>
+				</CenterRow>
+				<CenterRow>
 					<WideInput onChange={onChangeInput} autoFocus required ref={input} type="text" id="url" title="URL"
 						pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" autocapitalize="off" value={url}/>
 				</CenterRow>
 				<div className="row">
 					<div className="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
-						{tooLong && <Warning>URL too long :(</Warning>}
+						{tooLong && <ValidationMessage>URL too long :(</ValidationMessage>}
 						<SubmitButton className="primary"
 							type="submit" onClick={onClickSubmit} disabled={!isValid()} >Submit</SubmitButton>
 					</div>
