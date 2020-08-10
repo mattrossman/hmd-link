@@ -14,12 +14,17 @@ const InputContainer = styled.div`
 	height: 50px;
 	display: grid;
 	grid-template-columns: 1fr auto;
-	border: 2px solid #222;
-	box-shadow: 0 0 5px black;
+	box-shadow: 0 0 5px rgb(20, 20, 20);
 	background-color: #111;
 	border-radius: 25px;
 	overflow: hidden;
 	margin-top: 20px;
+	transition: transform 0.2s, background-color 0.2s;
+	transform: scale(0.9);
+	&:focus-within  {
+		transform: scale(1);
+		background-color: #080808;
+	}
 `
 
 const RawInput = styled.input`
@@ -40,15 +45,18 @@ const SubmitButton = styled.button`
 	display: grid;
 	place-items: center;
 	margin: 0;
+	transition: background-color 0.2s;
+	overflow: hidden;
 	&:disabled {
 		background-color: #333;
 	}
 	& > svg {
-		transition: transform .2s;
+		transition: transform .3s ease-in-out;
 	}
 	&:hover:not([disabled]), &:focus:not([disabled]) {
+		background-color: #54a7ff;
 		& > svg {
-			transform: scale(1.4);
+			transform: rotate(-360deg) scale(1.3);
 		}
 	}
 `
