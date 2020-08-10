@@ -12,4 +12,4 @@ Inspired by the local file sharing app [ShareDrop](https://www.sharedrop.io/), t
 
 ## Why use this?
 
-As of July 2020, there is still no easy way to access WebXR content on consumer headsets. Some browsers like Firefox Reality offer a way to sync bookmarks and tabs with thier 2D counterpart, but it requires additional setup. Others, like the built-in Oculus Browser don't have such a feature.
+As of July 2020, there is still no easy way to access WebXR content on consumer headsets. Some browsers like Firefox Reality offer a way to sync bookmarks and tabs with their 2D counterpart, but it requires additional setup. Others, like the built-in Oculus Browser don't have such a feature.
