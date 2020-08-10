@@ -23,11 +23,11 @@ const ActionBar = ({actions, ...props}) => {
 	const { left, right } = actions;
 	return (
 		<ActionBarContainer {...props}>
-			{left && <ActionBarButtonLeft onClick={left.action}>
-				<Icon path={left.icon} size={2} /><p>{left.label}</p>
+			{left && <ActionBarButtonLeft onClick={left.action} title={left.title}>
+				<Icon path={left.icon} size={2} />{left.label && <p>{left.label}</p>}
 			</ActionBarButtonLeft>}
-			{right && <ActionBarButtonRight  onClick={right.action}>
-				<p>{right.label}</p><Icon path={right.icon} size={2} />
+			{right && <ActionBarButtonRight  onClick={right.action} title={right.title}>
+				{right.label && <p>{right.label}</p>}<Icon path={right.icon} size={2} />
 			</ActionBarButtonRight>}
 		</ActionBarContainer>
 	)

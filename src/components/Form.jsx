@@ -3,7 +3,8 @@ import { useState, useRef, useEffect, useCallback } from 'preact/hooks'
 import styled from 'styled-components'
 import ActionBar from 'components/ActionBar'
 import { ContentView } from 'util/ui'
-import { mdiClose } from '@mdi/js'
+import { mdiClose, mdiAlert, mdiSend } from '@mdi/js'
+import Icon from '@mdi/react'
 import { useDataContext } from 'util/context'
 
 	// TODO: stop autofill
@@ -30,22 +31,54 @@ const WideInput = styled('input')`
 	}
 `
 
-const SubmitButton = styled.button`
+const InputContainer = styled.div`
 	width: 100%;
-	&:disabled {
-		background-color: #333;
+	height: 50px;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	border: 2px solid #222;
+	box-shadow: 0 0 5px black;
+	background-color: #111;
+	border-radius: 25px;
+	overflow: hidden;
+	margin-top: 20px;
+`
+
+const RawInput = styled.input`
+	text-align: center;
+	text-indent: 75px;
+	&& {
+		background: none;
+		border: none;
 	}
-	transition: transform .3s;
-	&:hover:not([disabled]) {
-		transform: scale(1.1);
-	}
-	&:focus:not([disabled]) {
-		transform: scale(1.1);
+	&:active, &:focus {
+		border: none;
+        outline: none;
 	}
 `
 
+const NewButton = styled.button`
+	width: 75px;
+	display: grid;
+	place-items: center;
+	margin: 0;
+	&:disabled {
+		background-color: #333;
+	}
+	& > svg {
+		transition: transform .2s;
+	}
+	&:hover:not([disabled]), &:focus:not([disabled]) {
+		& > svg {
+			transform: scale(1.4);
+		}
+	}
+`
+NewButton.defaultProps = {className: 'primary'}
+
 const CenteredHeading = styled.h2`
 	text-align: center;
+	margin-bottom: 0;
 	@media(max-height: 500px) {
 		margin-top: -30px;
 	}
@@ -57,12 +90,26 @@ const CenterRow = styled.div`
 `
 CenterRow.defaultProps = {className: 'row'}
 
-const Warning = styled.p`
+const ValidationMessage = styled.p`
 	color: red;
 	width: 100%;
 	text-align: center;
 `
 
+const Warning = styled.p`
+	color: #ffcc00;
+	font-size: 10pt;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	& > * {
+		margin: 0 10px;
+	}
+`
+
+const Error = styled(Warning)`
+	color: #cc3300;
+`
 
 const isValidLength = (val) => val.length <= 2000
 const isUrl = (val) => val.match(/(https?:\/\/)?.+\..+/)
@@ -94,8 +141,9 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 	const actions = {
 		right: {
 			icon: mdiClose,
-			label: 'Cancel',
-			action: closeAction
+			label: 'Close',
+			action: closeAction,
+			title: "Close"
 		}
 	}
 	useEffect(()=> {
@@ -103,6 +151,8 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 			setUrl(snapshot.child('url').val());
 		}
 	}, [snapshot])
+	const warning = <Warning><Icon path={mdiAlert} size={0.75} /> Don't put sensitive information in shared URLs</Warning>
+	const lengthError = <Error><Icon path={mdiClose} size={0.75} /> Please enter a shorter URL</Error>
 	return (
 		<ContentView>
 			<ActionBar actions={actions}/>
@@ -111,16 +161,17 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 					<CenteredHeading>Enter a URL</CenteredHeading>
 				</CenterRow>
 				<CenterRow>
-					<WideInput onChange={onChangeInput} autoFocus required ref={input} type="text" id="url" title="URL"
-						pattern="(https?:\/\/)?.+\..+" placeholder="e.g. www.example.com" autocapitalize="off" value={url}/>
+					<InputContainer>
+						<RawInput onChange={onChangeInput} autoFocus required ref={input} type="text" id="url" title="URL"
+							placeholder="www.example.com" autoCapitalize="off" value={url} />
+						<NewButton type="submit" onClick={onClickSubmit} disabled={!isValid()} title="Submit URL">
+							<Icon path={mdiSend} size={1} />
+						</NewButton>
+					</InputContainer>
 				</CenterRow>
-				<div className="row">
-					<div className="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 row">
-						{tooLong && <Warning>URL too long :(</Warning>}
-						<SubmitButton className="primary"
-							type="submit" onClick={onClickSubmit} disabled={!isValid()} >Submit</SubmitButton>
-					</div>
-				</div>
+				<CenterRow>
+					{ tooLong ? lengthError : warning }
+				</CenterRow>
 			</form>
 		</ContentView>
 	)
