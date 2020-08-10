@@ -3,7 +3,6 @@ import axios from 'redaxios';
 import * as firebase from "firebase/app";
 import "firebase/database";
 import "firebase/auth";
-import { sleep } from './hooks-dummy'
 
 const firebaseConfig = {
 	apiKey: process.env.FIREBASE_API_KEY,
@@ -47,16 +46,14 @@ export const useData = (user) => {
 
 	const upload = useCallback(async (url) => {
 		if (ref !== null) {
-			console.log('setting url ', url)
 			try {
 				await ref.set({
 					url,
 					timestamp: firebase.database.ServerValue.TIMESTAMP
 				})
-				console.log('set succeeded')
 			}
 			catch (e) {
-				console.log('failed to upload: ', e)
+				console.error('failed to upload: ', e)
 			}
 		}
 	}, [ref]);
@@ -79,7 +76,6 @@ export const usePreview = () => {
 		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
 		const target = prefix + url
 		try {
-			// await sleep(1000)
 			const response = await axios.post('/.netlify/functions/preview', {url: target})
 			const preview = response.data;
 

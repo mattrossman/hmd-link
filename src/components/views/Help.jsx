@@ -1,8 +1,10 @@
 import { h } from 'preact'
+
 import styled from 'styled-components'
-import { ContentView } from 'util/ui'
-import ActionBar from './ActionBar'
 import { mdiClose, mdiGithub  } from '@mdi/js'
+
+import { ContentView } from './common'
+import ActionBar from '../ActionBar'
 
 const Section = styled.div`
 	margin-bottom: 40px;

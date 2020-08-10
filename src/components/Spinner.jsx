@@ -9,14 +9,10 @@ const SpinnerContainer = styled.div`
 	height: 100%;
 `
 
-const Spinner = (props) => {
-	useEffect(() => {
-		console.log('mounting spinner')
-	}, [])
+export default function Spinner(props) {
 	return (
 		<SpinnerContainer {...props}>
 			<div class="spinner"></div>
 		</SpinnerContainer>
 	)
 }
-export default Spinner

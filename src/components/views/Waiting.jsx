@@ -4,9 +4,9 @@ import { useEffect } from 'preact/hooks'
 import styled, { keyframes } from 'styled-components'
 import { mdiPlus, mdiInformationOutline } from '@mdi/js'
 
-import Logo from './Logo'
+import Logo from 'components/Logo'
 import ActionBar from 'components/ActionBar'
-import { ContentView } from 'util/ui'
+import { ContentView } from './common'
 
 const size = 75
 
@@ -64,7 +64,7 @@ const Rows = styled.div`
 	align-items: center;
 `
 
-const Waiting = ({addAction, helpAction, ...props}) => {
+export default function Waiting ({addAction, helpAction, ...props}) {
 	const actions = {
 		left: {
 			icon: mdiPlus,
@@ -98,4 +98,3 @@ const Waiting = ({addAction, helpAction, ...props}) => {
 		</ContentView>
 	)
 }
-export default Waiting

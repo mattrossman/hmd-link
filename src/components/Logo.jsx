@@ -2,7 +2,7 @@ import { h } from "preact";
 
 // JSX generated from https://svg2jsx.com/
 
-function Icon(props) {
+export default function Icon(props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -57,5 +57,3 @@ function Icon(props) {
     </svg>
   );
 }
-
-export default Icon;

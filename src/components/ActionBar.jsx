@@ -1,8 +1,7 @@
 import { h } from 'preact'
+
 import styled from 'styled-components'
 import Icon from '@mdi/react'
-import FadeIn from './FadeIn'
-import { useActivityContext } from 'util/context'
 
 const ActionBarContainer = styled.div`
 	margin-bottom: 2vh;

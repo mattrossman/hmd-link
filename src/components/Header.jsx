@@ -21,7 +21,7 @@ const Title = styled.h1`
 	}
 `
 
-export const Header = () => {
+export default function Header() {
 	return (
 		<BottomMargin>
 			<Title>hmd.link</Title>

@@ -22,7 +22,6 @@ exports.handler = async event => {
 			oldRooms.forEach(room => {
 				room.ref.remove();
 				removed++;
-				console.log(room.val())
 			})
 			return {
 				statusCode: 200,

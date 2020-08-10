@@ -4,7 +4,7 @@
 
 Send URLs instantly from a 2D device to an immersive headset on your network, no setup required.
 
-No more typing long URLs with unweilding motion controllers — 8 characters (or 1 bookmark) is all you need! Just type [hmd.link](https://hmd.link) into your VR browser to access your link.
+No more typing long URLs with unweildy motion controllers — 8 characters (or 1 bookmark) is all you need! Just type [hmd.link](https://hmd.link) into your VR browser to access your link.
 
 ## What is this sorcery?
 

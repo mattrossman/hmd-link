@@ -1,35 +1,13 @@
 import { h } from 'preact'
 import { useState, useRef, useEffect, useCallback } from 'preact/hooks'
-import styled from 'styled-components'
-import ActionBar from 'components/ActionBar'
-import { ContentView } from 'util/ui'
-import { mdiClose, mdiAlert, mdiSend } from '@mdi/js'
-import Icon from '@mdi/react'
 import { useDataContext } from 'util/context'
 
-	// TODO: stop autofill
-const WideInput = styled('input')`
-	width: 90%;
-	text-align: center;
-	height: 50px;
-	border-radius: 25px;
-	/* background-color: #222; */
-	/* Override mini.css */
-	transform: scale(0.9);
-	transition: transform .3s;
-	margin-bottom: 20px;
-	&:focus {
-		transform: scale(1);
-    	outline: none;
-	}
-	&&&&& { 
-		border: 2px solid white;
-		box-shadow: 0 0 5px black;
-		&:invalid {
-			border: 2px solid white;
-		}
-	}
-`
+import styled from 'styled-components'
+import Icon from '@mdi/react'
+import { mdiClose, mdiAlert, mdiSend } from '@mdi/js'
+
+import ActionBar from 'components/ActionBar'
+import { ContentView } from './common'
 
 const InputContainer = styled.div`
 	width: 100%;
@@ -57,7 +35,7 @@ const RawInput = styled.input`
 	}
 `
 
-const NewButton = styled.button`
+const SubmitButton = styled.button`
 	width: 75px;
 	display: grid;
 	place-items: center;
@@ -74,7 +52,7 @@ const NewButton = styled.button`
 		}
 	}
 `
-NewButton.defaultProps = {className: 'primary'}
+SubmitButton.defaultProps = {className: 'primary'}
 
 const CenteredHeading = styled.h2`
 	text-align: center;
@@ -90,11 +68,6 @@ const CenterRow = styled.div`
 `
 CenterRow.defaultProps = {className: 'row'}
 
-const ValidationMessage = styled.p`
-	color: red;
-	width: 100%;
-	text-align: center;
-`
 
 const Warning = styled.p`
 	color: #ffcc00;
@@ -114,14 +87,13 @@ const Error = styled(Warning)`
 const isValidLength = (val) => val.length <= 2000
 const isUrl = (val) => val.match(/(https?:\/\/)?.+\..+/)
 
-export const Form = ({onComplete, closeAction, ...props}) => {
+export default function Form ({onComplete, closeAction, ...props}) {
 	const input = useRef(null);
 	const [url, setUrl] = useState('')
 	const { snapshot, timeLeft } = useDataContext()
 	const onClickSubmit = (e) => {
     	e.preventDefault();
 		if (input.current && input.current.checkValidity()) {
-			console.log('dispatching onComplete: ', input.current.value)
 			onComplete(input.current.value)
 		}
 	}
@@ -166,9 +138,9 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 					<InputContainer>
 						<RawInput onChange={onChangeInput} required ref={input} type="text" id="url" title="URL" placeholder="www.example.com"
 							autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
-						<NewButton type="submit" onClick={onClickSubmit} disabled={!isValid()} title="Submit URL">
+						<SubmitButton type="submit" onClick={onClickSubmit} disabled={!isValid()} title="Submit URL">
 							<Icon path={mdiSend} size={1} />
-						</NewButton>
+						</SubmitButton>
 					</InputContainer>
 				</CenterRow>
 				<CenterRow>
