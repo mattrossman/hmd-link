@@ -2,7 +2,7 @@ import { h } from 'preact'
 import { useEffect } from 'preact/hooks'
 
 import styled, { keyframes } from 'styled-components'
-import { mdiPlus, mdiInformationOutline } from '@mdi/js'
+import { mdiPlus, mdiHelpCircleOutline  } from '@mdi/js'
 
 import Logo from 'components/Logo'
 import ActionBar from 'components/ActionBar'
@@ -73,9 +73,10 @@ export default function Waiting ({addAction, helpAction, ...props}) {
 			title: "Add a link to share"
 		},
 		right: {
-			icon: mdiInformationOutline,
+			icon: mdiHelpCircleOutline,
 			action: helpAction,
-			title: "Info"
+			title: "Info",
+			size: 1.5
 		}
 	}
 	return (

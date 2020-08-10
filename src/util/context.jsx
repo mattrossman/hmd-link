@@ -1,7 +1,7 @@
 import { h, createContext } from 'preact'
 import { useUser, useData, usePreview, useCountdown } from 'util/hooks'
 import { useDummyUser, useDummyData } from 'util/hooks-dummy'
-import { useContext, useState, useEffect } from 'preact/hooks';
+import { useContext, useEffect } from 'preact/hooks';
 
 const DUMMY = false;
 

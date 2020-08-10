@@ -12,6 +12,7 @@ const ActionBarButtonLeft = styled.button`
 	display: inline-flex;
 	align-items: center;
 	margin: 0;
+	height: 66px;
 `
 
 const ActionBarButtonRight = styled(ActionBarButtonLeft)`
@@ -27,10 +28,10 @@ const ActionBar = ({actions, ...props}) => {
 	return (
 		<ActionBarContainer {...props}>
 			{left && tryWrapAnchor(<ActionBarButtonLeft onClick={left.action} title={left.title}>
-				<Icon path={left.icon} size={2} />{left.label && <p>{left.label}</p>}
+				<Icon path={left.icon} size={left.size || 2} />{left.label && <p>{left.label}</p>}
 			</ActionBarButtonLeft>, left.href)}
 			{right && tryWrapAnchor(<ActionBarButtonRight  onClick={right.action} title={right.title}>
-				{right.label && <p>{right.label}</p>}<Icon path={right.icon} size={2} />
+				{right.label && <p>{right.label}</p>}<Icon path={right.icon} size={right.size || 2} />
 			</ActionBarButtonRight>, right.href)}
 		</ActionBarContainer>
 	)

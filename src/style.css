@@ -13,6 +13,10 @@ form {
 	box-shadow: 0 0 5px rgb(20, 20, 20);
 }
 
+a, a:visited { 
+	color: #12a2fc
+}
+
 .tooltip:after {
 	width: min(400px, 90vw);
 	white-space: normal;
