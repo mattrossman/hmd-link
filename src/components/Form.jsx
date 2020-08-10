@@ -145,6 +145,7 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 		if (input && input.current) {
 			if (snapshot && snapshot.exists() && timeLeft > 0){
 				input.current.value = snapshot.child('url').val()
+				input.current.focus();
 				input.current.select();
 			}
 			else {
@@ -157,14 +158,14 @@ export const Form = ({onComplete, closeAction, ...props}) => {
 	return (
 		<ContentView>
 			<ActionBar actions={actions}/>
-			<form autocomplete="off" {...props}>
+			<form {...props}>
 				<CenterRow>
 					<CenteredHeading>Enter a URL</CenteredHeading>
 				</CenterRow>
 				<CenterRow>
 					<InputContainer>
-						<RawInput onChange={onChangeInput} required ref={input} type="text" id="url" title="URL"
-							placeholder="www.example.com" autoCapitalize="off" />
+						<RawInput onChange={onChangeInput} required ref={input} type="text" id="url" title="URL" placeholder="www.example.com"
+							autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
 						<NewButton type="submit" onClick={onClickSubmit} disabled={!isValid()} title="Submit URL">
 							<Icon path={mdiSend} size={1} />
 						</NewButton>
