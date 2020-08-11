@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 	entry: './src/index.jsx',
@@ -20,12 +21,17 @@ module.exports = {
 			template: './src/index.html',
 			favicon: './src/assets/favicon.ico'
 		}),
-		new MiniCssExtractPlugin()
+		new MiniCssExtractPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: '*.png', to: 'assets', context: 'src/assets' }
+            ]
+        })
 	],
 	module: {
 		rules: [
 			{ test: /\.jsx$/, exclude: /node_modules/, loader: "babel-loader" },
-      		{ test: /\.css$/i, use: [MiniCssExtractPlugin.loader, 'css-loader'] }
+			{ test: /\.css$/i, use: [MiniCssExtractPlugin.loader, 'css-loader'] },
 		]
 	},
 	resolve: {
