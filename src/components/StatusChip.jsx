@@ -18,6 +18,7 @@ const BottomChip = styled('div')`
 	background: rgb(50, 50, 50);
 	padding: 0 20px;
 	margin: 20px;
+	box-shadow: 0 0 5px rgb(20, 20, 20);
 `
 
 const Dot = styled('span')`
@@ -46,7 +47,7 @@ export default function StatusChip() {
 	`
 	return (
 		<ChipContainer>
-			<BottomChip className="shadowed tooltip" aria-label={tooltipText}>
+			<BottomChip className="tooltip" aria-label={tooltipText}>
 				<p><Dot color={color} /> {message}</p>
 			</BottomChip>
 		</ChipContainer>

@@ -22,23 +22,19 @@ const Thumbnail = styled('img')`
 	max-height: 200px;
 `
 
-const Card = styled('div')`
-	color: white;
-	background: rgb(50, 50, 50);
-	background-color: none;
-  	transition: transform .2s, box-shadow .2s; 
-	&:hover {
-		transform: scale(1.05);
-		box-shadow: 0 0 10px black;
-	}
-`
-
 const DivLink = styled('a')`
+	background-color: rgb(50, 50, 50);
 	&&& {
 		text-decoration: none;
+		color: white;
 	}
-	&:hover {
+	transition: transform .2s, box-shadow .2s;
+	box-shadow: 0 0 5px rgb(20, 20, 20);
+	&:hover, &:focus, &:active {
+		transform: scale(1.05);
+		box-shadow: 0 0 10px black;
 		text-decoration: none;
+		outline: 0;
 	}
 `
 
@@ -147,29 +143,27 @@ export default function Preview ({editAction, deleteAction}) {
 
 	const preview = data && (
 		<div hidden={loading} className="fadeIn" key={data}>
-		<DivLink href={data.url} target="_blank">
-			<Card className="row card-container shadowed">
-				<ThumbnailContainer>
-					{ data.thumbnail
-						? <Thumbnail src={data.thumbnail} ref={img} alt="site-preview" onLoad={onThumbLoad} />
-						: <MarginIcon path={mdiWeb} size={3} />
-					}
-				</ThumbnailContainer>
-				<div class="col-sm-12 col-md-8" style="padding: 10px">
-					<RightContainer>
-						<h2 class="truncate-width">{data.title}</h2>
-						<Description>{data.description}</Description>
-						<BottomRow>
-							<UrlContainer>
-								<UrlText>{data.url}</UrlText>
-							</UrlContainer>
-							<Centered>
-								<Icon path={mdiOpenInNew} size={1} />
-							</Centered>
-						</BottomRow>
-					</RightContainer>
-				</div>
-			</Card>
+		<DivLink href={data.url} target="_blank" className="row card-container">
+			<ThumbnailContainer>
+				{ data.thumbnail
+					? <Thumbnail src={data.thumbnail} ref={img} alt="site-preview" onLoad={onThumbLoad} />
+					: <MarginIcon path={mdiWeb} size={3} />
+				}
+			</ThumbnailContainer>
+			<div class="col-sm-12 col-md-8" style="padding: 10px">
+				<RightContainer>
+					<h2 class="truncate-width">{data.title}</h2>
+					<Description>{data.description}</Description>
+					<BottomRow>
+						<UrlContainer>
+							<UrlText>{data.url}</UrlText>
+						</UrlContainer>
+						<Centered>
+							<Icon path={mdiOpenInNew} size={1} />
+						</Centered>
+					</BottomRow>
+				</RightContainer>
+			</div>
 		</DivLink>
 		</div>
 	)

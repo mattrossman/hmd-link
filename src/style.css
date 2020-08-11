@@ -9,10 +9,6 @@ form {
 	padding: 0;
 }
 
-.shadowed {
-	box-shadow: 0 0 5px rgb(20, 20, 20);
-}
-
 a, a:visited { 
 	color: #12a2fc
 }
