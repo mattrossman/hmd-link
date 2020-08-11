@@ -1,4 +1,4 @@
-# hmd.link
+![hmd.link](src/assets/gh-banner.jpg)
 
 *(HMD) = head-mounted display*
 
