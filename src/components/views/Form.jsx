@@ -133,7 +133,7 @@ export default function Form ({onComplete, closeAction, ...props}) {
 			}
 		}
 	}, [snapshot, input])
-	const warning = <Warning><Icon path={mdiAlert} size={0.75} /> Don't put sensitive information in shared URLs</Warning>
+	const warning = <Warning><Icon path={mdiAlert} size={0.75} />This will be visible to anyone on your network</Warning>
 	const lengthError = <Error><Icon path={mdiClose} size={0.75} /> Please enter a shorter URL</Error>
 	return (
 		<View className="fadeIn" key="form">
