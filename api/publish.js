@@ -5,7 +5,7 @@ const db = admin.database()
 const rooms = db.ref('/rooms')
 
 /**
- * Publish a link to your room
+ * Publish a link to your room under /rooms/[ip]
  * @param {VercelRequest} req
  * @param {VercelResponse} res
  */
