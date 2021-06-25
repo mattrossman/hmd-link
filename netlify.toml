@@ -1,9 +1,0 @@
-[build]
-	publish = "dist/"
-	command = "yarn webpack:build"
-	functions = "./functions"
-[dev]
-	framework = "#custom"
-	command = "yarn webpack:dev"
-	targetPort = 9000
-	autoLaunch = false
