@@ -4,9 +4,11 @@
   "scripts": {
     "start": "vercel dev",
     "deploy": "vercel",
-    "dev": "vite --port $PORT",
-    "build": "vite build",
-    "serve": "vite preview"
+    "dev": "yarn vite:dev",
+    "vite:dev": "vite --port $PORT",
+    "vite:build": "vite build",
+    "vite:serve": "vite preview",
+    "firebase:dev": "firebase emulators:start --only database"
   },
   "dependencies": {
     "@twind/react": "^0.0.4",
