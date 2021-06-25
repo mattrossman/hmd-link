@@ -2,7 +2,9 @@
   "name": "hmd-link",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "start": "vercel dev",
+    "deploy": "vercel",
+    "dev": "vite --port $PORT",
     "build": "vite build",
     "serve": "vite preview"
   },
