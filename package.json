@@ -8,13 +8,15 @@
     "vite:dev": "vite --port $PORT",
     "vite:build": "vite build",
     "vite:serve": "vite preview",
-    "firebase:dev": "firebase emulators:start --only auth,database"
+    "firebase:dev": "firebase emulators:start --only auth,database",
+    "firebase:rules": "firebase deploy --only firestore:rules"
   },
   "dependencies": {
     "@twind/react": "^0.0.4",
     "@twind/vite-plugin-jsx": "^2.1.0",
     "firebase": "^9.0.0-beta.5",
     "firebase-admin": "^9.10.0",
+    "hashids": "^2.2.8",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "twind": "^0.16.16"
