@@ -1,7 +1,39 @@
 import "@twind/macro"
+import { animation, css, keyframes } from "twind/css"
 
 export default function AnimatedLogo({ className = "" }) {
-  return <Logo tw={["fill-primary bg-secondary rounded-full shadow-primary", className]} />
+  return (
+    <div tw={["relative", className]}>
+      <Logo tw={["fill-primary bg-secondary rounded-full shadow-primary absolute w-full h-full z-10"]} />
+      <Ripple />
+      <Ripple delay={-1} />
+      <Ripple delay={-2} />
+      <Ripple delay={-3} />
+    </div>
+  )
+}
+
+const rippleKeyframes = keyframes`
+  from {
+    transform: scale(.1);
+    opacity: .5;
+  }
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+`
+
+function Ripple({ delay = 0 }) {
+  return (
+    <div
+      tw={[
+        "border border-primary w-full h-full rounded-full absolute",
+        css({ animationDelay: delay + "s" }),
+        animation("4s ease-out infinite", rippleKeyframes),
+      ]}
+    />
+  )
 }
 
 function Logo(props) {

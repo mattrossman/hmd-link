@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <Layout>
       <div tw="w-full h-full grid place-content-center">
-        <AnimatedLogo tw="w-20" />
+        <AnimatedLogo tw="w-20 h-20" />
       </div>
     </Layout>
   )

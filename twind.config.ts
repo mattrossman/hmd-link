@@ -1,4 +1,5 @@
 import type { Configuration } from "twind"
+import * as colors from "twind/colors"
 
 const config: Configuration = {
   theme: {
@@ -6,8 +7,9 @@ const config: Configuration = {
       backgroundColor: {
         primary: "#1e1e1e",
         secondary: "#323232",
+        "status-ok": "#00ff00",
       },
-      textColor: {
+      colors: {
         primary: "#fdfdfd",
       },
       fill: {
