@@ -11,14 +11,16 @@
     "next:dev": "next dev -p $PORT",
     "next:build": "next build",
     "next:start": "next start",
-    "vite:serve": "vite preview",
     "firebase:dev": "firebase emulators:start --only auth,database",
     "firebase:rules": "firebase deploy --only firestore:rules"
   },
   "dependencies": {
+    "@twind/macro": "^2.1.1",
+    "@twind/next": "^1.0.8",
     "@twind/react": "^0.0.4",
     "@types/react": "^17.0.17",
     "@types/react-dom": "^17.0.9",
+    "babel-plugin-macros": "^3.1.0",
     "firebase": "^9.0.0-beta.5",
     "firebase-admin": "^9.10.0",
     "hashids": "^2.2.8",
