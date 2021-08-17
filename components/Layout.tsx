@@ -3,7 +3,7 @@ import RoomChip from "./RoomChip"
 
 export default function Layout({ children }) {
   return (
-    <div tw="bg-primary text-primary h-screen w-screen">
+    <div tw="bg-primary text-primary absolute inset-0">
       <div tw="flex flex-col h-full max-w-3xl mx-auto px-6">
         <header>
           <h1 tw="font-bold text-6xl my-4">hmd.link</h1>
