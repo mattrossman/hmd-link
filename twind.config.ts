@@ -8,6 +8,7 @@ const config: Configuration = {
         primary: "#1e1e1e",
         secondary: "#323232",
         "status-ok": "#00ff00",
+        "status-warn": "#ffa500",
       },
       colors: {
         primary: "#fdfdfd",
