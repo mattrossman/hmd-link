@@ -1,7 +1,10 @@
 import '@twind/macro'
-import RoomChip from './RoomChip'
+import RoomChip from '@/components/RoomChip'
+import { Suspense } from 'react'
+import useAuth from '@/lib/hooks/useAuth'
 
 export default function Layout({ children }) {
+  const credentials = useAuth()
   return (
     <div tw="bg-primary text-primary absolute inset-0">
       <div tw="flex flex-col h-full max-w-3xl mx-auto px-6">
@@ -11,7 +14,7 @@ export default function Layout({ children }) {
         </header>
         <main tw="flex-grow">{children}</main>
         <footer tw="grid place-content-center p-4">
-          <RoomChip />
+          <RoomChip room={credentials?.room} />
         </footer>
       </div>
     </div>

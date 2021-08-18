@@ -30,7 +30,9 @@
     "next": "^11.1.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "twind": "^0.16.16"
+    "swr": "^0.5.6",
+    "twind": "^0.16.16",
+    "unique-names-generator": "^4.6.0"
   },
   "devDependencies": {
     "firebase-tools": "^9.14.0",
