@@ -1,6 +1,6 @@
-import AnimatedLogo from "@/components/AnimatedLogo"
-import Layout from "@/components/Layout"
-import "@twind/macro"
+import AnimatedLogo from '@/components/AnimatedLogo'
+import Layout from '@/components/Layout'
+import '@twind/macro'
 
 export default function Home() {
   return (

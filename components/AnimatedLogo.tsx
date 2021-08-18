@@ -1,10 +1,10 @@
-import "@twind/macro"
-import { animation, css, keyframes } from "twind/css"
+import '@twind/macro'
+import { animation, css, keyframes } from 'twind/css'
 
-export default function AnimatedLogo({ className = "" }) {
+export default function AnimatedLogo({ className = '' }) {
   return (
-    <div tw={["relative", className]}>
-      <Logo tw={["fill-primary bg-secondary rounded-full shadow-primary absolute w-full h-full z-10"]} />
+    <div tw={['relative', className]}>
+      <Logo tw={['fill-primary bg-secondary rounded-full shadow-primary absolute w-full h-full z-10']} />
       <Ripple />
       <Ripple delay={-1} />
       <Ripple delay={-2} />
@@ -28,9 +28,9 @@ function Ripple({ delay = 0 }) {
   return (
     <div
       tw={[
-        "border border-primary w-full h-full rounded-full absolute",
-        css({ animationDelay: delay + "s" }),
-        animation("4s ease-out infinite", rippleKeyframes),
+        'border border-primary w-full h-full rounded-full absolute',
+        css({ animationDelay: delay + 's' }),
+        animation('4s ease-out infinite', rippleKeyframes),
       ]}
     />
   )
@@ -62,10 +62,7 @@ function Logo(props) {
       </g>
       <g>
         <defs>
-          <path
-            id="SVGID_1_"
-            d="M584.345 311.168L738.96 311.168 738.96 561.074 429.727 561.072 429.727 398.737 584.345 398.216z"
-          ></path>
+          <path id="SVGID_1_" d="M584.345 311.168L738.96 311.168 738.96 561.074 429.727 561.072 429.727 398.737 584.345 398.216z"></path>
         </defs>
         <clipPath id="SVGID_2_">
           <use overflow="visible" xlinkHref="#SVGID_1_"></use>
@@ -76,10 +73,7 @@ function Logo(props) {
       </g>
       <g>
         <defs>
-          <path
-            id="SVGID_3_"
-            d="M413.03 559.326L258.414 559.326 258.414 309.421 567.646 309.421 567.646 471.757 413.03 472.278z"
-          ></path>
+          <path id="SVGID_3_" d="M413.03 559.326L258.414 559.326 258.414 309.421 567.646 309.421 567.646 471.757 413.03 472.278z"></path>
         </defs>
         <clipPath id="SVGID_4_">
           <use overflow="visible" xlinkHref="#SVGID_3_"></use>

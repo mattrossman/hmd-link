@@ -1,5 +1,5 @@
-import "@twind/macro"
-import RoomChip from "./RoomChip"
+import '@twind/macro'
+import RoomChip from './RoomChip'
 
 export default function Layout({ children }) {
   return (
