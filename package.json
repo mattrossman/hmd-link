@@ -23,8 +23,8 @@
     "@types/react": "^17.0.17",
     "@types/react-dom": "^17.0.9",
     "babel-plugin-macros": "^3.1.0",
-    "firebase": "^9.0.0-beta.5",
-    "firebase-admin": "^9.10.0",
+    "firebase": "^9.0.0-beta.8",
+    "firebase-admin": "^9.11.0",
     "framer-motion": "^4.1.17",
     "hashids": "^2.2.8",
     "next": "^11.1.0",
@@ -35,7 +35,7 @@
     "unique-names-generator": "^4.6.0"
   },
   "devDependencies": {
-    "firebase-tools": "^9.14.0",
+    "firebase-tools": "^9.16.5",
     "husky": "^7.0.1",
     "prettier": "^2.3.2",
     "pretty-quick": "^3.1.1",
