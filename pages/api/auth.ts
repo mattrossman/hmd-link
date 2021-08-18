@@ -11,9 +11,11 @@ export type AuthResponse = {
 export default async (req: NextApiRequest, res: NextApiResponse<AuthResponse>) => {
   const auth = admin.auth()
   const ip = req.headers['x-real-ip'] as string
-  const uid = digest(ip)
+  const buffer = digest(ip)
+  const uid = buffer.toString('hex')
+
   const token = await auth.createCustomToken(uid)
-  const room = uniqueName(parseInt(uid, 16))
+  const room = uniqueName(buffer.readInt32BE())
 
   res.json({ token, room })
 }
