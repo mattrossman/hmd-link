@@ -93,7 +93,7 @@ const Error = styled(Warning)`
 `
 
 const isValidLength = (val) => val.length <= 2000
-const isUrl = (val) => val.match(/(https?:\/\/)?.+\..+/)
+const isUrl = (val) => val.match(/^(https?:\/\/)?(localhost|.+\.\w+)(:\d+)?$/)
 
 export default function Form ({onComplete, closeAction, ...props}) {
 	const input = useRef(null);

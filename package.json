@@ -15,7 +15,8 @@
     "webpack:dev": "webpack-dev-server",
     "webpack:build": "webpack",
     "analyze": "ANALYZE=true webpack",
-    "clean": "rm -rf dist && killall node"
+    "clean": "rm -rf dist && killall node",
+    "setup": "netlify login && netlify link"
   },
   "babel": {
     "presets": [
