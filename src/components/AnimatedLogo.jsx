@@ -1,6 +1,6 @@
 import { animation, css, keyframes } from 'twind/css'
 
-export default function AnimatedLogo({ className, ...props }: JSX.HTMLAttributes<HTMLDivElement>) {
+export default function AnimatedLogo({ className, ...props }) {
   return (
     <div style={{ position: 'relative' }} className={className} {...props}>
       <Logo tw="fill-primary bg-secondary rounded-full shadow-primary absolute w-full h-full z-10" />
@@ -35,7 +35,7 @@ function Ripple({ delay = 0 }) {
   )
 }
 
-function Logo(props: JSX.HTMLAttributes<SVGElement>) {
+function Logo(props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

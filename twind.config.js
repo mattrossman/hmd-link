@@ -1,7 +1,7 @@
-import type { Configuration } from 'twind'
 import * as colors from 'twind/colors'
 
-export const config: Configuration = {
+/** @type {import("twind").Configuration} */
+export const config = {
   theme: {
     extend: {
       backgroundColor: {

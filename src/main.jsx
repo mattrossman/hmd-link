@@ -5,4 +5,4 @@ import { config } from '@/twind.config'
 
 setup(config)
 
-render(<App />, document.getElementById('app')!)
+render(<App />, document.getElementById('app'))

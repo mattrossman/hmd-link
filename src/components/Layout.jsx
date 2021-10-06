@@ -2,7 +2,7 @@ import RoomChip from '@/src/components/RoomChip'
 import useAuthApi from '@/src/lib/hooks/useAuthApi'
 import useCredential from '@/src/lib/hooks/firebase/useCredential'
 
-export default function Layout({ children }: any) {
+export default function Layout({ children }) {
   const res = useAuthApi()
   return (
     <div tw="bg-primary text-primary absolute inset-0">
