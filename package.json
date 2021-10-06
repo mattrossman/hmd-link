@@ -6,7 +6,7 @@
     "node": "14"
   },
   "scripts": {
-    "start": "vercel dev",
+    "start": "vite",
     "deploy": "vercel",
     "dev": "yarn next:dev & yarn firebase:dev",
     "next:dev": "next dev -p $PORT",
@@ -17,29 +17,24 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@twind/macro": "^2.1.1",
-    "@twind/next": "^1.0.8",
-    "@twind/react": "^0.0.4",
-    "@types/react": "^17.0.17",
-    "@types/react-dom": "^17.0.9",
-    "babel-plugin-macros": "^3.1.0",
+    "@twind/preact": "^1.0.5",
     "firebase": "^9.0.0-beta.8",
     "firebase-admin": "^9.11.0",
-    "framer-motion": "^4.1.17",
     "hashids": "^2.2.8",
-    "next": "^11.1.0",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
+    "preact": "^10.5.14",
     "swr": "^0.5.6",
     "twind": "^0.16.16",
     "unique-names-generator": "^4.6.0"
   },
   "devDependencies": {
+    "@preact/preset-vite": "^2.1.2",
     "firebase-tools": "^9.16.5",
     "husky": "^7.0.1",
+    "netlify-cli": "^6.9.28",
     "prettier": "^2.3.2",
     "pretty-quick": "^3.1.1",
     "typescript": "^4.3.5",
-    "vercel": "^23.1.2"
+    "vite": "^2.6.2",
+    "vite-tsconfig-paths": "^3.3.14"
   }
 }

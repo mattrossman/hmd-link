@@ -1,7 +1,7 @@
 import type { Configuration } from 'twind'
 import * as colors from 'twind/colors'
 
-const config: Configuration = {
+export const config: Configuration = {
   theme: {
     extend: {
       backgroundColor: {
@@ -22,5 +22,3 @@ const config: Configuration = {
     },
   },
 }
-
-export default config

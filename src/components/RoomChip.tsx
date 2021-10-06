@@ -1,5 +1,3 @@
-import '@twind/macro'
-
 type Props = {
   room?: string
 }

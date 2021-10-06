@@ -1,10 +1,9 @@
-import '@twind/macro'
 import { animation, css, keyframes } from 'twind/css'
 
-export default function AnimatedLogo({ className = '' }) {
+export default function AnimatedLogo({ className, ...props }: JSX.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div tw={['relative', className]}>
-      <Logo tw={['fill-primary bg-secondary rounded-full shadow-primary absolute w-full h-full z-10']} />
+    <div style={{ position: 'relative' }} className={className} {...props}>
+      <Logo tw="fill-primary bg-secondary rounded-full shadow-primary absolute w-full h-full z-10" />
       <Ripple />
       <Ripple delay={-1} />
       <Ripple delay={-2} />
@@ -36,7 +35,7 @@ function Ripple({ delay = 0 }) {
   )
 }
 
-function Logo(props: React.SVGProps<SVGSVGElement>) {
+function Logo(props: JSX.HTMLAttributes<SVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

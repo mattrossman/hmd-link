@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import admin from '@/lib/admin'
-import { digest, uniqueName } from '@/lib/obfuscate'
+import admin from '@/src/lib/admin'
+import { digest, uniqueName } from '@/src/lib/obfuscate'
 
 export type AuthResponse = {
   token: string

@@ -1,7 +1,6 @@
-import '@twind/macro'
-import RoomChip from '@/components/RoomChip'
-import useAuthApi from '@/lib/hooks/useAuthApi'
-import useCredential from '@/lib/hooks/firebase/useCredential'
+import RoomChip from '@/src/components/RoomChip'
+import useAuthApi from '@/src/lib/hooks/useAuthApi'
+import useCredential from '@/src/lib/hooks/firebase/useCredential'
 
 export default function Layout({ children }: any) {
   const res = useAuthApi()

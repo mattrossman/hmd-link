@@ -1,8 +1,7 @@
-import AnimatedLogo from '@/components/AnimatedLogo'
-import Layout from '@/components/Layout'
-import '@twind/macro'
+import AnimatedLogo from './components/AnimatedLogo'
+import Layout from './components/Layout'
 
-export default function Home() {
+export function App() {
   return (
     <Layout>
       <div tw="w-full h-full grid place-content-center">
