@@ -8,10 +8,11 @@
     "dev:vite": "vite",
     "dev:firebase": "firebase emulators:start --only auth,database",
     "rules": "firebase deploy --only firestore:rules",
+    "setup:netlify": "netlify link",
+    "setup:firebase": "firebase login",
     "prepare": "husky install"
   },
   "dependencies": {
-    "@twind/preact": "^1.0.5",
     "firebase": "^9.0.0-beta.8",
     "firebase-admin": "^9.11.0",
     "hashids": "^2.2.8",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@netlify/functions": "^0.7.2",
     "@preact/preset-vite": "^2.1.2",
+    "@twind/vite-plugin-jsx": "^2.1.0",
     "firebase-tools": "^9.16.5",
     "husky": "^7.0.1",
     "netlify-cli": "^6.9.28",
