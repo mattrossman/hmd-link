@@ -1,0 +1,13 @@
+[dev]
+  command = "yarn dev:combined"
+  targetPort = 3000
+
+# Function files live in /api
+[functions]
+  directory = "api"
+  
+# Access functions from /api routes
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200

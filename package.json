@@ -2,18 +2,12 @@
   "name": "hmd-link",
   "version": "0.0.0",
   "license": "GPL-3.0",
-  "engines": {
-    "node": "14"
-  },
   "scripts": {
-    "start": "vite",
-    "deploy": "vercel",
-    "dev": "yarn next:dev & yarn firebase:dev",
-    "next:dev": "next dev -p $PORT",
-    "next:build": "next build",
-    "next:start": "next start",
-    "firebase:dev": "firebase emulators:start --only auth,database",
-    "firebase:rules": "firebase deploy --only firestore:rules",
+    "dev": "netlify dev",
+    "dev:combined": "yarn dev:vite & yarn dev:firebase",
+    "dev:vite": "vite",
+    "dev:firebase": "firebase emulators:start --only auth,database",
+    "rules": "firebase deploy --only firestore:rules",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -27,6 +21,7 @@
     "unique-names-generator": "^4.6.0"
   },
   "devDependencies": {
+    "@netlify/functions": "^0.7.2",
     "@preact/preset-vite": "^2.1.2",
     "firebase-tools": "^9.16.5",
     "husky": "^7.0.1",
