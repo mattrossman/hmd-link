@@ -1,11 +1,16 @@
 import { signInWithCustomToken } from '@firebase/auth'
-import type { UserCredential } from '@firebase/auth'
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'preact/hooks'
 import useAuth from './useAuth'
 
-export default function useCredential(token?: string) {
+/** @typedef {import("@firebase/auth").UserCredential} UserCredential */
+
+/**
+ * @param {?string} token
+ */
+export default function useCredential(token) {
   const auth = useAuth()
-  const [credential, setCredential] = useState<UserCredential | null>(null)
+  /** @type {[?UserCredential, (credential: ?UserCredential) => void]} */
+  const [credential, setCredential] = useState(null)
   useEffect(() => {
     if (token) {
       try {

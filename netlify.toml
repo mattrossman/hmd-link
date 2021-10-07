@@ -1,10 +1,12 @@
 [dev]
   command = "yarn dev:combined"
   targetPort = 3000
+  autoLaunch = false
 
 # Function files live in /api
 [functions]
   directory = "api"
+  node_bundler = "esbuild"
   
 # Access functions from /api routes
 [[redirects]]

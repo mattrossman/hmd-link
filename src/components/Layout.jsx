@@ -1,6 +1,6 @@
 import RoomChip from '@/src/components/RoomChip'
-import useAuthApi from '@/src/lib/hooks/useAuthApi'
-import useCredential from '@/src/lib/hooks/firebase/useCredential'
+import useAuthApi from '@/src/hooks/useAuthApi'
+import useCredential from '@/src/hooks/firebase/useCredential'
 
 export default function Layout({ children }) {
   const res = useAuthApi()

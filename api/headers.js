@@ -1,5 +1,5 @@
 /** @type {import("@netlify/functions").Handler} */
-exports.handler = async (event, context) => {
+export const handler = async (event, context) => {
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },

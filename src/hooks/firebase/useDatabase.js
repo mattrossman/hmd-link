@@ -1,5 +1,5 @@
 import { getDatabase, connectDatabaseEmulator } from 'firebase/database'
-import { useMemo } from 'react'
+import { useMemo } from 'preact/hooks'
 import useApp from './useApp'
 import cliConfig from '@/firebase.json'
 

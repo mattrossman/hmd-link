@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'preact/hooks'
 import { getAuth, connectAuthEmulator } from '@firebase/auth'
 
 import cliConfig from '@/firebase.json'
