@@ -36,7 +36,7 @@ const RawInput = styled.input`
 	}
 	&:active, &:focus {
 		border: none;
-        outline: none;
+				outline: none;
 	}
 `
 
@@ -93,14 +93,31 @@ const Error = styled(Warning)`
 `
 
 const isValidLength = (val) => val.length <= 2000
-const isUrl = (val) => val.match(/^(https?:\/\/)?(localhost|.+\.\w+)(:\d+)?$/)
+
+/** URL validation with an explicit protocol */
+const isUrlStrict = (val) => {
+	try {
+		const url = new URL(val)
+		const isHttp = url.protocol.match(/^https?:$/)
+		const hasTLD = url.hostname.match(/[\w-]+(\.[\w-]+)+/)
+		const isLocalhost = url.hostname === "localhost"
+		return isHttp && (hasTLD || isLocalhost)
+	} catch (e) {
+		return false
+	}
+}
+
+/** URL validation with optional protocol */
+const isUrl = (val) => {
+	return isUrlStrict(val) || isUrlStrict("http:" + val)
+}
 
 export default function Form ({onComplete, closeAction, ...props}) {
 	const input = useRef(null);
 	const [url, setUrl] = useState('')
 	const { snapshot, timeLeft } = useDataContext()
 	const onClickSubmit = (e) => {
-    	e.preventDefault();
+			e.preventDefault();
 		if (input.current && input.current.checkValidity()) {
 			onComplete(input.current.value)
 		}
