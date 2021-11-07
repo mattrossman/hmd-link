@@ -92,26 +92,6 @@ const Error = styled(Warning)`
 	color: #cc3300;
 `
 
-const isValidLength = (val) => val.length <= 2000
-
-/** URL validation with an explicit protocol */
-const isUrlStrict = (val) => {
-	try {
-		const url = new URL(val)
-		const isHttp = url.protocol.match(/^https?:$/)
-		const hasTLD = url.hostname.match(/[\w-]+(\.[\w-]+)+/)
-		const isLocalhost = url.hostname === "localhost"
-		return isHttp && (hasTLD || isLocalhost)
-	} catch (e) {
-		return false
-	}
-}
-
-/** URL validation with optional protocol */
-const isUrl = (val) => {
-	return isUrlStrict(val) || isUrlStrict("http:" + val)
-}
-
 export default function Form ({onComplete, closeAction, ...props}) {
 	const input = useRef(null);
 	const [url, setUrl] = useState('')
@@ -125,10 +105,8 @@ export default function Form ({onComplete, closeAction, ...props}) {
 	const onChangeInput = (e) => {
 		setUrl(e.target.value)
 	}
-	const isValid = useCallback(() => {
-		return input.current && isValidLength(input.current.value) && isUrl(input.current.value)
-	}, [url])
-	const tooLong = input.current && !isValidLength(input.current.value)
+	const tooLong = url.length > 2000
+	const isValid = url.length > 0 && !tooLong
 
 	const actions = {
 		right: {
@@ -163,7 +141,7 @@ export default function Form ({onComplete, closeAction, ...props}) {
 					<InputContainer>
 						<RawInput onChange={onChangeInput} required ref={input} type="text" id="url" title="URL" placeholder="www.example.com"
 							autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
-						<SubmitButton type="submit" onClick={onClickSubmit} disabled={!isValid()} title="Submit URL">
+						<SubmitButton type="submit" onClick={onClickSubmit} disabled={!isValid} title="Submit URL">
 							<Icon path={mdiSend} size={1} />
 						</SubmitButton>
 					</InputContainer>
