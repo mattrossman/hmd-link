@@ -1,5 +1,5 @@
 import { h, Fragment } from 'preact'
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { useUserContext, useDataContext } from 'util/context'
 
 import View from './View'
@@ -21,6 +21,16 @@ export default function Content() {
 		setEditing(false)
 		clearPreview()
 	}
+
+	useEffect(() => {
+		const url = new URL(window.location.href)
+		const urlSearchParam = url.searchParams.get('url')
+		if (urlSearchParam && upload) {
+			console.log('submitting', urlSearchParam)
+			upload(urlSearchParam)
+			window.history.replaceState(null, '', window.location.origin)
+		}
+	}, [upload])
 
 	if (user == null || snapshot == null) {
 		return <View><div /> <Spinner /></View>

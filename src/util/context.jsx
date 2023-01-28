@@ -20,7 +20,7 @@ export const useUserContext = () => useContext(UserContext)
 
 const DataContext = createContext({
 	snapshot: null,
-	upload: () => {},
+	upload: null,
 	clear: () => {}
 })
 export const DataProvider = ({children}) => {
