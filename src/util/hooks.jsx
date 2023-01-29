@@ -74,7 +74,7 @@ export const usePreview = () => {
 	const clearPreview = () => setData(null)
 	const getPreview = async (url) => {
 		setData(null)
-		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
+		const prefix = url.match(/https?:\/\//) ? '' : 'https://'
 		const target = prefix + url
 		try {
 			const response = await axios.post('/.netlify/functions/preview', {url: target})

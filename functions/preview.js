@@ -4,7 +4,7 @@ exports.handler = async event => {
 	try {
 		const body = JSON.parse(event.body);
 		let url = body.url
-		if (!url.match(/https?:\/\//)) url = 'http://' + url;
+		if (!url.match(/https?:\/\//)) url = 'https://' + url;
 		const preview = await getLinkPreview(url)
 		return {
 			statusCode: 200,
