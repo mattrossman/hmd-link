@@ -1,5 +1,4 @@
 import { h } from 'preact'
-import { useState, useEffect } from 'preact/hooks'
 import { useUserContext } from 'util/context'
 
 import styled from 'styled-components'
@@ -32,14 +31,8 @@ const Dot = styled('span')`
 
 export default function StatusChip() {
 	const user = useUserContext()
-	const [color, setColor] = useState('orange')
-	const [message, setMessage] = useState('Connecting...')
-	useEffect(() => {
-		if (user) {
-			setColor('#0f0')
-			setMessage(user.displayName)
-		}
-	}, [user])
+	const color = user ? '#0f0' : 'orange'
+	const message = user ? user.displayName : 'Connecting...'
 	const tooltipText=`
 		This is your room name, assigned by your public IP.
 		As long as your headset and companion device show the same room name,
