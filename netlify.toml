@@ -7,3 +7,6 @@
 	command = "yarn webpack:dev"
 	targetPort = 9000
 	autoLaunch = false
+[[redirects]]
+  from = "/http*"
+  to = "/?http:splat"

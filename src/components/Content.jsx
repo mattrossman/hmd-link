@@ -1,5 +1,5 @@
 import { h, Fragment } from 'preact'
-import { useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import { useUserContext, useDataContext } from 'util/context'
 
 import View from './View'
@@ -15,12 +15,26 @@ export default function Content() {
 	const { snapshot, upload, clearData, clearPreview, timeLeft } = useDataContext()
 	const [editing, setEditing] = useState(false)
 	const [showInfo, setShowInfo] = useState(false)
+	const didPrefill = useRef(false)
 
 	const onCompleteForm = (url) => {
 		upload(url)
 		setEditing(false)
 		clearPreview()
 	}
+
+	useEffect(() => {
+		if (didPrefill.current) return
+		/**
+		 * Handle pre-filled URL in default query param
+		 * E.g. hmd.link/example.com
+		 */
+		const prefilledUrl = window.location.search.slice(1)
+		if (prefilledUrl.length > 0 && upload) {
+			upload(prefilledUrl)
+			didPrefill.current = true
+		}
+	}, [upload])
 
 	if (user == null || snapshot == null) {
 		return <View><div /> <Spinner /></View>

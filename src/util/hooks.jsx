@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'preact/hooks'
+import { useState, useEffect, useCallback, useMemo } from 'preact/hooks'
 import axios from 'redaxios';
 import * as firebase from "firebase/app";
 import "firebase/database";
@@ -31,38 +31,39 @@ export const useUser = () => {
 
 export const useData = (user) => {
 	const [snapshot, setSnapshot] = useState(null);
-	const [ref, setRef] = useState(null);
+
+	const ref = useMemo(() => {
+		if (user == null) return null
+		return db.ref('rooms/' + user.uid)
+	}, [user?.uid])
 
 	useEffect(() => {
-		if (user !== null) {
-			const ref = db.ref('rooms/' + user.uid)
-			setRef(ref)
-			ref.on('value', (snapshot) => {
-				setSnapshot(snapshot);
+		if (ref == null) return
+		ref.on('value', (snapshot) => {
+			setSnapshot(snapshot);
+		})
+		return () => ref.off('value')
+	}, [ref])
+
+	if (ref == null) return [null, null, null]
+
+	const upload = async (url) => {
+		try {
+			await ref.set({
+				url,
+				timestamp: firebase.database.ServerValue.TIMESTAMP
 			})
-			return () => ref.off('value')
 		}
-	}, [user])
-
-	const upload = useCallback(async (url) => {
-		if (ref !== null) {
-			try {
-				await ref.set({
-					url,
-					timestamp: firebase.database.ServerValue.TIMESTAMP
-				})
-			}
-			catch (e) {
-				console.error('failed to upload: ', e)
-			}
+		catch (e) {
+			console.error('failed to upload: ', e)
 		}
-	}, [ref]);
+	}
 
-	const clear = useCallback((url) => {
+	const clear = () => {
 		if (ref !== null) {
 			ref.remove();
 		}
-	}, [ref])
+	}
 
 	return [snapshot, upload, clear]
 }
@@ -73,7 +74,7 @@ export const usePreview = () => {
 	const clearPreview = () => setData(null)
 	const getPreview = async (url) => {
 		setData(null)
-		const prefix = url.match(/https?:\/\//) ? '' : 'http://'
+		const prefix = url.match(/https?:\/\//) ? '' : 'https://'
 		const target = prefix + url
 		try {
 			const response = await axios.post('/.netlify/functions/preview', {url: target})
