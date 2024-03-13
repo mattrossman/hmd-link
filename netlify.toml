@@ -7,6 +7,21 @@
 	command = "yarn webpack:dev"
 	targetPort = 9000
 	autoLaunch = false
+
+# Exclude assets (`.js`, `.css`, etc.) from SPA rewrite
 [[redirects]]
-  from = "/http*"
-  to = "/?http:splat"
+  from = "/assets/*"
+  to = "/assets/:splat"
+
+# Exclude root from repeated rewrites
+[[redirects]]
+  from = "/"
+  to = "/"
+
+# Rewrite all other paths to SPA root
+# Allows for prefilling URLs e.g. https://hmd.link/example.com
+[[redirects]]
+  from = "/*"
+  to = "/"
+	status = 200 # Rewrite
+  force = true # Prevents "Cannot GET ..." error

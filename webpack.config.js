@@ -7,8 +7,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
 	entry: './src/index.jsx',
 	output: {
-		filename: 'main.js',
+		filename: 'assets/main.js',
 		path: path.resolve(__dirname, 'dist'),
+		publicPath: "/",
 	},
 	devServer: {
 		contentBase: path.join(__dirname, 'dist'),
@@ -18,15 +19,14 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: './src/index.html',
-			favicon: './src/assets/favicon.ico'
+			template: './src/index.html'
 		}),
-		new MiniCssExtractPlugin(),
-        new CopyWebpackPlugin({
-            patterns: [
-                { from: '*.png', to: 'assets', context: 'src/assets' }
-            ]
-        })
+		new MiniCssExtractPlugin({ filename: "assets/main.css" }),
+		new CopyWebpackPlugin({
+				patterns: [
+						{ from: '*', to: 'assets', context: "src/assets" }
+				]
+		})
 	],
 	module: {
 		rules: [

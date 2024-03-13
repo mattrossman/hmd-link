@@ -26,10 +26,14 @@ export default function Content() {
 	useEffect(() => {
 		if (didPrefill.current) return
 		/**
-		 * Handle pre-filled URL in default query param
-		 * E.g. hmd.link/example.com
+		 * Handle pre-filled URL in default query param or path
+		 * - hmd.link/?example.com
+		 * - hmd.link/example.com
 		 */
-		const prefilledUrl = window.location.search.slice(1)
+		const prefilledUrl = location.href
+			.replace(location.origin, '') // remove https://hmd.link
+			.replace(/^\//, "") // remove leading slash from path
+			.replace(/^\?/, "") // remove separator for query string
 		if (prefilledUrl.length > 0 && upload) {
 			upload(prefilledUrl)
 			didPrefill.current = true
