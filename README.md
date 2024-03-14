@@ -28,13 +28,14 @@ Example: https://hmd.link/https://aframe.io/examples/showcase/helloworld/
 
 ### Bookmarklet
 
-Share pages to [hmd.link](https://hmd.link) in a single click with a Bookmarklet.
+Share links to [hmd.link](https://hmd.link) in a single click! Simply drag the following link into your bookmarks, and click to share your current page.
 
-Create a new bookmark in your browser with the following code as the URL:
+<a href="javascript:(function(){window.open('https://hmd.link/'+window.location.href,'_blank')})()">
 
-```js
-javascript:window.open(`https://hmd.link/${window.location.href}`,"_blank")
-```
+![Send to HMD.link](https://img.shields.io/badge/Send_to_HMD.link-red)
+
+</a>
+
 
 ### What is this sorcery?
 
