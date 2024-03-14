@@ -73,6 +73,8 @@ export const usePreview = () => {
 	
 	const clearPreview = () => setData(null)
 	const getPreview = async (url) => {
+		if (url === data?.url) return
+
 		setData(null)
 		const prefix = url.match(/https?:\/\//) ? '' : 'https://'
 		const target = prefix + url
