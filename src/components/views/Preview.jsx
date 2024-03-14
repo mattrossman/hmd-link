@@ -146,7 +146,7 @@ export default function Preview ({editAction, deleteAction}) {
 		<DivLink href={data.url} target="_blank" className="row card-container">
 			<ThumbnailContainer>
 				{ data.thumbnail
-					? <Thumbnail src={data.thumbnail} ref={img} alt="site-preview" onLoad={onThumbLoad} />
+					? <Thumbnail src={data.thumbnail} ref={img} alt="site-preview" onLoad={onThumbLoad} onError={onThumbLoad} />
 					: <MarginIcon path={mdiWeb} size={3} />
 				}
 			</ThumbnailContainer>

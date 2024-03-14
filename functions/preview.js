@@ -9,6 +9,11 @@ exports.handler = async event => {
 		return {
 			statusCode: 200,
 			body: JSON.stringify(preview),
+			headers: {
+				// For 1 hour: serve cached copy
+				// For 1 day: serve stale copy but revalidate in background
+				'Cache-Control': 'public, max-age=3600, stale-while-revalidate 86400'
+			}
 		}
 	}
 	catch (error) {
