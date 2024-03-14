@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'preact/hooks'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'preact/hooks'
 import axios from 'redaxios';
 import * as firebase from "firebase/app";
 import "firebase/database";
@@ -70,10 +70,12 @@ export const useData = (user) => {
 
 export const usePreview = () => {
 	const [data, setData] = useState(null)
+	const urlRef = useRef()
 	
 	const clearPreview = () => setData(null)
 	const getPreview = async (url) => {
-		if (url === data?.url) return
+		if (url === urlRef.current) return
+		urlRef.current = url
 
 		setData(null)
 		const prefix = url.match(/https?:\/\//) ? '' : 'https://'
