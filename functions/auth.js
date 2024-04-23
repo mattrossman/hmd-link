@@ -28,6 +28,11 @@ const getUniqueName = (seed) => {
 	})
 }
 
+/**
+ * @param {admin.auth.Auth} auth 
+ * @param {string} uid 
+ * @returns 
+ */
 const setupDisplayName = async (auth, uid) => {
 	/* Make sure that the user exists and has a display name */
 	let displayName = null
@@ -39,7 +44,7 @@ const setupDisplayName = async (auth, uid) => {
 	catch (_) {
 		// If the user doesn't exist (error from getUser) or the displayName is blank, generate one
 		displayName = getUniqueName(uid)
-		auth.updateUser(uid, { displayName })
+		await auth.updateUser(uid, { displayName })
 	}
 	return displayName
 }
