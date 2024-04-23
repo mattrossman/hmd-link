@@ -14,8 +14,9 @@ const init = () => {
 }
 
 const getPublicIp = (headers) => {
-	const ip = headers['x-nf-client-connection-ip']
-			|| headers['client-ip'];
+	const ip = headers["cf-connecting-ip"]
+					?? headers['x-nf-client-connection-ip']
+					?? headers['client-ip'];
 	return ip === '::1' ? '127.0.0.1' : ip;
 }
 
