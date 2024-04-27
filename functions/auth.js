@@ -28,34 +28,23 @@ const getUniqueName = (seed) => {
 	})
 }
 
-/**
- * @param {admin.auth.Auth} auth 
- * @param {string} uid 
- * @returns 
- */
-const setupDisplayName = async (auth, uid) => {
-	/* Make sure that the user exists and has a display name */
-	let displayName = null
-	try {
-		const user = await auth.getUser(uid)
-		displayName = user.displayName
-		if (displayName === undefined) throw new Error('User exists but displayName is blank')
-	}
-	catch (_) {
-		// If the user doesn't exist (error from getUser) or the displayName is blank, generate one
-		displayName = getUniqueName(uid)
-		await auth.updateUser(uid, { displayName })
-	}
-	return displayName
-}
-
-
 exports.handler = async event => {
 	init();
 	const auth = admin.auth()
 	const uid = stringHash(getPublicIp(event.headers)).toString()
-	await setupDisplayName(auth, uid)
+	const displayName = getUniqueName(uid)
+
+	// Get or create user
+	const user = await auth.getUser(uid)
+		.catch(() => auth.createUser({ uid, displayName }))
+
+	// Update room name as needed
+	if (user.displayName !== displayName) {
+		await auth.updateUser(uid, { displayName })
+	}
+
 	const token = await auth.createCustomToken(uid)
+
 	return {
 		statusCode: 200,
 		headers: { "Content-Type": "application/json" },
